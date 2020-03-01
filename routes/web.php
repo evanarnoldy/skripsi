@@ -19,6 +19,6 @@ Route::get('/register', function () {
     return view('register');
 });
 
-Route::get('/admin', function () {
-    return view('admin.dashboard');
-});
+Route::get('/admin', 'AdminController@index');
+
+Route::get('/data-siswa', 'StudentController@index');

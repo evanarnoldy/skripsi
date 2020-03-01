@@ -18,7 +18,7 @@
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
     <div class="daftar">
-        <a href="google.com">Belum punya akun? Daftar disini</a>
+        <a href="{{url('/admin')}}">Belum punya akun? Daftar disini</a>
     </div>
 
 @endsection

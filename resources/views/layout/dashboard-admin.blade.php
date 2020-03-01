@@ -19,8 +19,16 @@
     <div class="bg-light border-right" id="sidebar-wrapper">
         <div class="sidebar-heading">Monitoring Kesehatan Mental</div>
         <div class="list-group list-group-flush">
-            <a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-            <a href="#" class="list-group-item list-group-item-action bg-light">Shortcuts</a>
+            <a href="{{url('/admin')}}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
+            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-light dropdown-toggle">Data User</a>
+            <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li>
+                    <a href="{{url('/data-siswa')}}" class="list-group-item list-group-item-action bg-light">Data Siswa</a>
+                </li>
+                <li>
+                    <a href="#" class="list-group-item list-group-item-action bg-light">Data Guru</a>
+                </li>
+            </ul>
             <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
             <a href="#" class="list-group-item list-group-item-action bg-light">Events</a>
             <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>

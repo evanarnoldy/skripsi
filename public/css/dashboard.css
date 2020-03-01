@@ -98,6 +98,18 @@
     margin-left: 0;
 }
 
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
 @media (min-width: 768px) {
     #sidebar-wrapper {
         margin-left: 0;
