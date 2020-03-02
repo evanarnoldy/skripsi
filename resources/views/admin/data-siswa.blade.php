@@ -3,8 +3,17 @@
 @section('container')
     <div class="container-fluid">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="title mt-4">Data User</h1>
+            <h1 class="title mt-4">Data Siswa</h1>
         </div>
+
+        <a href="{{url('tambah-siswa')}}" class="btn btn-primary mb-18">Tambah Data Siswa</a>
+
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+
         <table class="table">
             <thead>
             <tr>
@@ -25,8 +34,13 @@
                 <td>{{ $siswa->kelas }}</td>
                 <td>{{ $siswa->email }}</td>
                 <td>
-                    <a href="" class="badge badge-success">Edit</a>
-                    <a href="" class="badge badge-danger">Hapus</a>
+                    <a href="/detail-siswa/{{ $siswa->id}}" class="badge badge-info">Rincian</a>
+                    <form method="post" action="/data-siswa/{{ $siswa->id }}" class="d-inline">
+                        @method('delete')
+                        @csrf
+                        <button type="submit" class="badge badge-danger">Hapus</button>
+                    </form>
+                    <a href="/data-siswa/{{ $siswa->id }}/edit-siswa" class="badge badge-success">Edit</a>
                 </td>
              </tr>
             @endforeach

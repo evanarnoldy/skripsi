@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" type="text/css" href="css/dashboard.css">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="fontawesome-free-5.12.1-web/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{{url('css/dashboard.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url('css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url('fontawesome-free-5.12.1-web/css/all.min.css')}}">
 
     <title>Sistem Monitoring Kesehatan Mental</title>
 </head>
@@ -19,20 +19,20 @@
     <div class="bg-light border-right" id="sidebar-wrapper">
         <div class="sidebar-heading">Monitoring Kesehatan Mental</div>
         <div class="list-group list-group-flush">
-            <a href="{{url('/admin')}}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-light dropdown-toggle">Data User</a>
+            <a href="{{ route('admin') }}" class="{{set_active('admin')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-home mr-15"></i> Dashboard</a>
+            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-puteh dropdown-toggle"><i class="fas fa-users mr-15"></i>Data User</a>
             <ul class="collapse list-unstyled" id="pageSubmenu">
                 <li>
-                    <a href="{{url('/data-siswa')}}" class="list-group-item list-group-item-action bg-light">Data Siswa</a>
+                    <a href="{{ route('data-siswa') }}" class="{{set_active('data-siswa')}}list-group-item list-group-item-action bg-puteh">Data Siswa</a>
                 </li>
                 <li>
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Data Guru</a>
+                    <a href="#" class="list-group-item list-group-item-action bg-puteh">Data Guru</a>
                 </li>
             </ul>
-            <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
-            <a href="#" class="list-group-item list-group-item-action bg-light">Events</a>
-            <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
-            <a href="#" class="list-group-item list-group-item-action bg-light">Status</a>
+            <a href="#" class="list-group-item list-group-item-action bg-puteh">Overview</a>
+            <a href="#" class="list-group-item list-group-item-action bg-puteh">Events</a>
+            <a href="#" class="list-group-item list-group-item-action bg-puteh">Profile</a>
+            <a href="#" class="list-group-item list-group-item-action bg-puteh">Status</a>
         </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -40,7 +40,7 @@
     <!-- Page Content -->
     <div id="page-content-wrapper">
 
-        <nav class="navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow">
+        <nav class="navbar navbar-dark bg-light flex-md-nowrap p-0 shadow">
             <button class="btn btn-primary ml-20" id="menu-toggle">Buka Menu</button>
 
             <div class="navbar-nav px-3">
@@ -49,7 +49,7 @@
                         <div class="nama-ses mt-14">Notifikasi</div>
                     </div>
                     <div class="nav-item col">
-                        <img src="asset/yoyo.jpg" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px">
+                        <img src="{{url('asset/yoyo.jpg')}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px">
                     </div>
                     <div class="nav-item col">
                         <div class="nama-ses mt-14" style="margin-left: -20px">Admin</div>

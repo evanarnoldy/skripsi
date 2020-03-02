@@ -19,6 +19,13 @@ Route::get('/register', function () {
     return view('register');
 });
 
-Route::get('/admin', 'AdminController@index');
+Route::get('/admin', 'AdminController@index')->name('admin');
 
-Route::get('/data-siswa', 'StudentController@index');
+//siswa
+Route::get('/data-siswa', 'StudentsController@index')->name('data-siswa');
+Route::get('/detail-siswa/{student}', 'StudentsController@show');
+Route::get('/tambah-siswa/', 'StudentsController@create');
+Route::post('/data-siswa', 'StudentsController@store');
+Route::delete('/data-siswa/{student}', 'StudentsController@destroy');
+Route::get('/data-siswa/{student}/edit-siswa', 'StudentsController@edit');
+Route::patch('/data-siswa/{student}', 'StudentsController@update');
