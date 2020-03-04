@@ -38,7 +38,7 @@
                     <form method="post" action="/data-siswa/{{ $siswa->id }}" class="d-inline">
                         @method('delete')
                         @csrf
-                        <button type="submit" class="badge badge-danger">Hapus</button>
+                        <button type="submit" class="badge badge-danger no-border">Hapus</button>
                     </form>
                     <a href="/data-siswa/{{ $siswa->id }}/edit-siswa" class="badge badge-success">Edit</a>
                 </td>

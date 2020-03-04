@@ -148,6 +148,10 @@ body {
     background: #0069d9;
 }
 
+.no-border{
+    border: none!important;
+}
+
 @media (min-width: 768px) {
     #sidebar-wrapper {
         margin-left: 0;
