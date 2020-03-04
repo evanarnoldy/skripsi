@@ -4,8 +4,8 @@
     <h3> Daftar Sebagai :</h3>
     <form>
         <div class="tombol">
-            <button type="button" class="btn btn-primary btn-lg">Siswa</button>
-            <button type="button" class="btn btn-primary btn-lg">Guru</button>
+            <a href="{{route('registersiswa')}}" class="btn btn-primary">Siswa</a>
+            <a href="{{route('registersiswa')}}" class="btn btn-primary">Guru</a>
         </div>
     </form>
 

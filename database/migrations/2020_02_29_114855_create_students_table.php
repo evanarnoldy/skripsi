@@ -17,8 +17,12 @@ class CreateStudentsTable extends Migration
             $table->bigIncrements('id');
             $table->char('NISN', 9)->unique();
             $table->string('nama');
+            $table->date('tanggal_lahir');
+            $table->string('jenis_kelamin');
+            $table->string('alamat');
             $table->string('email')->unique();
             $table->string('kelas');
+            $table->string('password');
             $table->timestamps();
         });
     }

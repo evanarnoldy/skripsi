@@ -18,13 +18,31 @@
                 @error('NISN') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             <div class="form-group">
+                <label for="tanggal_lahir">Tanggal lahir</label>
+                <input type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror" id="tanggal_lahir" name="tanggal_lahir" placeholder="Masukkan Tanggal lahir" value="{{ old('tanggal_lahir') }}">
+                @error('tanggal_lahir') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            </div>
+            <div class="form-group">
+                <label for="jenis_kelamin">Jenis Kelamin</label>
+                <select type="date" class="form-control @error('jenis_kelamin') is-invalid @enderror" id="jenis_kelamin" name="jenis_kelamin" placeholder="Masukkan Jenis Kelamin" value="{{ old('jenis_kelamin') }}">
+                @error('jenis_kelamin') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <option>Laki-laki</option>
+                    <option>Perempuan</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="alamat">Alamat</label>
+                <input type="text" class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" placeholder="Masukkan Alamat" value="{{ old('alamat') }}">
+                @error('alamat') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            </div>
+            <div class="form-group">
                 <label for="kelas">Kelas</label>
                 <input type="text" class="form-control @error('kelas') is-invalid @enderror" id="kelas" name="kelas" placeholder="Masukkan Kelas" value="{{ old('kelas') }}">
                 @error('kelas') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Masukkan Email" value="{{ old('email') }}">
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Masukkan Email" value="{{ old('email') }}">
                 @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             <button type="submit" class="btn btn-primary">Tambah Data</button>

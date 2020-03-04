@@ -21,6 +21,13 @@ Route::get('/register', function () {
 
 Route::get('/admin', 'AdminController@index')->name('admin');
 
+//auth
+Route::get('/login', 'AuthController@login');
+Route::post('/login', 'AuthController@postlogin')->name('login');
+Route::get('/register-siswa', 'AuthController@registersiswa')->name('registersiswa');
+Route::post('/register-siswa', 'AuthController@postregister')->name('postregistersiswa');
+Route::get('/logout', 'AuthController@logout')->name('logout');
+
 //siswa
 Route::get('/data-siswa', 'StudentsController@index')->name('data-siswa');
 Route::get('/detail-siswa/{student}', 'StudentsController@show');

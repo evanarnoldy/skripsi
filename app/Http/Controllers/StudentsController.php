@@ -43,18 +43,26 @@ class StudentsController extends Controller
         $request->validate([
             'nama' => 'required|unique:students|max:255',
             'NISN' => 'required|size:9|unique:students',
+            'jenis_kelamin' => 'required',
+            'tanggal_lahir' => 'required',
+            'alamat' => 'required',
             'kelas' => 'required|size:2',
-            'email' => 'required|email'
+            'email' => 'required|email|unique:students',
+            'passsword' => 'nullable'
         ],
         [
             'nama.required' => 'Nama harus diisi',
             'nama.unique' => 'Nama telah dipakai',
             'NISN.required' => 'NISN harus diisi',
             'NISN.size' => 'NISN harus berisi 9 karakter',
+            'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
+            'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
+            'alamat.required' => 'Alamat harus diisi',
             'kelas.required' => 'Kelas harus diisi',
             'kelas.size' => 'Kelas harus berisi 2 karakter',
             'emai;.required' => 'Email harus diisi',
-            'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com'
+            'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
+            'email.unique' => 'Email telah digunakan',
         ]);
 
         Student::create($request->all());

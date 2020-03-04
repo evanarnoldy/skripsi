@@ -49,10 +49,15 @@
                         <div class="nama-ses mt-14">Notifikasi</div>
                     </div>
                     <div class="nav-item col">
-                        <img src="{{url('asset/yoyo.jpg')}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px">
+                        <a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><img src="{{url('asset/yoyo.jpg')}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px"></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
                     </div>
                     <div class="nav-item col">
-                        <div class="nama-ses mt-14" style="margin-left: -20px">Admin</div>
+                        <div class="nama-ses mt-14" style="margin-left: -20px">{{Auth::user()->nama}}</div>
                     </div>
                 </div>
             </div>
