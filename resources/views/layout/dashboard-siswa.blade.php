@@ -48,8 +48,7 @@
                         </div>
                     </div>
                     <div class="nav-item col">
-                        <div class="nama-ses mt-14" style="margin-left: -20px"></div>
-{{--                        {{Auth::user()->nama}}--}}
+                        <div class="nama-ses mt-14" style="margin-left: -20px">{{Auth::user()->nama}}</div>
                     </div>
                 </div>
             </div>

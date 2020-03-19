@@ -29,7 +29,7 @@
                     <a href="{{ route('data-guru') }}" class="{{set_active('data-guru')}}list-group-item list-group-item-action bg-puteh">Data Guru</a>
                 </li>
             </ul>
-            <a href="#" class="list-group-item list-group-item-action bg-puteh">Overview</a>
+            <a href="{{ route('daftar-pertanyaan') }}" class="{{set_active('daftar-pertanyaan')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-list mr-15"></i>Daftar Pertanyaan</a>
             <a href="#" class="list-group-item list-group-item-action bg-puteh">Events</a>
             <a href="#" class="list-group-item list-group-item-action bg-puteh">Profile</a>
             <a href="#" class="list-group-item list-group-item-action bg-puteh">Status</a>
@@ -52,13 +52,12 @@
                         <a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown"><img src="{{url('asset/yoyo.jpg')}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px"></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
-                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Edit profil</a>
                             <a class="dropdown-item" href="#">Something else here</a>
                         </div>
                     </div>
                     <div class="nav-item col">
-                        <div class="nama-ses mt-14" style="margin-left: -20px"></div>
-{{--                        {{Auth::user()->nama}}--}}
+                        <div class="nama-ses mt-14" style="margin-left: -20px">{{Auth::user()->nama}}</div>
                     </div>
                 </div>
             </div>
