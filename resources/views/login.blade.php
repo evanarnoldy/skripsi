@@ -10,8 +10,8 @@
     <form method="post" action="{{ route('login') }}">
         @csrf
         <div class="form-group">
-            <label for="NISN">NISN/NIP</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" name="NISN" aria-describedby="emailHelp" required>
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" required>
         </div>
         <div class="form-group">
             <label for="password">Password</label>

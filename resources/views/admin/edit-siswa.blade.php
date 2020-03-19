@@ -24,6 +24,24 @@
                 @error('kelas') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             <div class="form-group">
+                <label for="tanggal_lahir">Tanggal lahir</label>
+                <input type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror" id="tanggal_lahir" name="tanggal_lahir" placeholder="Masukkan Tanggal lahir" value="{{ $student->tanggal_lahir }}">
+                @error('tanggal_lahir') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            </div>
+            <div class="form-group">
+                <label for="jenis_kelamin">Jenis Kelamin</label>
+                <select type="date" class="form-control @error('jenis_kelamin') is-invalid @enderror" id="jenis_kelamin" name="jenis_kelamin" placeholder="Masukkan Jenis Kelamin" value="{{ $student->jenis_kelamin }}">
+                    @error('jenis_kelamin') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <option>Laki-laki</option>
+                    <option>Perempuan</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="alamat">Alamat</label>
+                <input type="text" class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" placeholder="Masukkan Alamat" value="{{ $student->alamat }}">
+                @error('alamat') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            </div>
+            <div class="form-group">
                 <label for="email">Email</label>
                 <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Masukkan Email" value="{{ $student->email }}">
                 @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror

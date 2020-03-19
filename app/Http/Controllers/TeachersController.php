@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Student;
+use App\Teacher;
 
-class StudentsController extends Controller
+class TeachersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class StudentsController extends Controller
     public function index()
     {
         //
-        $siswa = Student::all();
-        return view('admin.data-siswa', compact('siswa'));
+        $guru = Teacher::all();
+        return view('admin.data-guru', compact('guru'));
     }
 
     /**
@@ -28,7 +28,7 @@ class StudentsController extends Controller
     public function create()
     {
         //
-        return view('admin.tambah-siswa');
+        return view('admin.tambah-guru');
     }
 
     /**
@@ -41,33 +41,30 @@ class StudentsController extends Controller
     {
         //
         $request->validate([
-            'nama' => 'required|unique:students|max:255',
-            'NISN' => 'required|size:9|unique:students',
+            'nama' => 'required|unique:teachers|max:255',
+            'NIP' => 'required|size:9|unique:teachers',
             'jenis_kelamin' => 'required',
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
-            'kelas' => 'required|size:2',
-            'email' => 'required|email|unique:students',
+            'email' => 'required|email|unique:teachers',
             'passsword' => 'nullable'
         ],
         [
             'nama.required' => 'Nama harus diisi',
             'nama.unique' => 'Nama telah dipakai',
-            'NISN.required' => 'NISN harus diisi',
-            'NISN.size' => 'NISN harus berisi 9 karakter',
+            'NIP.required' => 'NISN harus diisi',
+            'NIP.size' => 'NISN harus berisi 9 karakter',
             'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
             'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
             'alamat.required' => 'Alamat harus diisi',
-            'kelas.required' => 'Kelas harus diisi',
-            'kelas.size' => 'Kelas harus berisi 2 karakter',
             'emai;.required' => 'Email harus diisi',
             'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
             'email.unique' => 'Email telah digunakan',
         ]);
 
-        Student::create($request->all());
+        Teacher::create($request->all());
 
-        return redirect('data-siswa')->with('status', 'Data berhasil ditambahkan!');
+        return redirect('data-guru')->with('status', 'Data berhasil ditambahkan!');
 
     }
 
@@ -77,10 +74,10 @@ class StudentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Student $student)
+    public function show(Teacher $teacher)
     {
         //
-        return view('admin.detail-siswa', compact('student'));
+        return view('admin.detail-guru', compact('teacher'));
     }
 
     /**
@@ -89,10 +86,10 @@ class StudentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Student $student)
+    public function edit(Teacher $teacher)
     {
         //
-        return view('admin.edit-siswa', compact('student'));
+        return view('admin.edit-guru', compact('teacher'));
     }
 
     /**
@@ -102,21 +99,20 @@ class StudentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, Teacher $teacher)
     {
         //
-        Student::where('id', $student->id)
+        Teacher::where('id', $teacher->id)
             ->update([
                 'nama'=> $request->nama,
-                'NISN'=> $request->NISN,
-                'kelas'=> $request->kelas,
+                'NIP'=> $request->NIP,
                 'alamat'=> $request->alamat,
                 'jenis_kelamin'=> $request->jenis_kelamin,
                 'tanggal_lahir'=> $request->tanggl_lahir,
                 'email'=> $request->email
             ]);
 
-        return redirect('data-siswa')->with('status', 'Data berhasil diubah!');
+        return redirect('data-guru')->with('status', 'Data berhasil diubah!');
     }
 
     /**
@@ -125,10 +121,10 @@ class StudentsController extends Controller
      * @param  int  $id
      * @return Student
      */
-    public function destroy(Student $student)
+    public function destroy(Teacher $teacher)
     {
         //
-        Student::destroy($student->id);
-        return redirect('data-siswa')->with('status', 'Data berhasil dihapus!');
+        Teacher::destroy($teacher->id);
+        return redirect('data-guru')->with('status', 'Data berhasil dihapus!');
     }
 }
