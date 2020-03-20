@@ -22,7 +22,7 @@ class CreateTeachersTable extends Migration
             $table->string('alamat');
             $table->string('email')->unique();
             $table->boolean('admin')->default(0);
-            $table->string('password');
+            $table->string('password')->nullable(true);
             $table->timestamps();
         });
     }

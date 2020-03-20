@@ -22,7 +22,7 @@ class CreateStudentsTable extends Migration
             $table->string('alamat');
             $table->string('email')->unique();
             $table->string('kelas');
-            $table->string('password');
+            $table->string('password')->nullable(true);;
             $table->timestamps();
         });
     }

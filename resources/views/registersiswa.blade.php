@@ -54,6 +54,5 @@
             @error('password_confirmation') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
         <button type="submit" class="btn btn-primary">Daftar</button>
-        <a href="{{'/login'}}" class="btn btn-primary">Login</a>
     </form>
 @endsection

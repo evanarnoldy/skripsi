@@ -59,3 +59,6 @@ Route::post('/daftar-pertanyaan', 'AdminController@store_question')->middleware(
 Route::delete('/daftar-pertanyaan/{question}', 'AdminController@destroy_question')->middleware('auth:teachers');
 Route::get('/daftar-pertanyaan/{question}/edit-pertanyaan', 'AdminController@edit_question')->middleware('auth:teachers');
 Route::patch('/daftar-pertanyaan/{question}', 'AdminController@update_question')->middleware('auth:teachers');
+
+//kuesioner
+Route::get('/pengisian-kuesioner', 'SiswaController@pertanyaan')->name('kuesioner')->middleware('auth:students');
