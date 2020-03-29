@@ -42,6 +42,7 @@ Route::post('/data-siswa', 'AdminController@store_student')->middleware('auth:te
 Route::delete('/data-siswa/{student}', 'AdminController@destroy_student')->middleware('auth:teachers');
 Route::get('/data-siswa/{student}/edit-siswa', 'AdminController@edit_student')->middleware('auth:teachers');
 Route::patch('/data-siswa/{student}', 'AdminController@update_student')->middleware('auth:teachers');
+Route::get('/detail-jawaban/{student}', 'AdminController@show_answer')->middleware('auth:teachers');
 
 //guru
 Route::get('/data-guru', 'AdminController@index_teacher')->name('data-guru')->middleware('auth:teachers');
@@ -62,3 +63,5 @@ Route::patch('/daftar-pertanyaan/{question}', 'AdminController@update_question')
 
 //kuesioner
 Route::get('/pengisian-kuesioner', 'SiswaController@pertanyaan')->name('kuesioner')->middleware('auth:students');
+Route::post('/store-kuesioner', 'SiswaController@store_jawaban')->middleware('auth:students');
+Route::get('/hasil-kuesioner', 'SiswaController@hasil')->name('hasil')->middleware('auth:students');

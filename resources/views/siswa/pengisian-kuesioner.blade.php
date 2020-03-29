@@ -12,6 +12,8 @@
             </div>
         @endif
 
+        <form method="post" action="/store-kuesioner" class="d-inline">
+            @csrf
         <table class="table">
             <thead>
             <tr>
@@ -21,34 +23,28 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($pertanyaan as $p)
-             <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $p->pertanyaan }}</td>
-                <td>
-                    <form method="post" action="/daftar-pertanyaan/{{ $p->id }}" class="d-inline">
-                        @csrf
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="1" value="1">
-                            <label class="form-check-label" for="inlineRadio1">1</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="2" value="2">
-                            <label class="form-check-label" for="inlineRadio2">2</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="3" value="3">
-                            <label class="form-check-label" for="inlineRadio3">3</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="4" value="4">
-                            <label class="form-check-label" for="inlineRadio4">4</label>
-                        </div>
-                    </form>
-                </td>
-             </tr>
-            @endforeach
+                @foreach($pertanyaan as $p)
+                     <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $p->pertanyaan }}</td>
+                        <td>
+                         <div class="form-check form-check-inline">
+                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="1" value="{{$p->jenis=='Favorable'?1:4}}">
+                             <label class="form-check-label" for="inlineRadio1">1</label>
+                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="2" value="{{$p->jenis=='Favorable'?2:3}}">
+                             <label class="form-check-label" for="inlineRadio2">2</label>
+                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="3" value="{{$p->jenis=='Favorable'?3:2}}">
+                             <label class="form-check-label" for="inlineRadio3">3</label>
+                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="4" value="{{$p->jenis=='Favorable'?4:1}}">
+                             <label class="form-check-label" for="inlineRadio4">4</label>
+                             <input type="hidden" name="jawaban[]" value="{{ $p->id }}">
+                         </div>
+                        </td>
+                     </tr>
+                @endforeach
             </tbody>
         </table>
+            <button type="submit" class="btn btn-primary" style="margin-bottom: 40px">Selesai</button>
+        </form>
     </div>
 @endsection

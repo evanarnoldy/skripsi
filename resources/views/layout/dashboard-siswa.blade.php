@@ -21,7 +21,7 @@
         <div class="list-group list-group-flush">
             <a href="{{ route('siswa') }}" class="{{set_active('siswa')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-home mr-15"></i> Dashboard</a>
             <a href="{{ route('kuesioner') }}" class="{{set_active('kuesioner')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-list mr-15"></i>Pengisian Kuesioner</a>
-            <a href="#" class="list-group-item list-group-item-action bg-puteh">Events</a>
+            <a href="{{ route('hasil') }}" class="{{set_active('hasil')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-list mr-15"></i>Hasil Kuesioner</a>
             <a href="#" class="list-group-item list-group-item-action bg-puteh">Profile</a>
             <a href="#" class="list-group-item list-group-item-action bg-puteh">Status</a>
         </div>

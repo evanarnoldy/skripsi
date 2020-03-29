@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Student;
 use App\Teacher;
 use App\Question;
+use App\Hasil;
+use App\Answer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +30,12 @@ class AdminController extends Controller
     {
         //
         $siswa = Student::all();
-        return view('admin.data-siswa', compact('siswa'));
+        $hasil = DB::table('hasil')
+            ->select('student_id','skor', 'kesimpulan', 'bulan')
+            ->orderBy('bulan', 'desc')
+            ->limit('1')
+            ->get();
+        return view('admin.data-siswa', compact('siswa', 'hasil'));
     }
 
     /**
@@ -91,7 +98,12 @@ class AdminController extends Controller
     public function show_student(Student $student)
     {
         //
-        return view('admin.detail-siswa', compact('student'));
+        $hasil = DB::table('hasil')
+            ->select('student_id','skor', 'kesimpulan', 'bulan')
+            ->orderBy('bulan', 'desc')
+            ->limit('1')
+            ->get();
+        return view('admin.detail-siswa', compact('student','hasil'));
     }
 
     /**
@@ -100,6 +112,15 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function show_answer(Student $student)
+    {
+        $hasil = DB::table('questions')
+            ->join('answers', 'questions.id', '=', 'answers.question_id')
+            ->select('questions.*','answers.jawaban')
+            ->get();
+        return view('admin.detail-jawaban', compact('student', 'hasil'));
+    }
     public function edit_student(Student $student)
     {
         //

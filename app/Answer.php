@@ -9,11 +9,13 @@ class Answer extends Model
     //
     public function user()
     {
-        return $this ->belongsTo('App\Student');
+        return $this ->belongsTo(Student::class);
     }
 
     public function pertanyaan()
     {
-        return $this->belongsTo('App\Question');
+        return $this->belongsTo(Question::class);
     }
+
+    protected $guarded = ['student_id'];
 }

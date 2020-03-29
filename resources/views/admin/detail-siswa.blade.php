@@ -18,15 +18,21 @@
                         <p class="card-text">Tanggal lahir  :</p>
                         <p class="card-text">Kelas :</p>
                         <p class="card-text">Email :</p>
+                        <p class="card-text">Hasil :</p>
+                        <p class="card-text">Skor:</p>
                     </div>
                     <div class="col" style="text-align: left">
-                        <p class="card-text">{{ $student->nama }}</p>
-                        <p class="card-text">{{ $student->NISN }}</p>
-                        <p class="card-text">{{ $student->jenis_kelamin }}</p>
-                        <p class="card-text">{{ $student->alamat }}</p>
-                        <p class="card-text">{{ $student->tanggal_lahir}}</p>
-                        <p class="card-text">{{ $student->kelas}}</p>
-                        <p class="card-text">{{ $student->email}}</p>
+                        @foreach($hasil as $h)
+                            <p class="card-text">{{ $student->nama }}</p>
+                            <p class="card-text">{{ $student->NISN }}</p>
+                            <p class="card-text">{{ $student->jenis_kelamin }}</p>
+                            <p class="card-text">{{ $student->alamat }}</p>
+                            <p class="card-text">{{ $student->tanggal_lahir}}</p>
+                            <p class="card-text">{{ $student->kelas}}</p>
+                            <p class="card-text">{{ $student->email}}</p>
+                            <p class="card-text">{{ $h->kesimpulan}}</p>
+                            <p class="card-text">{{ $h->skor}}</p>
+                        @endforeach
                     </div>
                 </div>
                 <a href="{{url('data-siswa')}}" class="btn btn-primary mt-14">Kembali</a>

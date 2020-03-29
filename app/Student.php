@@ -21,4 +21,14 @@ class Student extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
+
+    public function hasil()
+    {
+        return $this->hasMany(Hasil::class);
+    }
+
 }
