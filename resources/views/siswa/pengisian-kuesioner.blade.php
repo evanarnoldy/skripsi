@@ -29,15 +29,15 @@
                         <td>{{ $p->pertanyaan }}</td>
                         <td>
                          <div class="form-check form-check-inline">
-                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="1" value="{{$p->jenis=='Favorable'?1:4}}">
+                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="1" value="{{$p->jenis=='Favorable'?1:4}}" required>
                              <label class="form-check-label" for="inlineRadio1">1</label>
-                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="2" value="{{$p->jenis=='Favorable'?2:3}}">
+                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="2" value="{{$p->jenis=='Favorable'?2:3}}" required>
                              <label class="form-check-label" for="inlineRadio2">2</label>
-                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="3" value="{{$p->jenis=='Favorable'?3:2}}">
+                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="3" value="{{$p->jenis=='Favorable'?3:2}}" required>
                              <label class="form-check-label" for="inlineRadio3">3</label>
-                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="4" value="{{$p->jenis=='Favorable'?4:1}}">
+                             <input class="form-check-input" type="radio" name="{{ $p->id }}" id="4" value="{{$p->jenis=='Favorable'?4:1}}" required>
                              <label class="form-check-label" for="inlineRadio4">4</label>
-                             <input type="hidden" name="jawaban[]" value="{{ $p->id }}">
+                             <input type="hidden" name="jawaban[]" value="{{ $p->id }}" required>
                          </div>
                         </td>
                      </tr>
