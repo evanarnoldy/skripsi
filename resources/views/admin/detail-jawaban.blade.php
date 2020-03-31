@@ -15,17 +15,15 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">Id</th>
                 <th scope="col">Pertanyaan</th>
                 <th scope="col">Jenis</th>
                 <th scope="col">Kategori</th>
-                <th scope="col">Jawaban</th>
+                <th scope="col">Nilai</th>
             </tr>
             </thead>
             <tbody>
             @foreach($hasil as $h)
              <tr>
-                 <td>{{ $h->id }}</td>
                  <td>{{ $h->pertanyaan }}</td>
                  <td>{{ $h->jenis }}</td>
                  <td>{{ $h->kategori }}</td>

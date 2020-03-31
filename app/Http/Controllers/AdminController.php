@@ -31,8 +31,8 @@ class AdminController extends Controller
         //
         $siswa = Student::all();
         $hasil = DB::table('hasil')
-            ->select('student_id','skor', 'kesimpulan', 'bulan')
-            ->orderBy('bulan', 'desc')
+            ->select('student_id','skor', 'kesimpulan', 'bulan', 'created_at')
+            ->latest()
             ->limit('1')
             ->get();
         return view('admin.data-siswa', compact('siswa', 'hasil'));
@@ -115,9 +115,13 @@ class AdminController extends Controller
 
     public function show_answer(Student $student)
     {
+        $jmlpertanyaan = Question::select('id')->get();
+
         $hasil = DB::table('questions')
             ->join('answers', 'questions.id', '=', 'answers.question_id')
-            ->select('questions.*','answers.jawaban')
+            ->select('questions.id','questions.jenis','questions.kategori','questions.pertanyaan','answers.*')
+            ->latest()
+            ->limit(count($jmlpertanyaan))
             ->get();
         return view('admin.detail-jawaban', compact('student', 'hasil'));
     }
