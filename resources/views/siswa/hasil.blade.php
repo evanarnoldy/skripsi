@@ -11,11 +11,17 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col" style="text-align: right">
+                        <p class="card-text">Nama :</p>
+                        <p class="card-text">Kelas :</p>
+                        <p class="card-text">Email :</p>
                         <p class="card-text">Skor :</p>
                         <p class="card-text">Hasil :</p>
                     </div>
                     <div class="col" style="text-align: left">
                         @foreach($hasil as $h)
+                            <p class="card-text">{{ $h->nama}}</p>
+                            <p class="card-text">{{ $h->kelas}}</p>
+                            <p class="card-text">{{ $h->email}}</p>
                             <p class="card-text">{{ $h->skor}}</p>
                             <p class="card-text">{{ $h->kesimpulan }}</p>
                         @endforeach
