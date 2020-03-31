@@ -18,7 +18,6 @@ class CreateAnswersTable extends Migration
             $table->integer('question_id');
             $table->integer('student_id');
             $table->string('jawaban');
-            $table->string('hasil');
             $table->timestamps();
         });
     }
