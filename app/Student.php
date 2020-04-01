@@ -31,4 +31,9 @@ class Student extends Authenticatable
         return $this->hasMany(Hasil::class);
     }
 
+    public function prestasi()
+    {
+        return $this->hasMany(Prestasi::class);
+    }
+
 }
