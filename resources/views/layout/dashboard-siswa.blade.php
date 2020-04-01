@@ -20,7 +20,15 @@
         <div class="sidebar-heading">Monitoring Kesehatan Mental</div>
         <div class="list-group list-group-flush">
             <a href="{{ route('siswa') }}" class="{{set_active('siswa')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-home mr-15"></i> Dashboard</a>
-            <a href="{{ route('kuesioner') }}" class="{{set_active('kuesioner')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-list mr-15"></i>Pengisian Kuesioner</a>
+            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-puteh dropdown-togglee"><i class="fas fa-users mr-15"></i>Pengisian kuesioner</a>
+            <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li>
+                    <a href="{{ route('kuesioner') }}" class="{{set_active('kuesioner')}}list-group-item list-group-item-action bg-puteh">Form Kuesioner</a>
+                </li>
+                <li>
+                    <a href="{{ route('prestasi') }}" class="{{set_active('prestasi')}}list-group-item list-group-item-action bg-puteh">Prestasi Belajar</a>
+                </li>
+            </ul>
             <a href="{{ route('hasil') }}" class="{{set_active('hasil')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-list mr-15"></i>Hasil Kuesioner</a>
             <a href="#" class="list-group-item list-group-item-action bg-puteh">Profile</a>
             <a href="#" class="list-group-item list-group-item-action bg-puteh">Status</a>
@@ -73,5 +81,6 @@
     });
 
 </script>
+@yield('footer')
 </body>
 </html>

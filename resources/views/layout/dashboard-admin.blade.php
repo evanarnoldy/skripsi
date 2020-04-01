@@ -48,7 +48,7 @@
                     <div class="nav-item col mr-18">
                         <div class="nama-ses mt-14">Notifikasi</div>
                     </div>
-                    <div class="nav-item col">
+                    <div class="nav-item col dropdown">
                         <a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown"><img src="{{url('asset/yoyo.jpg')}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px"></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
@@ -82,5 +82,6 @@
     });
 
 </script>
+@yield('footer')
 </body>
 </html>

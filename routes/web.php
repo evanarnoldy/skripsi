@@ -65,3 +65,5 @@ Route::patch('/daftar-pertanyaan/{question}', 'AdminController@update_question')
 Route::get('/pengisian-kuesioner', 'SiswaController@pertanyaan')->name('kuesioner')->middleware('auth:students');
 Route::post('/store-kuesioner', 'SiswaController@store_jawaban')->middleware('auth:students');
 Route::get('/hasil-kuesioner', 'SiswaController@hasil')->name('hasil')->middleware('auth:students');
+Route::get('/form-prestasi', 'SiswaController@create_prestasi')->name('prestasi')->middleware('auth:students');
+Route::post('/store-prestasi', 'SiswaController@store_prestasi')->middleware('auth:students');

@@ -3,9 +3,71 @@
 @section('container')
     <div class="container-fluid">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="title mt-4">Grafik Kesehatan Mental Sekolah</h1>
+            <h1 class="title mt-4">Grafik Kesehatan Mental Siswa</h1>
         </div>
-        <p>The starting state of the menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will change.</p>
-        <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>. The top navbar is optional, and just for demonstration. Just create an element with the <code>#menu-toggle</code> ID which will toggle the menu when clicked.</p>
+        <div class="container">
+            <div id="chart">
+
+            </div>
+        </div>
     </div>
+@endsection
+
+@section('footer')
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script>
+        Highcharts.chart('chart', {
+
+            title: {
+                text: 'Grafik Kesehatan Mental {{Auth::user()->nama}} Tahun {{date('Y')}}'
+            },
+
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Nilai'
+                }
+            },
+
+            xAxis: {
+                categories: {!! json_encode($bulan) !!},
+                crosshairs: true
+            },
+
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                }
+            },
+
+            series: [{
+                name: 'Nilai',
+                data: {!! json_encode($nilai) !!},
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+        });
+    </script>
 @endsection
