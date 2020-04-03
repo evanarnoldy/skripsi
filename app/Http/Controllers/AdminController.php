@@ -46,7 +46,7 @@ class AdminController extends Controller
             $ket = 'Rendah';
         }elseif ($value == 2){
             $ket = 'Sedang';
-        }else {
+        }elseif ($value == 3) {
             $ket = 'Tinggi';
         }
 
