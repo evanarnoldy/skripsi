@@ -35,7 +35,22 @@ class AdminController extends Controller
             ->latest()
             ->limit('1')
             ->get();
-        return view('admin.data-siswa', compact('siswa', 'hasil'));
+
+        foreach ($hasil as $h){
+            $value = $h -> kesimpulan;
+        }
+
+        if ($value == null){
+            $ket = 'Tidak ada';
+        }elseif ($value == 1){
+            $ket = 'Rendah';
+        }elseif ($value == 2){
+            $ket = 'Sedang';
+        }else {
+            $ket = 'Tinggi';
+        }
+
+        return view('admin.data-siswa', compact('siswa', 'hasil', 'ket'));
     }
 
     /**
