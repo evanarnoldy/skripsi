@@ -22,12 +22,20 @@ class SiswaController extends Controller
             ->get();
 
         $bulan = [];
-
+        $nilai = [];
 
         foreach ($data as $d)
         {
             $bulan[] = $d->bulan;
             $nilai[] = $d->kesimpulan;
+        }
+
+        if($data == null){
+           $data = "Data tidak ada";
+        }elseif ($bulan == null){
+            $bulan = 'Data tidak ada';
+        }elseif ($nilai == null){
+            $nilai = 'Data tidak ada';
         }
 
         return view('siswa.index', compact('data', 'bulan','nilai'));
@@ -74,7 +82,7 @@ class SiswaController extends Controller
         $data = implode(',',$data);
 
         $kesimpulan = (($jumlah/(4*count($jawaban)))*100);
-        if($kesimpulan = null){
+        if($kesimpulan == null){
             $hasil = 0;
         } elseif($kesimpulan <= 33.34){
             $hasil = 1;
@@ -180,7 +188,7 @@ class SiswaController extends Controller
             $ket = 'Rendah';
         }elseif ($value == 2){
             $ket = 'Sedang';
-        }else {
+        }elseif ($value == 3) {
             $ket = 'Tinggi';
         }
 

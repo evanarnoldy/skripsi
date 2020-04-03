@@ -36,7 +36,7 @@
                     <td>{{ $siswa->kelas }}</td>
                     <td>{{ $siswa->email }}</td>
                      <td>
-                         <a href="/detail-jawaban/{{ $siswa->id}}">{{ $h->kesimpulan }}</a></td>
+                         <a href="/detail-jawaban/{{ $siswa->id}}">{{ $ket }}</a></td>
                     <td>
                         <a href="/detail-siswa/{{ $siswa->id}}" class="badge badge-info">Rincian</a>
                         <form method="post" action="/data-siswa/{{ $siswa->id }}" class="d-inline">
