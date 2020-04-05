@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Student;
 use App\Teacher;
 use App\Question;
+use App\Korelasi;
 use App\Hasil;
 use App\Answer;
 use Illuminate\Http\Request;
@@ -16,7 +17,113 @@ class AdminController extends Controller
     //
     public function index()
     {
-        return view('admin.index');
+        $bulan = [
+            '01' => 'Januari',
+            '02' => 'Februari',
+            '03' => 'Maret',
+            '04' => 'April',
+            '05' => 'Mei',
+            '06' => 'Juni',
+            '07' => 'Juli',
+            '08' => 'Agustus',
+            '09' => 'September',
+            '10' => 'Oktober',
+            '11' => 'November',
+            '12' => 'Desember'
+        ];
+
+        $bulan1 = date('m');
+        $bulan1 = $bulan[$bulan1];
+
+        $tinggi = DB::table('hasil')
+            ->where('kesimpulan', 3)
+            ->get();
+
+        $sedang = DB::table('hasil')
+            ->where('kesimpulan', 2)
+            ->get();
+
+        $rendah = DB::table('hasil')
+            ->where('kesimpulan', 1)
+            ->get();
+
+        $siswa = Student::all();
+
+        $t = count($tinggi);
+        $s = count($sedang);
+        $r = count($rendah);
+        $jmlsiswa = count($siswa);
+
+        return view('admin.index', compact('bulan1', 't','s','r','jmlsiswa'));
+    }
+
+    public function korelasi()
+    {
+        $siswa = Student::all();
+
+        $data = DB::table('students')
+            ->join('hasil', 'students.id', '=', 'hasil.student_id')
+            ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+            ->select('students.id', 'hasil.skor', 'prestasi.rata')
+            ->get();
+
+        $jmlsiswa = count($siswa);
+        $skor = [];
+        $rata = [];
+
+        foreach ($data as $d){
+            $skor[] = $d->skor;
+            $rata[] = $d->rata;
+        }
+
+        //variabel x = skor, variabel y = rata
+        foreach ($data as $d){
+            $x2[] = pow($d->skor,2);
+            $y2[] = pow($d->rata, 2);
+        }
+
+        foreach ($data as $d){
+            $xy[] = $d->skor * $d->rata;
+        }
+
+        $jumlahx = array_sum($skor);
+        $jumlahy = array_sum($rata);
+        $jumlahx2 = array_sum($x2);
+        $jumlahy2 = array_sum($y2);
+        $jumlahxy = array_sum($xy);
+        $njumlahxy = $jumlahxy*$jmlsiswa;
+        $kalixy = $jumlahx*$jumlahy;
+        $njumlahx2 = $jmlsiswa*$jumlahx2;
+        $totkiri = $njumlahx2-pow($jumlahx,2);
+        $njumlahy2 = $jmlsiswa*$jumlahy2;
+        $totkanan= $njumlahy2-pow($jumlahy,2);
+        $kalitotbwh = $totkiri*$totkanan;
+        $hsltotbwh = sqrt($kalitotbwh);
+        $hslatas = $njumlahxy-$kalixy;
+        $korelasi = $hslatas/$hsltotbwh;
+
+        $tes = DB::table('korelasi')
+            ->select('df', 'taraf_sig')
+            ->where('df', $jmlsiswa)
+            ->get();
+
+        $df = [];
+        $ts = [];
+
+        foreach ($tes as $t){
+            $df[] = $t->df;
+            $ts[] = $t->taraf_sig;
+        }
+
+        $data = implode(',',$ts);
+
+        if($korelasi >= $data){
+            $hasil = 'Korelasi antara Kesehatan Mental dan Prestasi Belajar bersifat positif artinya semakin tinggi Kesehatan Mental siswa maka semakin tinggi prestasi belajarnya';
+        }elseif ($korelasi < $data){
+            $hasil = 'TIdak ada korelasi antara Kesehatan Mental dan Prestasi Belajar';
+        }
+
+        return view('admin.korelasi', compact('hasil'));
     }
 
     public function profil()
@@ -30,34 +137,20 @@ class AdminController extends Controller
     {
         //
         $siswa = Student::all();
-        $hasil = DB::table('hasil')
-            ->select('student_id','skor', 'kesimpulan', 'bulan', 'created_at')
-            ->latest()
-            ->limit('1')
-            ->get();
 
-        foreach ($hasil as $h){
-            $value = $h -> kesimpulan;
-        }
-
-        if ($value == null){
-            $ket = 'Tidak ada';
-        }elseif ($value == 1){
-            $ket = 'Rendah';
-        }elseif ($value == 2){
-            $ket = 'Sedang';
-        }elseif ($value == 3) {
-            $ket = 'Tinggi';
-        }
-
-        return view('admin.data-siswa', compact('siswa', 'hasil', 'ket'));
+        return view('admin.data-siswa', compact('siswa'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function hasil_survey()
+    {
+        $siswa = DB::table('students')
+            ->join('hasil','students.id', '=', 'hasil.student_id')
+            ->select('students.*', 'hasil.keterangan')
+            ->get();
+
+        return view('admin.hasil-survey', compact('siswa'));
+    }
+
     public function create_student()
     {
         //
@@ -132,12 +225,16 @@ class AdminController extends Controller
     {
         $jmlpertanyaan = Question::select('id')->get();
 
+        $id = $student->id;
+
         $hasil = DB::table('questions')
             ->join('answers', 'questions.id', '=', 'answers.question_id')
-            ->select('questions.id','questions.jenis','questions.kategori','questions.pertanyaan','answers.*')
+            ->select('questions.id','questions.pertanyaan','questions.jenis','questions.kategori','answers.*')
+            ->where('answers.student_id',$id)
             ->latest()
             ->limit(count($jmlpertanyaan))
             ->get();
+
         return view('admin.detail-jawaban', compact('student', 'hasil'));
     }
     public function edit_student(Student $student)

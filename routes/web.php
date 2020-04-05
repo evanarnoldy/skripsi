@@ -52,7 +52,8 @@ Route::post('/data-guru', 'AdminController@store_teacher')->middleware('auth:tea
 Route::delete('/data-guru/{teacher}', 'AdminController@destroy_teacher')->middleware('auth:teachers');
 Route::get('/data-guru/{teacher}/edit-guru', 'AdminController@edit_teacher')->middleware('auth:teachers');
 Route::patch('/data-guru/{teacher}', 'AdminController@update_teacher')->middleware('auth:teachers');
-
+Route::get('/hasil-survey', 'AdminController@hasil_survey')->name('survey')->middleware('auth:teachers');
+Route::get('/korelasi', 'AdminController@korelasi')->name('korelasi')->middleware('auth:teachers');
 //pertanyaan
 Route::get('/daftar-pertanyaan', 'AdminController@list_pertanyaan')->name('daftar-pertanyaan')->middleware('auth:teachers');
 Route::get('/tambah-pertanyaan', 'AdminController@create_question')->middleware('auth:teachers');
