@@ -22,21 +22,17 @@
                 <th scope="col">NISN</th>
                 <th scope="col">Kelas</th>
                 <th scope="col">Email</th>
-                <th scope="col">Hasil</th>
                 <th scope="col">Aksi</th>
             </tr>
             </thead>
             <tbody>
             @foreach($siswa as $siswa)
-                @foreach($hasil as $h)
                  <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td>{{ $siswa->nama }}</td>
                     <td>{{ $siswa->NISN }}</td>
                     <td>{{ $siswa->kelas }}</td>
                     <td>{{ $siswa->email }}</td>
-                     <td>
-                         <a href="/detail-jawaban/{{ $siswa->id}}">{{ $ket }}</a></td>
                     <td>
                         <a href="/detail-siswa/{{ $siswa->id}}" class="badge badge-info">Rincian</a>
                         <form method="post" action="/data-siswa/{{ $siswa->id }}" class="d-inline">
@@ -47,7 +43,6 @@
                         <a href="/data-siswa/{{ $siswa->id }}/edit-siswa" class="badge badge-success">Edit</a>
                     </td>
                  </tr>
-                @endforeach
             @endforeach
             </tbody>
         </table>
