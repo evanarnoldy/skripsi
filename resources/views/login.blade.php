@@ -17,10 +17,6 @@
             <label for="password">Password</label>
             <input type="password" class="form-control" id="exampleInputPassword1" name="password" required>
         </div>
-        <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Ingatin password</label>
-        </div>
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
     <div class="daftar">

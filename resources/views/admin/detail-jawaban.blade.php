@@ -32,6 +32,6 @@
             @endforeach
             </tbody>
         </table>
-        <a href="{{url('data-siswa')}}" class="btn btn-primary mt-14" style="margin-bottom: 40px">Kembali</a>
+        <a href="{{url('/hasil-survey')}}" class="btn btn-primary mt-14" style="margin-bottom: 40px">Kembali</a>
     </div>
 @endsection

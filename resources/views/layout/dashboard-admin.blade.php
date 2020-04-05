@@ -30,7 +30,15 @@
                 </li>
             </ul>
             <a href="{{ route('daftar-pertanyaan') }}" class="{{set_active('daftar-pertanyaan')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-list mr-15"></i>Daftar Pertanyaan</a>
-            <a href="#" class="list-group-item list-group-item-action bg-puteh">Events</a>
+            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-puteh dropdown-togglee"><i class="fas fa-poll mr-15"></i>Hasil</a>
+            <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li>
+                    <a href="{{ route('survey') }}" class="{{set_active('survey')}}list-group-item list-group-item-action bg-puteh">Hasil Monitoring Kesehatan Mental</a>
+                </li>
+                <li>
+                    <a href="{{ route('korelasi') }}" class="{{set_active('korelasi')}}list-group-item list-group-item-action bg-puteh">Korelasi</a>
+                </li>
+            </ul>
             <a href="#" class="list-group-item list-group-item-action bg-puteh">Profile</a>
             <a href="#" class="list-group-item list-group-item-action bg-puteh">Status</a>
         </div>
