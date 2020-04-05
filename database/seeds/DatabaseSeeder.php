@@ -12,6 +12,129 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
+        DB::table('korelasi')->insert([
+            [
+              'df' => '3',
+              'taraf_sig' => '0.997'
+            ],
+            [
+                'df' => '4',
+                'taraf_sig' => '0.950'
+            ],
+            [
+                'df' => '5',
+                'taraf_sig' => '0.878'
+            ],
+            [
+                'df' => '6',
+                'taraf_sig' => '0.811'
+            ],
+            [
+                'df' => '7',
+                'taraf_sig' => '0.754'
+            ],
+            [
+                'df' => '8',
+                'taraf_sig' => '0.707'
+            ],
+            [
+                'df' => '9',
+                'taraf_sig' => '0.666'
+            ],
+            [
+                'df' => '10',
+                'taraf_sig' => '0.632'
+            ],
+            [
+                'df' => '11',
+                'taraf_sig' => '0.602'
+            ],
+            [
+                'df' => '12',
+                'taraf_sig' => '0.576'
+            ],
+            [
+                'df' => '13',
+                'taraf_sig' => '0.553'
+            ],
+            [
+                'df' => '14',
+                'taraf_sig' => '0.532'
+            ],
+            [
+                'df' => '15',
+                'taraf_sig' => '0.514'
+            ],
+            [
+                'df' => '16',
+                'taraf_sig' => '0.497'
+            ],
+            [
+                'df' => '17',
+                'taraf_sig' => '0.482'
+            ],
+            [
+                'df' => '18',
+                'taraf_sig' => '0.468'
+            ],
+            [
+                'df' => '19',
+                'taraf_sig' => '0.456'
+            ],
+            [
+                'df' => '20',
+                'taraf_sig' => '0.444'
+            ],
+            [
+                'df' => '21',
+                'taraf_sig' => '0.433'
+            ],
+            [
+                'df' => '22',
+                'taraf_sig' => '0.423'
+            ],
+            [
+                'df' => '23',
+                'taraf_sig' => '0.413'
+            ],
+            [
+                'df' => '24',
+                'taraf_sig' => '0.404'
+            ],
+            [
+                'df' => '25',
+                'taraf_sig' => '0.396'
+            ],
+            [
+                'df' => '26',
+                'taraf_sig' => '0.388'
+            ],
+            [
+                'df' => '27',
+                'taraf_sig' => '0.381'
+            ],
+            [
+                'df' => '28',
+                'taraf_sig' => '0.374'
+            ],
+            [
+                'df' => '29',
+                'taraf_sig' => '0.367'
+            ],
+            [
+                'df' => '30',
+                'taraf_sig' => '0.361'
+            ],
+            [
+                'df' => '31',
+                'taraf_sig' => '0.355'
+            ],
+            [
+                'df' => '32',
+                'taraf_sig' => '0.349'
+            ]
+        ]);
+
         DB::table('questions')->insert([
             [
                 'pertanyaan' => 'Teman-teman akan membantu ketika saya mendapatkan masalah atau musibah',
