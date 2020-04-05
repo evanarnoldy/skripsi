@@ -23,7 +23,7 @@
                             <p class="card-text">{{ $h->kelas}}</p>
                             <p class="card-text">{{ $h->email}}</p>
                             <p class="card-text">{{ $h->skor}}</p>
-                            <p class="card-text">{{ $ket }}</p>
+                            <p class="card-text">{{ $h->keterangan }}</p>
                         @endforeach
                     </div>
                 </div>

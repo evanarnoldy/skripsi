@@ -92,8 +92,19 @@ class SiswaController extends Controller
             $hasil = 3;
         }
 
+        if($hasil == 0){
+            $ket = 'Tidak ada isi';
+        } elseif($hasil == 1){
+            $ket = 'Rendah';
+        } elseif ($hasil == 2){
+            $ket = 'Sedang';
+        } else if ($hasil == 3){
+            $ket = 'Tinggi';
+        }
+
+
         DB::insert('insert into answers(question_id, jawaban, student_id, created_at, updated_at, bulan, tahun) values '.$data.' ');
-        DB::insert('insert into hasil(student_id, skor, kesimpulan, bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$hasil.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+        DB::insert('insert into hasil(student_id, skor, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$hasil.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
         return redirect('/hasil-kuesioner');
     }
@@ -173,25 +184,31 @@ class SiswaController extends Controller
     {
         $hasil = DB::table('students')->where('student_id', Auth::id())
             ->join('hasil', 'students.id', '=', 'hasil.student_id')
-            ->select('students.nama','students.kelas','students.email','hasil.skor', 'hasil.kesimpulan', 'hasil.bulan', 'hasil.created_at')
+            ->select('students.nama','students.kelas','students.email','hasil.skor', 'hasil.kesimpulan', 'hasil.bulan', 'hasil.created_at', 'hasil.keterangan')
             ->latest()
             ->limit('1')
             ->get();
 
-        foreach ($hasil as $h){
-            $value = $h -> kesimpulan;
+//        foreach ($hasil as $h){
+//            $value = $h -> kesimpulan;
+//        }
+//
+//        if ($value == null){
+//            $ket = 'Tidak ada';
+//        }elseif ($value == 1){
+//            $ket = 'Rendah';
+//        }elseif ($value == 2){
+//            $ket = 'Sedang';
+//        }elseif ($value == 3) {
+//            $ket = 'Tinggi';
+//        }
+
+        //validate
+        if($hasil == null)
+        {
+            $hasil = 'Tidak ada data';
         }
 
-        if ($value == null){
-            $ket = 'Tidak ada';
-        }elseif ($value == 1){
-            $ket = 'Rendah';
-        }elseif ($value == 2){
-            $ket = 'Sedang';
-        }elseif ($value == 3) {
-            $ket = 'Tinggi';
-        }
-
-        return view('siswa.hasil', compact('hasil', 'ket'));
+        return view('siswa.hasil', compact('hasil'));
     }
 }
