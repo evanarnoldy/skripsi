@@ -8,6 +8,7 @@ use App\Question;
 use App\Korelasi;
 use App\Hasil;
 use App\Answer;
+use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +48,7 @@ class AdminController extends Controller
             ->where('kesimpulan', 1)
             ->get();
 
-        $siswa = Student::all();
+        $siswa = Hasil::all();
 
         $t = count($tinggi);
         $s = count($sedang);
@@ -129,14 +130,71 @@ class AdminController extends Controller
     public function profil()
     {
         $user = Auth::user();
-        return view('admin.index')->with(['user' => $user]);
+        return view('admin.profil', compact('user'));
+    }
+
+    public function edit_profil(Teacher $teacher)
+    {
+        return view('admin.edit-profil', compact('teacher'));
+    }
+
+    public function update_profil(Request $request, Teacher $teacher)
+    {
+
+        $request->validate([
+            'nama' => 'required|unique:teachers|max:255',
+            'NIP' => 'required|size:9|unique:teachers',
+            'jenis_kelamin' => 'required',
+            'tanggal_lahir' => 'required',
+            'alamat' => 'required',
+            'email' => 'required|email|unique:teachers',
+            'passsword' => 'nullable'
+        ],
+            [
+                'nama.required' => 'Nama harus diisi',
+                'nama.unique' => 'Nama telah dipakai',
+                'NIP.required' => 'NIP harus diisi',
+                'NIP.size' => 'NIP harus berisi 9 karakter',
+                'NIP.unique' => 'NIP telah dipakai',
+                'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
+                'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
+                'alamat.required' => 'Alamat harus diisi',
+                'emai;.required' => 'Email harus diisi',
+                'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
+                'email.unique' => 'Email telah digunakan',
+            ]);
+
+        Teacher::where('id', Auth::user()->id)
+            ->update([
+                'nama'=> $request->nama,
+                'NIP'=> $request->NIP,
+                'alamat'=> $request->alamat,
+                'jenis_kelamin'=> $request->jenis_kelamin,
+                'tanggal_lahir'=> $request->tanggal_lahir,
+                'email'=> $request->email
+            ]);
+        return redirect('profil')->with('status', 'Data berhasil diubah!');
+    }
+
+    public function update_avatar(Request $request)
+    {
+        if($request->hasFile('avatar')){
+            $avatar = $request->file('avatar');
+            $filename = time() . '.' . $avatar->getClientOriginalExtension();
+            Image::make($avatar)->resize(300, 300)->save(public_path('uploads/avatar/'.$filename));
+
+            $user = Auth::user();
+            $user->avatar = $filename;
+            $user->save();
+        }
+        return redirect('profil')->with('status', 'Gambar berhasil diubah!');
     }
 
     //siswa
     public function index_student()
     {
         //
-        $siswa = Student::all();
+        $siswa = Student::paginate(10);
 
         return view('admin.data-siswa', compact('siswa'));
     }
@@ -146,7 +204,7 @@ class AdminController extends Controller
         $siswa = DB::table('students')
             ->join('hasil','students.id', '=', 'hasil.student_id')
             ->select('students.*', 'hasil.keterangan')
-            ->get();
+            ->paginate(10);
 
         return view('admin.hasil-survey', compact('siswa'));
     }
@@ -252,7 +310,31 @@ class AdminController extends Controller
      */
     public function update_student(Request $request, Student $student)
     {
-        //
+        $request->validate([
+            'nama' => 'required|unique:students|max:255',
+            'NISN' => 'required|size:9|unique:students',
+            'jenis_kelamin' => 'required',
+            'tanggal_lahir' => 'required',
+            'alamat' => 'required',
+            'kelas' => 'required|size:2',
+            'email' => 'required|email|unique:students',
+            'passsword' => 'nullable'
+        ],
+            [
+                'nama.required' => 'Nama harus diisi',
+                'nama.unique' => 'Nama telah dipakai',
+                'NISN.required' => 'NISN harus diisi',
+                'NISN.size' => 'NISN harus berisi 9 karakter',
+                'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
+                'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
+                'alamat.required' => 'Alamat harus diisi',
+                'kelas.required' => 'Kelas harus diisi',
+                'kelas.size' => 'Kelas harus berisi 2 karakter',
+                'emai;.required' => 'Email harus diisi',
+                'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
+                'email.unique' => 'Email telah digunakan',
+            ]);
+
         Student::where('id', $student->id)
             ->update([
                 'nama'=> $request->nama,
@@ -283,7 +365,7 @@ class AdminController extends Controller
     public function index_teacher()
     {
         //
-        $guru = Teacher::all();
+        $guru = Teacher::paginate(10);
         return view('admin.data-guru', compact('guru'));
     }
 
@@ -368,7 +450,28 @@ class AdminController extends Controller
      */
     public function update_teacher(Request $request, Teacher $teacher)
     {
-        //
+        $request->validate([
+            'nama' => 'required|unique:teachers|max:255',
+            'NIP' => 'required|size:9|unique:teachers',
+            'jenis_kelamin' => 'required',
+            'tanggal_lahir' => 'required',
+            'alamat' => 'required',
+            'email' => 'required|email|unique:teachers',
+            'passsword' => 'nullable'
+        ],
+            [
+                'nama.required' => 'Nama harus diisi',
+                'nama.unique' => 'Nama telah dipakai',
+                'NIP.required' => 'NISN harus diisi',
+                'NIP.size' => 'NISN harus berisi 9 karakter',
+                'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
+                'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
+                'alamat.required' => 'Alamat harus diisi',
+                'emai;.required' => 'Email harus diisi',
+                'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
+                'email.unique' => 'Email telah digunakan',
+            ]);
+
         Teacher::where('id', $teacher->id)
             ->update([
                 'nama'=> $request->nama,
@@ -398,7 +501,7 @@ class AdminController extends Controller
     //pertanyaan
     public function list_pertanyaan()
     {
-        $pertanyaan = Question::all();
+        $pertanyaan = Question::paginate(10);
         return view('admin.daftar-pertanyaan', compact('pertanyaan'));
     }
 
