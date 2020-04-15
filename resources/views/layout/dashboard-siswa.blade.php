@@ -16,54 +16,62 @@
 <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
-    <div class="bg-light border-right" id="sidebar-wrapper">
+    <div class="bg-drk border-right" id="sidebar-wrapper">
         <div class="sidebar-heading">Monitoring Kesehatan Mental</div>
         <div class="list-group list-group-flush">
-            <a href="{{ route('siswa') }}" class="{{set_active('siswa')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-home mr-15"></i> Dashboard</a>
-            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-puteh dropdown-togglee"><i class="fas fa-users mr-15"></i>Pengisian kuesioner</a>
+            <a href="{{ route('siswa') }}" class="{{set_active('siswa')}}list-group-item bg-list list-group-item-action"><i class="fas fa-home mr-15"></i> Dashboard</a>
+            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-list dropdown-togglee"><i class="fas fa-users mr-15"></i>Pengisian kuesioner</a>
             <ul class="collapse list-unstyled" id="pageSubmenu">
                 <li>
-                    <a href="{{ route('kuesioner') }}" class="{{set_active('kuesioner')}}list-group-item list-group-item-action bg-puteh">Form Kuesioner</a>
+                    <a href="{{ route('kuesioner') }}" class="{{set_active('kuesioner')}}list-group-item bg-list list-group-item-action">Form Kuesioner</a>
                 </li>
                 <li>
-                    <a href="{{ route('prestasi') }}" class="{{set_active('prestasi')}}list-group-item list-group-item-action bg-puteh">Prestasi Belajar</a>
+                    <a href="{{ route('prestasi') }}" class="{{set_active('prestasi')}}list-group-item bg-list list-group-item-action">Prestasi Belajar</a>
                 </li>
             </ul>
-            <a href="{{ route('hasil') }}" class="{{set_active('hasil')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-list mr-15"></i>Hasil Kuesioner</a>
-            <a href="#" class="list-group-item list-group-item-action bg-puteh">Profile</a>
-            <a href="#" class="list-group-item list-group-item-action bg-puteh">Status</a>
+            <a href="{{ route('hasil') }}" class="{{set_active('hasil')}}list-group-item bg-list list-group-item-action"><i class="fas fa-list mr-15"></i>Hasil Kuesioner</a>
+            <a href="{{ route('konsultasi') }}" class="{{set_active('konsultasi')}}list-group-item bg-list list-group-item-action"><i class="fas fa-comments mr-15"></i>Konsultasi</a>
         </div>
     </div>
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
-
-        <nav class="navbar navbar-dark bg-light flex-md-nowrap p-0 shadow">
-            <button class="btn btn-primary ml-20" id="menu-toggle">Buka Menu</button>
-
-            <div class="navbar-nav px-3">
-                <div class="row mr-50">
-                    <div class="nav-item col mr-18">
-                        <div class="nama-ses mt-14">Notifikasi</div>
-                    </div>
-                    <div class="nav-item col">
-                        <a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown"><img src="{{url('asset/yoyo.jpg')}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px"></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
-                    <div class="nav-item col">
-                        <div class="nama-ses mt-14" style="margin-left: -20px">{{Auth::user()->nama}}</div>
-                    </div>
-                </div>
+        <nav class="navbar navbar-expand bg-gl p-0 shadow">
+            <div class="nav toggle">
+                <a id="menu-toggle"><i class="fas fa-bars"></i></a>
             </div>
+            <ul class="nav navbar-nav ml-auto" style="margin: 13px">
+                <li class="dropdown" onclick="markNotificationAsRead()">
+                    <a href="#" class="nama-ses mt-14 dropdown-togglee" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-globe"></i>Notifikasi<span class="badge badge-danger notif">{{count(auth()->user()->unreadNotifications)}}</span>
+                    </a>
+                    <ul class="dropdown-menu cus" aria-labelledby="navbarDropdown">
+                        <li>
+                            @forelse(auth()->user()->unreadNotifications as $notif)
+                                @include('layout.notification.'.Str::snake(class_basename($notif->type)))
+{{--                                {{$notif->markAsRead()}}--}}
+                                    @empty
+                                    <span>Tidak ada pesan</span>
+                            @endforelse
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown" style="padding-left: 15px;">
+                    <a href="#" class="user-profile dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{url('asset/yoyo.jpg')}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px">
+                        <span>{{Auth::user()->nama}}</span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt mr-15"></i>Logout</a>
+                            <a class="dropdown-item" href="{{ route('profil') }}"><i class="fas fa-user mr-15"></i>Profil</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </nav>
-
         @yield('container')
-
     </div>
 </div>
 
@@ -71,9 +79,10 @@
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="{{'/js/app.js'}}"></script>
 <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();

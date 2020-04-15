@@ -17,18 +17,19 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($siswa as $siswa)
+            @foreach($siswa as $s)
                  <tr>
-                    <td>{{ $siswa->nama }}</td>
-                    <td>{{ $siswa->NISN }}</td>
-                    <td>{{ $siswa->kelas }}</td>
-                    <td>{{ $siswa->email }}</td>
+                    <td>{{ $s->nama }}</td>
+                    <td>{{ $s->NISN }}</td>
+                    <td>{{ $s->kelas }}</td>
+                    <td>{{ $s->email }}</td>
                      <td>
-                         <a href="/detail-jawaban/{{ $siswa->id}}">{{ $siswa->keterangan }}</a>
+                         <a href="/detail-jawaban/{{ $s->id}}">{{ $s->keterangan }}</a>
                      </td>
                  </tr>
             @endforeach
             </tbody>
         </table>
+        {{$siswa->links()}}
     </div>
 @endsection

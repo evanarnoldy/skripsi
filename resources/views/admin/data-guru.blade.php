@@ -25,24 +25,25 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($guru as $guru)
+            @foreach($guru as $g)
              <tr>
                 <th scope="row">{{ $loop->iteration }}</th>
-                <td>{{ $guru->nama }}</td>
-                <td>{{ $guru->NIP }}</td>
-                <td>{{ $guru->email }}</td>
+                <td>{{ $g->nama }}</td>
+                <td>{{ $g->NIP }}</td>
+                <td>{{ $g->email }}</td>
                 <td>
-                    <a href="/detail-guru/{{ $guru->id}}" class="badge badge-info">Rincian</a>
-                    <form method="post" action="/data-guru/{{ $guru->id }}" class="d-inline">
+                    <a href="/detail-guru/{{ $g->id}}" class="badge badge-info">Rincian</a>
+                    <form method="post" action="/data-guru/{{ $g->id }}" class="d-inline">
                         @method('delete')
                         @csrf
                         <button type="submit" class="badge badge-danger no-border">Hapus</button>
                     </form>
-                    <a href="/data-guru/{{ $guru->id }}/edit-guru" class="badge badge-success">Edit</a>
+                    <a href="/data-guru/{{ $g->id }}/edit-guru" class="badge badge-success">Edit</a>
                 </td>
              </tr>
             @endforeach
             </tbody>
         </table>
+        {{$guru->links()}}
     </div>
 @endsection

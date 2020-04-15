@@ -16,63 +16,71 @@
 <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
-    <div class="bg-light border-right" id="sidebar-wrapper">
+    <div class="bg-drk border-right" id="sidebar-wrapper">
         <div class="sidebar-heading">Monitoring Kesehatan Mental</div>
         <div class="list-group list-group-flush">
-            <a href="{{ route('admin') }}" class="{{set_active('admin')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-home mr-15"></i> Dashboard</a>
-            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-puteh dropdown-togglee"><i class="fas fa-users mr-15"></i>Data User</a>
+            <a href="{{ route('admin') }}" class="{{set_active('admin')}}list-group-item bg-list list-group-item-action"><i class="fas fa-home mr-15"></i> Dashboard</a>
+            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-list dropdown-togglee"><i class="fas fa-users mr-15"></i>Data User</a>
             <ul class="collapse list-unstyled" id="pageSubmenu">
                 <li>
-                    <a href="{{ route('data-siswa') }}" class="{{set_active('data-siswa')}}list-group-item list-group-item-action bg-puteh">Data Siswa</a>
+                    <a href="{{ route('data-siswa') }}" class="{{set_active('data-siswa')}}list-group-item bg-list list-group-item-action">Data siswa</a>
                 </li>
                 <li>
-                    <a href="{{ route('data-guru') }}" class="{{set_active('data-guru')}}list-group-item list-group-item-action bg-puteh">Data Guru</a>
+                    <a href="{{ route('data-guru') }}" class="{{set_active('data-guru')}}list-group-item bg-list list-group-item-action">Data guru</a>
                 </li>
             </ul>
-            <a href="{{ route('daftar-pertanyaan') }}" class="{{set_active('daftar-pertanyaan')}}list-group-item list-group-item-action bg-puteh"><i class="fas fa-list mr-15"></i>Daftar Pertanyaan</a>
-            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-puteh dropdown-togglee"><i class="fas fa-poll mr-15"></i>Hasil</a>
-            <ul class="collapse list-unstyled" id="pageSubmenu">
+            <a href="{{ route('daftar-pertanyaan') }}" class="{{set_active('daftar-pertanyaan')}}list-group-item bg-list list-group-item-action"><i class="fas fa-list mr-15"></i>Daftar Pertanyaan</a>
+            <a href="#pageSubmenuu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-list dropdown-togglee"><i class="fas fa-poll mr-15"></i>Hasil</a>
+            <ul class="collapse list-unstyled" id="pageSubmenuu">
                 <li>
-                    <a href="{{ route('survey') }}" class="{{set_active('survey')}}list-group-item list-group-item-action bg-puteh">Hasil Monitoring Kesehatan Mental</a>
+                    <a href="{{ route('survey') }}" class="{{set_active('survey')}}list-group-item bg-list list-group-item-action">Hasil Monitoring Kesehatan Mental</a>
                 </li>
                 <li>
-                    <a href="{{ route('korelasi') }}" class="{{set_active('korelasi')}}list-group-item list-group-item-action bg-puteh">Korelasi</a>
+                    <a href="{{ route('korelasi') }}" class="{{set_active('korelasi')}}list-group-item bg-list list-group-item-action">Korelasi</a>
                 </li>
             </ul>
-            <a href="#" class="list-group-item list-group-item-action bg-puteh">Profile</a>
-            <a href="#" class="list-group-item list-group-item-action bg-puteh">Status</a>
+            <a href="{{ route('daftar.keluhan') }}" class="{{set_active('daftar.keluhan')}}list-group-item bg-list list-group-item-action"><i class="fas fa-comments mr-15"></i>Daftar Keluhan</a>
         </div>
     </div>
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
-
-        <nav class="navbar navbar-dark bg-light flex-md-nowrap p-0 shadow">
-            <button class="btn btn-primary ml-20" id="menu-toggle">Buka Menu</button>
-
-            <div class="navbar-nav px-3">
-                <div class="row mr-50">
-                    <div class="nav-item col mr-18">
-                        <div class="nama-ses mt-14">Notifikasi</div>
-                    </div>
-                    <div class="nav-item col dropdown">
-                        <a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown"><img src="{{url('asset/yoyo.jpg')}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px"></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
-                            <a class="dropdown-item" href="#">Edit profil</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
-                    <div class="nav-item col">
-                        <div class="nama-ses mt-14" style="margin-left: -20px">{{Auth::user()->nama}}</div>
-                    </div>
-                </div>
+        <nav class="navbar navbar-expand bg-gl p-0 shadow">
+            <div class="nav toggle">
+                <a id="menu-toggle"><i class="fas fa-bars"></i></a>
             </div>
+            <ul class="nav navbar-nav ml-auto" style="margin: 13px">
+                <li class="dropdown">
+                    <a href="#" class="nama-ses mt-14 dropdown-togglee" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-globe"></i>Notifikasi<span class="badge badge-danger notif">{{count(auth()->user()->unreadNotifications)}}</span>
+                    </a>
+                    <ul class="dropdown-menu cus" aria-labelledby="navbarDropdown">
+                        <li>
+                            @forelse(auth()->user()->unreadNotifications as $notif)
+                                @include('layout.notification.'.Str::snake(class_basename($notif->type)))
+                                {{$notif->markAsRead()}}
+                            @empty
+                                <span>Tidak ada pesan</span>
+                            @endforelse
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown" style="padding-left: 15px;">
+                    <a href="#" class="user-profile dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{url('asset/yoyo.jpg')}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px">
+                        <span>{{Auth::user()->nama}}</span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt mr-15"></i>Logout</a>
+                            <a class="dropdown-item" href="{{ route('profil') }}"><i class="fas fa-user mr-15"></i>Profil</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </nav>
-
         @yield('container')
-
     </div>
 </div>
 
@@ -83,6 +91,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="{{'/js/app.js'}}"></script>
 <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();

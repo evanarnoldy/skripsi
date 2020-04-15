@@ -26,25 +26,26 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($siswa as $siswa)
+            @foreach($siswa as $s)
                  <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
-                    <td>{{ $siswa->nama }}</td>
-                    <td>{{ $siswa->NISN }}</td>
-                    <td>{{ $siswa->kelas }}</td>
-                    <td>{{ $siswa->email }}</td>
+                    <td>{{ $s->nama }}</td>
+                    <td>{{ $s->NISN }}</td>
+                    <td>{{ $s->kelas }}</td>
+                    <td>{{ $s->email }}</td>
                     <td>
-                        <a href="/detail-siswa/{{ $siswa->id}}" class="badge badge-info">Rincian</a>
-                        <form method="post" action="/data-siswa/{{ $siswa->id }}" class="d-inline">
+                        <a href="/detail-siswa/{{ $s->id}}" class="badge badge-info">Rincian</a>
+                        <form method="post" action="/data-siswa/{{ $s->id }}" class="d-inline">
                             @method('delete')
                             @csrf
                             <button type="submit" class="badge badge-danger no-border">Hapus</button>
                         </form>
-                        <a href="/data-siswa/{{ $siswa->id }}/edit-siswa" class="badge badge-success">Edit</a>
+                        <a href="/data-siswa/{{ $s->id }}/edit-siswa" class="badge badge-success">Edit</a>
                     </td>
                  </tr>
             @endforeach
             </tbody>
         </table>
+        {{$siswa->links()}}
     </div>
 @endsection

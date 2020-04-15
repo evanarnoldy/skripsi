@@ -13,12 +13,12 @@
 <body>
 <div class="fullpage">
     <div class="branding">
-        <img src="{{url("/asset/yoyo.jpg")}}" style="width: 95%; height: 760px">
+        <img src="{{url("/asset/buku.jpg")}}" style="width: 95%; height: 760px;background-size: cover;">
     </div>
     <div class="contentWrap">
         <div class="content">
-            <div class="header">
-                <img src="/asset/Logo.png" style="width: 260px; height: auto">
+            <div class="header center" style="margin-bottom: 8px!important;">
+                <img src="/asset/download.png" style="width: 140px; height: auto; display: block; margin: auto">
             </div>
 
             @yield('form')

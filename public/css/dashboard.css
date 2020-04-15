@@ -68,23 +68,78 @@
 .nama-ses {
     padding-top: 8px;
     display: block;
-    color: #33312f;
+    color: #5E6974 !important;
+    text-decoration: none!important;
+}
+
+.badge.notif{
+    font-size: 80%!important;
+    margin-left: 3px;
+    border-radius: 1.25rem!important;
 }
 
 .active{
     color: #007bff!important;
     border-color: rgba(0,0,0,.125)!important;
-    background-color: #e6eef5!important;;
 }
 
-.bg-puteh{
-    background-color: #f8f9fa;
+.bg-drk{
+    background-color: #2A3F54;
 }
 
 .pd {
     padding: 0.5rem 3rem!important;
 }
 
+.bg-list{
+    color: #ECF0F1!important;
+    background-color: inherit!important;
+}
+
+.list-group-item.active{
+    background-color: rgba(255,255,255,0.05)!important;;
+}
+
+.toggle{
+    float: left;
+    margin: 0;
+    width: 70px;
+}
+
+a.user-profile {
+    color: #5E6974 !important;
+    text-decoration: none!important;
+}
+
+.toggle a i {
+    font-size: 26px;
+}
+
+.cus{
+    top: 115%!important;
+    padding: 0.5rem!important;
+    min-width: 24rem!important;
+    margin: 0.125rem 0 0 -140px!important;
+}
+
+.bot{
+    border-bottom: solid 1px;
+    border-bottom-color: rgba(0, 0, 0, 0.15);
+}
+
+.toggle a {
+    padding: 15px 15px 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+body{
+    color: #73879C!important;
+}
+
+.bg-gl{
+    background-color: #EDEDED;
+}
 /*tes*/
 #sidebar-wrapper {
     min-height: 100vh;
@@ -98,6 +153,7 @@
 #sidebar-wrapper .sidebar-heading {
     padding: 0.875rem 1.25rem;
     font-size: 1.2rem;
+    color: #ECF0F1;
 }
 
 #sidebar-wrapper .list-group {

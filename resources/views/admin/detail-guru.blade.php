@@ -23,7 +23,7 @@
                         <p class="card-text">{{ $teacher->NIP }}</p>
                         <p class="card-text">{{ $teacher->jenis_kelamin }}</p>
                         <p class="card-text">{{ $teacher->alamat }}</p>
-                        <p class="card-text">{{ $teacher->tanggal_lahir}}</p>
+                        <p class="card-text">{{ date('d-m-Y', strtotime($teacher->tanggal_lahir))}}</p>
                         <p class="card-text">{{ $teacher->email}}</p>
                     </div>
                 </div>

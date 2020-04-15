@@ -27,7 +27,7 @@
                             <p class="card-text">{{ $student->NISN }}</p>
                             <p class="card-text">{{ $student->jenis_kelamin }}</p>
                             <p class="card-text">{{ $student->alamat }}</p>
-                            <p class="card-text">{{ $student->tanggal_lahir}}</p>
+                            <p class="card-text">{{ date('d-m-Y', strtotime($student->tanggal_lahir))}}</p>
                             <p class="card-text">{{ $student->kelas}}</p>
                             <p class="card-text">{{ $student->email}}</p>
                             <p class="card-text">{{ $h->kesimpulan}}</p>
