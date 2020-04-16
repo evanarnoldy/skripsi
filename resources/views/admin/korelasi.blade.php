@@ -11,6 +11,7 @@
             <div class="card-body">
                 <h5 class="bold">Tahun : {{date('Y')}}</h5>
                 <h5 class="bold">Hasil : </h5>
+                <p>Nilai koefisien korelasi sebesar {{$korelasi}}</p>
                 <p>{{$hasil}}</p>
             </div>
             <div class="card-footer text-muted">

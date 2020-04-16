@@ -15,7 +15,6 @@ class CreateKorelasiTable extends Migration
     {
         Schema::create('korelasi', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('student_id');
             $table->integer('df');
             $table->string('taraf_sig');
             $table->timestamps();

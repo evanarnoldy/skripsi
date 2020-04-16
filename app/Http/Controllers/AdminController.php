@@ -124,7 +124,7 @@ class AdminController extends Controller
             $hasil = 'TIdak ada korelasi antara Kesehatan Mental dan Prestasi Belajar';
         }
 
-        return view('admin.korelasi', compact('hasil'));
+        return view('admin.korelasi', compact('hasil', 'korelasi'));
     }
 
     public function profil()

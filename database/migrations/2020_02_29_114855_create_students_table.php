@@ -21,6 +21,7 @@ class CreateStudentsTable extends Migration
             $table->string('jenis_kelamin');
             $table->string('alamat');
             $table->string('email')->unique();
+            $table->string('avatar')->default('default.jpg');
             $table->string('kelas');
             $table->string('password')->nullable(true);;
             $table->timestamps();

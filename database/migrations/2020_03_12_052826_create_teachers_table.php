@@ -21,6 +21,7 @@ class CreateTeachersTable extends Migration
             $table->string('jenis_kelamin');
             $table->string('alamat');
             $table->string('email')->unique();
+            $table->string('avatar')->default('default.jpg');
             $table->boolean('admin')->default(0);
             $table->string('password')->nullable(true);
             $table->timestamps();

@@ -18,6 +18,7 @@ class CreateHasilTable extends Migration
             $table->integer('student_id');
             $table->string('skor');
             $table->string('kesimpulan');
+            $table->string('keterangan');
             $table->string('bulan');
             $table->string('tahun');
             $table->timestamps();
