@@ -72,7 +72,7 @@ Route::patch('/daftar-pertanyaan/{question}', 'AdminController@update_question')
 //dashboard siswa
 Route::get('/konsultasi', 'KeluhanController@konsultasi')->name('konsultasi')->middleware('auth:students');
 Route::post('/konsultasi', 'KeluhanController@send_konsultasi')->middleware('auth:students');
-Route::get('/profil-siswa', 'SiswaController@profil')->name('profil')->middleware('auth:students');
+Route::get('/profil-siswa', 'SiswaController@profil')->name('profil-siswa')->middleware('auth:students');
 Route::get('/profil-siswa/{student}/edit-profil', 'SiswaController@edit_profil')->middleware('auth:students');
 Route::patch('/profil-siswa/{student}', 'SiswaController@update_profil')->name('profil.update')->middleware('auth:students');
 Route::post('/profil-siswa', 'SiswaController@update_avatar')->name('update.avatar')->middleware('auth:students');
