@@ -119,9 +119,9 @@ class AdminController extends Controller
         $data = implode(',',$ts);
 
         if($korelasi >= $data){
-            $hasil = 'Korelasi antara Kesehatan Mental dan Prestasi Belajar bersifat positif artinya semakin tinggi Kesehatan Mental siswa maka semakin tinggi prestasi belajarnya';
+            $hasil = 'Korelasi antara Kesehatan Mental dan Prestasi Belajar bersifat positif dan signifikan artinya semakin tinggi Kesehatan Mental siswa maka semakin tinggi prestasi belajarnya';
         }elseif ($korelasi < $data){
-            $hasil = 'TIdak ada korelasi antara Kesehatan Mental dan Prestasi Belajar';
+            $hasil = 'Korelasi antara Kesehatan Mental dan Prestasi Belajar bersifat positif dan tidak signifikan';
         }
 
         return view('admin.korelasi', compact('hasil', 'korelasi'));
@@ -223,7 +223,7 @@ class AdminController extends Controller
      */
     public function store_student(Request $request)
     {
-        //
+
         $request->validate([
             'nama' => 'required|unique:students|max:255',
             'NISN' => 'required|size:9|unique:students',
@@ -232,7 +232,7 @@ class AdminController extends Controller
             'alamat' => 'required',
             'kelas' => 'required|size:2',
             'email' => 'required|email|unique:students',
-            'passsword' => 'nullable'
+            'avatar' => 'required'
         ],
             [
                 'nama.required' => 'Nama harus diisi',
@@ -247,9 +247,25 @@ class AdminController extends Controller
                 'emai;.required' => 'Email harus diisi',
                 'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
                 'email.unique' => 'Email telah digunakan',
+                'avatar.required' => 'Foto harus diisi'
             ]);
 
-        Student::create($request->all());
+        if($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+            $filename = time() . '.' . $avatar->getClientOriginalExtension();
+            Image::make($avatar)->resize(300, 300)->save(public_path('uploads/avatar/' . $filename));
+
+            Student::create([
+                'nama' => $request->nama,
+                'NISN' => $request->NISN,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'alamat' => $request->alamat,
+                'kelas' => $request->kelas,
+                'email' => $request->email,
+                'avatar' => $filename
+            ]);
+        };
 
         return redirect('data-siswa')->with('status', 'Data berhasil ditambahkan!');
 
@@ -263,13 +279,7 @@ class AdminController extends Controller
      */
     public function show_student(Student $student)
     {
-        //
-        $hasil = DB::table('hasil')
-            ->select('student_id','skor', 'kesimpulan', 'bulan')
-            ->orderBy('bulan', 'desc')
-            ->limit('1')
-            ->get();
-        return view('admin.detail-siswa', compact('student','hasil'));
+        return view('admin.detail-siswa', compact('student'));
     }
 
     /**
@@ -297,42 +307,33 @@ class AdminController extends Controller
     }
     public function edit_student(Student $student)
     {
-        //
         return view('admin.edit-siswa', compact('student'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update_student(Request $request, Student $student)
     {
         $request->validate([
-            'nama' => 'required|unique:students|max:255',
-            'NISN' => 'required|size:9|unique:students',
+            'nama' => 'required|max:255',
+            'NISN' => 'required|size:9',
             'jenis_kelamin' => 'required',
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
             'kelas' => 'required|size:2',
-            'email' => 'required|email|unique:students',
-            'passsword' => 'nullable'
+            'email' => 'required|email',
+            'passsword' => 'nullable',
+            'avatar' => 'required'
         ],
             [
                 'nama.required' => 'Nama harus diisi',
-                'nama.unique' => 'Nama telah dipakai',
-                'NISN.required' => 'NISN harus diisi',
                 'NISN.size' => 'NISN harus berisi 9 karakter',
                 'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
                 'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
                 'alamat.required' => 'Alamat harus diisi',
                 'kelas.required' => 'Kelas harus diisi',
                 'kelas.size' => 'Kelas harus berisi 2 karakter',
-                'emai;.required' => 'Email harus diisi',
+                'email.required' => 'Email harus diisi',
                 'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
-                'email.unique' => 'Email telah digunakan',
+                'avatar.required' => 'Foto harus diisi',
             ]);
 
         Student::where('id', $student->id)
@@ -345,6 +346,16 @@ class AdminController extends Controller
                 'tanggal_lahir'=> $request->tanggal_lahir,
                 'email'=> $request->email
             ]);
+
+        if($request->hasFile('avatar')){
+            $avatar = $request->file('avatar');
+            $filename = time() . '.' . $avatar->getClientOriginalExtension();
+            Image::make($avatar)->resize(300, 300)->save(public_path('uploads/avatar/'.$filename));
+
+            $user = $student;
+            $user->avatar = $filename;
+            $user->save();
+        };
 
         return redirect('data-siswa')->with('status', 'Data berhasil diubah!');
     }
@@ -396,7 +407,8 @@ class AdminController extends Controller
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
             'email' => 'required|email|unique:teachers',
-            'passsword' => 'nullable'
+            'passsword' => 'nullable',
+            'avatar' => 'required'
         ],
             [
                 'nama.required' => 'Nama harus diisi',
@@ -409,9 +421,24 @@ class AdminController extends Controller
                 'emai;.required' => 'Email harus diisi',
                 'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
                 'email.unique' => 'Email telah digunakan',
+                'avatar.required' => 'Foto harus diisi'
             ]);
 
-        Teacher::create($request->all());
+        if($request->hasFile('avatar')){
+            $avatar = $request->file('avatar');
+            $filename = time() . '.' . $avatar->getClientOriginalExtension();
+            Image::make($avatar)->resize(300, 300)->save(public_path('uploads/avatar/'.$filename));
+
+            Teacher::create([
+                'nama' => $request->nama,
+                'NIP' => $request->NIP,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'alamat' => $request->alamat,
+                'email' => $request->email,
+                'avatar' => $filename
+            ]);
+        };
 
         return redirect('data-guru')->with('status', 'Data berhasil ditambahkan!');
 
@@ -451,13 +478,14 @@ class AdminController extends Controller
     public function update_teacher(Request $request, Teacher $teacher)
     {
         $request->validate([
-            'nama' => 'required|unique:teachers|max:255',
-            'NIP' => 'required|size:9|unique:teachers',
+            'nama' => 'required|max:255',
+            'NIP' => 'required|size:9',
             'jenis_kelamin' => 'required',
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
-            'email' => 'required|email|unique:teachers',
-            'passsword' => 'nullable'
+            'email' => 'required|email',
+            'passsword' => 'nullable',
+            'avatar' => 'required'
         ],
             [
                 'nama.required' => 'Nama harus diisi',
@@ -469,7 +497,7 @@ class AdminController extends Controller
                 'alamat.required' => 'Alamat harus diisi',
                 'emai;.required' => 'Email harus diisi',
                 'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
-                'email.unique' => 'Email telah digunakan',
+                'avatar.required' => 'Foto harus diisi'
             ]);
 
         Teacher::where('id', $teacher->id)
@@ -481,6 +509,16 @@ class AdminController extends Controller
                 'tanggal_lahir'=> $request->tanggal_lahir,
                 'email'=> $request->email
             ]);
+
+        if($request->hasFile('avatar')){
+            $avatar = $request->file('avatar');
+            $filename = time() . '.' . $avatar->getClientOriginalExtension();
+            Image::make($avatar)->resize(300, 300)->save(public_path('uploads/avatar/'.$filename));
+
+            $user = $teacher;
+            $user->avatar = $filename;
+            $user->save();
+        };
 
         return redirect('data-guru')->with('status', 'Data berhasil diubah!');
     }

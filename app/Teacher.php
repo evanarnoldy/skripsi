@@ -15,7 +15,7 @@ class Teacher extends Authenticatable
         $this->attributes['password'] = bcrypt($value);
     }
 
-    protected $fillable = ['nama', 'NIP', 'email', 'tanggal_lahir', 'jenis_kelamin', 'alamat', 'password'];
+    protected $fillable = ['nama', 'NIP', 'email', 'tanggal_lahir', 'jenis_kelamin', 'alamat', 'avatar'];
 
     protected $hidden = [
         'password', 'remember_token',

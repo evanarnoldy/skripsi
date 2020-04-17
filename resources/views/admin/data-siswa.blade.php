@@ -22,6 +22,7 @@
                 <th scope="col">NISN</th>
                 <th scope="col">Kelas</th>
                 <th scope="col">Email</th>
+                <th scope="col">Foto</th>
                 <th scope="col">Aksi</th>
             </tr>
             </thead>
@@ -33,6 +34,7 @@
                     <td>{{ $s->NISN }}</td>
                     <td>{{ $s->kelas }}</td>
                     <td>{{ $s->email }}</td>
+                     <td><img src="{{'uploads/avatar/'.$s->avatar }}" style="width:100px;height: 100px;"></td>
                     <td>
                         <a href="/detail-siswa/{{ $s->id}}" class="badge badge-info">Rincian</a>
                         <form method="post" action="/data-siswa/{{ $s->id }}" class="d-inline">

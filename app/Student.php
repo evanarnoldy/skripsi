@@ -15,7 +15,7 @@ class Student extends Authenticatable
         $this->attributes['password'] = bcrypt($value);
     }
 
-    protected $fillable = ['nama', 'NISN', 'kelas', 'email', 'tanggal_lahir', 'jenis_kelamin', 'alamat', 'password'];
+    protected $fillable = ['nama', 'NISN', 'kelas', 'email', 'tanggal_lahir', 'jenis_kelamin', 'alamat', 'password', 'avatar'];
 
     protected $guarded = ['password', 'id'];
 

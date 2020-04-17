@@ -1,4 +1,4 @@
-@extends('layout.dashboard-admin')
+@extends('layout.dashboard-siswa')
 
 @section('container')
     <div class="container-fluid">
@@ -14,7 +14,7 @@
 
             <div class="row no-gutters">
                 <div class="col-md-3">
-                    <img src="/uploads/avatar/{{$user -> avatar}}" class="card-img" alt="..." style="width: 250px; height: 250px">
+                    <img src="{{url('uploads/avatar/'.auth()->user()->avatar)}}" class="card-img" alt="..." style="width: 250px; height: 250px">
                     <form enctype="multipart/form-data" action="/profil-siswa" method="POST">
                         @csrf
                         <div class="form-group">

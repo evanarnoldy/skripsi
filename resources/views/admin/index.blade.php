@@ -14,7 +14,7 @@
             <p>Keterangan</p>
             <p>Jumlah siswa dengan hasil tinggi : {{$t}}</p>
             <p>Jumlah siswa dengan hasil sedang : {{$s}}</p>
-            <p>Jumlah siswa dengan hasil tinggi : {{$r}}</p>
+            <p>Jumlah siswa dengan hasil rendah : {{$r}}</p>
             <p>Jumlah siswa yang sudah di survey : {{$jmlsiswa}}</p>
         </div>
     </div>

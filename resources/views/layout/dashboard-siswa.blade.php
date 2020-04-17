@@ -59,13 +59,13 @@
                 </li>
                 <li class="dropdown" style="padding-left: 15px;">
                     <a href="#" class="user-profile dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="{{url('asset/yoyo.jpg')}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px">
+                        <img src="{{url('uploads/avatar/'.auth()->user()->avatar)}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px">
                         <span>{{Auth::user()->nama}}</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li>
                             <a class="dropdown-item" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt mr-15"></i>Logout</a>
-                            <a class="dropdown-item" href="{{ route('profil') }}"><i class="fas fa-user mr-15"></i>Profil</a>
+                            <a class="dropdown-item" href="{{ route('profil-siswa') }}"><i class="fas fa-user mr-15"></i>Profil</a>
                         </li>
                     </ul>
                 </li>

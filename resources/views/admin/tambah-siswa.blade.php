@@ -5,7 +5,7 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="title mt-4">Form Tambah Data Siswa</h1>
         </div>
-        <form method="post" action="data-siswa">
+        <form enctype="multipart/form-data" method="post" action="data-siswa">
             @csrf
             <div class="form-group">
                 <label for="nama">Nama</label>
@@ -44,6 +44,11 @@
                 <label for="email">Email</label>
                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Masukkan Email" value="{{ old('email') }}">
                 @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            </div>
+            <div class="form-group">
+                <label for="avatar">Foto</label>
+                <input type="file" class="form-control-file @error('avatar') is-invalid @enderror" id="avatar" name="avatar">
+                @error('avatar') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             <button type="submit" class="btn btn-primary">Tambah Data</button>
         </form>

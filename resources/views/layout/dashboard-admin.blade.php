@@ -68,7 +68,7 @@
                 </li>
                 <li class="dropdown" style="padding-left: 15px;">
                     <a href="#" class="user-profile dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="{{url('asset/yoyo.jpg')}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px">
+                        <img src="{{url('uploads/avatar/'.auth()->user()->avatar)}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px">
                         <span>{{Auth::user()->nama}}</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">

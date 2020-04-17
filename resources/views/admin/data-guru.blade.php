@@ -21,6 +21,7 @@
                 <th scope="col">Nama</th>
                 <th scope="col">NIP</th>
                 <th scope="col">Email</th>
+                <th scope="col">Foto</th>
                 <th scope="col">Aksi</th>
             </tr>
             </thead>
@@ -31,6 +32,7 @@
                 <td>{{ $g->nama }}</td>
                 <td>{{ $g->NIP }}</td>
                 <td>{{ $g->email }}</td>
+                 <td><img src="{{'uploads/avatar/'.$g->avatar }}" style="width:100px;height: 100px;"></td>
                 <td>
                     <a href="/detail-guru/{{ $g->id}}" class="badge badge-info">Rincian</a>
                     <form method="post" action="/data-guru/{{ $g->id }}" class="d-inline">
