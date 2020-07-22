@@ -10,27 +10,35 @@
     <link rel="stylesheet" type="text/css" href="{{url('css/bootstrap.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{url('fontawesome-free-5.12.1-web/css/all.min.css')}}">
 
-    <title>Sistem Monitoring Kesehatan Mental</title>
+    <title>Sistem Monitoring Kesehatan Mental dan Prestasi Belajar</title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
     <div class="bg-drk border-right" id="sidebar-wrapper">
-        <div class="sidebar-heading">Monitoring Kesehatan Mental</div>
+        <div class="sidebar-heading">Monitoring Kesehatan Mental dan Prestasi Belajar</div>
         <div class="list-group list-group-flush">
-            <a href="{{ route('siswa') }}" class="{{set_active('siswa')}}list-group-item bg-list list-group-item-action"><i class="fas fa-home mr-15"></i> Dashboard</a>
-            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-list dropdown-togglee"><i class="fas fa-users mr-15"></i>Pengisian kuesioner</a>
+            <a href="{{ route('siswa.index') }}" class="{{set_active('siswa.index')}}list-group-item bg-list list-group-item-action"><i class="fas fa-home mr-15"></i> Dashboard</a>
+            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-list dropdown-togglee"><i class="fas fa-book mr-15"></i>Kuesioner</a>
             <ul class="collapse list-unstyled" id="pageSubmenu">
                 <li>
-                    <a href="{{ route('kuesioner') }}" class="{{set_active('kuesioner')}}list-group-item bg-list list-group-item-action">Form Kuesioner</a>
+                    <a href="{{ route('kuesioner') }}" class="{{set_active('kuesioner')}}list-group-item bg-list list-group-item-action">Pengisian Kuesioner</a>
                 </li>
                 <li>
-                    <a href="{{ route('prestasi') }}" class="{{set_active('prestasi')}}list-group-item bg-list list-group-item-action">Prestasi Belajar</a>
+                    <a href="{{ route('hasil') }}" class="{{set_active('hasil')}}list-group-item bg-list list-group-item-action">Hasil Kuesioner</a>
                 </li>
             </ul>
-            <a href="{{ route('hasil') }}" class="{{set_active('hasil')}}list-group-item bg-list list-group-item-action"><i class="fas fa-list mr-15"></i>Hasil Kuesioner</a>
-            <a href="{{ route('konsultasi') }}" class="{{set_active('konsultasi')}}list-group-item bg-list list-group-item-action"><i class="fas fa-comments mr-15"></i>Konsultasi</a>
+            <a href="{{ route('prestasi') }}" class="{{set_active('prestasi')}}list-group-item bg-list list-group-item-action"><i class="fas fa-poll mr-15"></i>Hasil Prestasi Belajar</a>
+            <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-list dropdown-togglee"><i class="fas fa-comments mr-15"></i>Konsultasi</a>
+            <ul class="collapse list-unstyled" id="pageSubmenu1">
+                <li>
+                    <a href="{{ route('konsultasi') }}" class="{{set_active('konsultasi')}}list-group-item bg-list list-group-item-action">Keluhan</a>
+                </li>
+                <li>
+                    <a href="{{ route('daftar.tanggapan') }}" class="{{set_active('daftar.tanggapan')}}list-group-item bg-list list-group-item-action">Tanggapan</a>
+                </li>
+            </ul>
         </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -50,7 +58,7 @@
                         <li>
                             @forelse(auth()->user()->unreadNotifications as $notif)
                                 @include('layout.notification.'.Str::snake(class_basename($notif->type)))
-{{--                                {{$notif->markAsRead()}}--}}
+                                    {{$notif->markAsRead()}}
                                     @empty
                                     <span>Tidak ada pesan</span>
                             @endforelse
@@ -62,10 +70,11 @@
                         <img src="{{url('uploads/avatar/'.auth()->user()->avatar)}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px">
                         <span>{{Auth::user()->nama}}</span>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: 20px">
                         <li>
                             <a class="dropdown-item" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt mr-15"></i>Logout</a>
                             <a class="dropdown-item" href="{{ route('profil-siswa') }}"><i class="fas fa-user mr-15"></i>Profil</a>
+                            <a class="dropdown-item" href="{{ route('psswrd.siswa') }}"><i class="fas fa-key mr-15"></i>Ganti Password</a>
                         </li>
                     </ul>
                 </li>

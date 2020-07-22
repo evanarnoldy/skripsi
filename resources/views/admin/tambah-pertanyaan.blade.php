@@ -5,7 +5,7 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="title mt-4">Form Tambah Pertanyaan</h1>
         </div>
-        <form method="post" action="daftar-pertanyaan">
+        <form method="post" action="{{url('admin/daftar-pertanyaan')}}">
             @csrf
             <div class="form-group">
                 <label for="pertanyaan">Pertnyaan</label>

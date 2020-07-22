@@ -17,7 +17,6 @@
                         <p class="card-text">Alamat  :</p>
                         <p class="card-text">Tanggal lahir  :</p>
                         <p class="card-text">Kelas :</p>
-                        <p class="card-text">Email :</p>
                     </div>
                     <div class="col" style="text-align: left">
                             <p class="card-text">{{ $student->nama }}</p>
@@ -25,11 +24,10 @@
                             <p class="card-text">{{ $student->jenis_kelamin }}</p>
                             <p class="card-text">{{ $student->alamat }}</p>
                             <p class="card-text">{{ date('d-m-Y', strtotime($student->tanggal_lahir))}}</p>
-                            <p class="card-text">{{ $student->kelas}}</p>
-                            <p class="card-text">{{ $student->email}}</p>
+                            <p class="card-text">{{ $student->kelas}}{{ $student->unit }}</p>
                     </div>
                 </div>
-                <a href="{{url('data-siswa')}}" class="btn btn-primary mt-14">Kembali</a>
+                <a href="{{url('admin/data-siswa')}}" class="btn btn-primary mt-14">Kembali</a>
             </div>
             <div class="card-footer text-muted">
             </div>

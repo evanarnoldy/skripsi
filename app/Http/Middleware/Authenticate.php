@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\Auth;
 
 class Authenticate extends Middleware
 {
@@ -14,8 +15,18 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        if (! $request->expectsJson()) {
-            return route('login');
+//        if (! $request->expectsJson()) {
+//            return route('login');
+//        }
+
+        if (Auth::guard('students')->check()) {
+            return redirect('/siswa/index');
+        } else if (Auth::guard('admin')->check()) {
+            return redirect('/admin/data-siswa');
+        } else if (Auth::guard('teachers')->check()) {
+            return redirect('/guru/index');
+        } else if (Auth::guard('wali')->check()) {
+            return redirect('/wali/index');
         }
     }
 }

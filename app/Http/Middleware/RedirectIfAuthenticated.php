@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,9 +18,13 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard('students')->check()) {
-            return redirect('/siswa');
+            return redirect('/siswa/index');
+        } else if (Auth::guard('admin')->check()) {
+            return redirect('/admin/data-siswa');
         } else if (Auth::guard('teachers')->check()) {
-            return redirect('/admin');
+            return redirect('/guru/index');
+        } else if (Auth::guard('wali')->check()) {
+            return redirect('/wali/index');
         }
 
         return $next($request);

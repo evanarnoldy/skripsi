@@ -6,7 +6,7 @@
             <h1 class="title mt-4">Daftar Pertanyaan</h1>
         </div>
 
-        <a href="{{url('tambah-pertanyaan')}}" class="btn btn-primary mb-18">Tambah Pertanyaan</a>
+        <a href="{{url('admin/tambah-pertanyaan')}}" class="btn btn-primary mb-18">Tambah Pertanyaan</a>
 
         @if (session('status'))
             <div class="alert alert-success">
@@ -32,12 +32,12 @@
                 <td>{{ $p->jenis }}</td>
                 <td>{{ $p->kategori }}</td>
                 <td>
-                    <form method="post" action="/daftar-pertanyaan/{{ $p->id }}" class="d-inline">
+                    <form method="post" action="{{url('admin/daftar-pertanyaan/'.$p->id)}}" class="d-inline">
                         @method('delete')
                         @csrf
                         <button type="submit" class="badge badge-danger no-border">Hapus</button>
                     </form>
-                    <a href="/daftar-pertanyaan/{{ $p->id }}/edit-pertanyaan" class="badge badge-success">Edit</a>
+                    <a href="{{url('admin/daftar-pertanyaan/'.$p->id.'/edit-pertanyaan')}}" class="badge badge-success">Edit</a>
                 </td>
              </tr>
             @endforeach

@@ -17,8 +17,11 @@ class CreateHasilTable extends Migration
             $table->bigIncrements('id');
             $table->integer('student_id');
             $table->string('skor');
+            $table->string('nilai');
             $table->string('kesimpulan');
             $table->string('keterangan');
+            $table->string('kelas');
+            $table->string('unit');
             $table->string('bulan');
             $table->string('tahun');
             $table->timestamps();

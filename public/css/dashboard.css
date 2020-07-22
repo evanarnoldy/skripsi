@@ -154,6 +154,7 @@ body{
     padding: 0.875rem 1.25rem;
     font-size: 1.2rem;
     color: #ECF0F1;
+    width: 250px;
 }
 
 #sidebar-wrapper .list-group {
@@ -165,7 +166,7 @@ body{
 }
 
 #wrapper.toggled #sidebar-wrapper {
-    margin-left: 0;
+    margin-left: 5px;
 }
 
 a[data-toggle="collapse"] {

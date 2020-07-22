@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKorelasiTable extends Migration
+class CreateTanggapanTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateKorelasiTable extends Migration
      */
     public function up()
     {
-        Schema::create('korelasi', function (Blueprint $table) {
+        Schema::create('tanggapan', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('df');
-            $table->string('taraf_sig');
+            $table->integer('konsultasi_id');
+            $table->integer('user_id');
+            $table->string('tanggapan');
+            $table->string('pengirim');
+            $table->string('email');
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateKorelasiTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('korelasi');
+        Schema::dropIfExists('tanggapan');
     }
 }

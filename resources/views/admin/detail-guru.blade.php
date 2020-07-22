@@ -27,7 +27,7 @@
                         <p class="card-text">{{ $teacher->email}}</p>
                     </div>
                 </div>
-                <a href="{{url('data-guru')}}" class="btn btn-primary mt-14">Kembali</a>
+                <a href="{{url('admin/data-guru')}}" class="btn btn-primary mt-14">Kembali</a>
             </div>
             <div class="card-footer text-muted">
             </div>

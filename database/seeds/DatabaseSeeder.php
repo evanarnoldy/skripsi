@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
-        DB::table('korelasi')->insert([
+        DB::table('tabelsig')->insert([
             [
               'df' => '3',
               'taraf_sig' => '0.997'

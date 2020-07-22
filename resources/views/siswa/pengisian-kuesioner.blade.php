@@ -7,12 +7,43 @@
         </div>
 
         @if (session('status'))
-            <div class="alert alert-success">
+            <div class="alert alert-info">
                 {{ session('status') }}
             </div>
         @endif
 
-        <form method="post" action="/store-kuesioner" class="d-inline">
+        <div class="alert alert-success">
+            <p>Pengisian kuesioner hanya dilakukan setelah UAS dan UTS</p>
+        </div>
+
+        <table class="table table-bordered col-3">
+            <thead>
+            <tr>
+                <th>Nilai</th>
+                <th>Keterangan</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>Sangat tidak setuju</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Tidak setuju</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Setuju</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Sangat setuju</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <form method="post" action="{{url('siswa/store-kuesioner')}}" class="d-inline">
             @csrf
         <table class="table">
             <thead>

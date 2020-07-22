@@ -9,14 +9,19 @@ use App\Hasil;
 use App\Student;
 use App\Keluhan;
 use Carbon\Carbon;
-use App\Notifications\Konsultasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 
 class SiswaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function profil()
     {
         $user = Auth::user();
@@ -32,28 +37,26 @@ class SiswaController extends Controller
     {
 
         $request->validate([
-            'nama' => 'required|unique:students|max:255',
-            'NISN' => 'required|size:9|unique:students',
+            'nama' => 'required|max:255',
+            'NISN' => 'required|size:9',
             'jenis_kelamin' => 'required',
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
-            'kelas' => 'required|size:2',
-            'email' => 'required|email|unique:students',
-            'passsword' => 'nullable'
+            'kelas' => 'required',
+            'email' => 'required|email',
+            'unit' => 'required'
         ],
             [
                 'nama.required' => 'Nama harus diisi',
-                'nama.unique' => 'Nama telah dipakai',
                 'NISN.required' => 'NISN harus diisi',
                 'NISN.size' => 'NISN harus berisi 9 karakter',
                 'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
                 'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
                 'alamat.required' => 'Alamat harus diisi',
                 'kelas.required' => 'Kelas harus diisi',
-                'kelas.size' => 'Kelas harus berisi 2 karakter',
-                'emai;.required' => 'Email harus diisi',
+                'unit.required' => 'Unit harus diisi',
+                'email.required' => 'Email harus diisi',
                 'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
-                'email.unique' => 'Email telah digunakan',
             ]);
 
         Student::where('id', Auth::user()->id)
@@ -61,12 +64,13 @@ class SiswaController extends Controller
                 'nama'=> $request->nama,
                 'NISN'=> $request->NISN,
                 'kelas'=> $request->kelas,
+                'unit'=> $request->unit,
                 'alamat'=> $request->alamat,
                 'jenis_kelamin'=> $request->jenis_kelamin,
                 'tanggal_lahir'=> $request->tanggal_lahir,
                 'email'=> $request->email
             ]);
-        return redirect('profil-siswa')->with('status', 'Data berhasil diubah!');
+        return redirect('siswa/profil-siswa')->with('status', 'Data berhasil diubah!');
     }
 
     public function update_avatar(Request $request)
@@ -80,35 +84,38 @@ class SiswaController extends Controller
             $user->avatar = $filename;
             $user->save();
         }
-        return redirect('profil-siswa')->with('status', 'Gambar berhasil diubah!');
+        return redirect('siswa/profil-siswa')->with('status', 'Gambar berhasil diubah!');
     }
     public function index()
     {
         $data = DB::table('hasil')
             ->where('student_id', Auth::id())
-            ->select('kesimpulan', 'bulan')
+            ->select('nilai', 'bulan')
             ->groupBy('bulan')
-            ->whereRaw('id = (select max(id) from hasil)')
+            ->get();
+
+        $dataprestasi = DB::table('prestasi')
+            ->where('student_id', Auth::id())
+            ->select('rata', 'bulan')
+            ->groupBy('bulan')
             ->get();
 
         $bulan = [];
         $nilai = [];
+        $prestasi = [];
 
         foreach ($data as $d)
         {
-            $bulan[] = $d->bulan;
-            $nilai[] = $d->kesimpulan;
+            $nilai[] = $d->nilai;
         }
 
-        if($data == null){
-           $data = "Data tidak ada";
-        }elseif ($bulan == null){
-            $bulan = 'Data tidak ada';
-        }elseif ($nilai == null){
-            $nilai = 'Data tidak ada';
+        foreach ($dataprestasi as $p)
+        {
+            $prestasi[] = $p->rata;
+            $bulan[] = $p->bulan;
         }
 
-        return view('siswa.index', compact('data', 'bulan','nilai'));
+        return view('siswa.index', compact('data', 'bulan','nilai', 'prestasi'));
     }
 
     public function pertanyaan()
@@ -142,6 +149,8 @@ class SiswaController extends Controller
         $id = Auth::id();
         $create = Carbon::now();
         $update = Carbon::now();
+        $kelas = Auth::user()->kelas;
+        $unit = Auth::user()->unit;
 
         foreach ($jawaban as $key => $value ){
             $data[] = '('.$value.','.$_POST[$value].','.$id.',"'.$create.'","'.$update.'","'.$bulan1.'","'.$tahun.'")';
@@ -179,10 +188,15 @@ class SiswaController extends Controller
             ->limit(1)
             ->get();
 
-        $tes = Answer::all()
-        ->find($id);
+        $tes = DB::table('answers')
+            ->where('student_id', $id)
+            ->first();
 
-        $tes1 = $tes->student_id;
+        if ($tes == null){
+            $tes1 = 0;
+        }else {
+             $tes1 = $tes->student_id;
+        }
 
         $cek1 = [];
 
@@ -191,14 +205,16 @@ class SiswaController extends Controller
         }
 
     //Jawaban
-        if($tes1 !== $id){
-            if ($cek1[0] !== $bulan1){
+        if ($tes1 == 0){
+            DB::insert('insert into answers(question_id, jawaban, student_id, created_at, updated_at, bulan, tahun) values '.$data.' ');
+        }elseif($tes1 != $id){
+            if ($cek1[0] != $bulan1){
                 DB::insert('insert into answers(question_id, jawaban, student_id, created_at, updated_at, bulan, tahun) values ' . $data . ' ');
             }elseif ($cek1[0] == $bulan1){
                 DB::insert('insert into answers(question_id, jawaban, student_id, created_at, updated_at, bulan, tahun) values ' . $data . ' ');
             }
         }elseif ($tes1 == $id){
-            if ($cek1[0] !== $bulan1){
+            if ($cek1[0] != $bulan1){
                 DB::insert('insert into answers(question_id, jawaban, student_id, created_at, updated_at, bulan, tahun) values ' . $data . ' ');
             }elseif ($cek1[0] == $bulan1){
                 DB::insert('insert into answers(question_id, jawaban, student_id, created_at, updated_at, bulan, tahun) values '.$data.' ');
@@ -213,37 +229,39 @@ class SiswaController extends Controller
         }
 
         //hasil
-        if($tes1 !== $id){
-            if ($cek1[0] !== $bulan1){
-                DB::insert('insert into hasil(student_id, skor, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$hasil.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+        if ($tes1 == 0){
+            DB::insert('insert into hasil(student_id, skor, nilai, kesimpulan, keterangan, kelas, unit, bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+        }elseif($tes1 != $id){
+            if ($cek1[0] != $bulan1){
+                DB::insert('insert into hasil(student_id, skor, nilai, kesimpulan, keterangan, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
             }elseif ($cek1[0] == $bulan1){
-                DB::insert('insert into hasil(student_id, skor, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$hasil.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into hasil(student_id, skor,  nilai, keterangan, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
             }
         }elseif ($tes1 == $id){
-            if ($cek1[0] !== $bulan1){
-                DB::insert('insert into hasil(student_id, skor, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$hasil.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+            if ($cek1[0] != $bulan1){
+                DB::insert('insert into hasil(student_id, skor,  nilai, kesimpulan, keterangan, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
             }elseif ($cek1[0] == $bulan1){
-                DB::insert('insert into hasil(student_id, skor, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$hasil.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into hasil(student_id, skor,  nilai, kesimpulan, keterangan, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
                 DB::table('hasil')
                     ->where('bulan', $bulan1)
                     ->where('student_id', $id)
                     ->delete();
 
-                DB::insert('insert into hasil(student_id, skor, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$hasil.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into hasil(student_id, skor,  nilai, kesimpulan, keterangan, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
             }
         }
 
-        return redirect('/hasil-kuesioner');
+        return redirect('siswa/hasil-kuesioner');
     }
 
-    public function create_prestasi()
+    public function create_prestasi(Student $student)
     {
-        return view('siswa.form-prestasi');
+        return view('siswa.form-prestasi', compact('student'));
     }
 
-    public function store_prestasi(Request $request)
+    public function store_prestasi(Request $request, Student $student)
     {
         //
         $bulan = [
@@ -264,19 +282,25 @@ class SiswaController extends Controller
         $bulan1 = date('m');
         $bulan1 = $bulan[$bulan1];
         $tahun = date('Y');
-        $id = Auth::id();
+        $id = $student->id;
+        $nama = $student->nama;
         $create = now();
         $update = now();
-        $cek = DB::table('answers')
+        $cek = DB::table('prestasi')
             ->select('bulan')
             ->latest()
             ->limit(1)
             ->get();
 
-        $tes = Answer::all()
+        $tes = Prestasi::all()
             ->find($id);
 
-        $tes1 = $tes->student_id;
+        if ($tes == null){
+            $tes1 = 0;
+        }else {
+            $tes1 = $tes->student_id;
+        }
+
 
         $cek1 = [];
 
@@ -285,20 +309,14 @@ class SiswaController extends Controller
         }
 
         $request->validate([
-            'biologi' => 'required|max:3',
-            'kimia' => 'required|max:3',
-            'fisika' => 'required|max:3',
+            'ipa' => 'required|max:3',
             'matematika' => 'required|max:3',
             'bhsind' => 'required|max:3',
             'bhsing' => 'required|max:3',
         ],
             [
-                'biologi.required' => 'field harus diisi',
-                'biologi.size' => 'field maksimal berisi 3 karakter',
-                'kimia.required' => 'field harus diisi',
-                'kimia.size' => 'field maksimal berisi 3 karakter',
-                'fisika.required' => 'field harus diisi',
-                'fisika.size' => 'field maksimal berisi 3 karakter',
+                'ipa.required' => 'field harus diisi',
+                'ipa.size' => 'field maksimal berisi 3 karakter',
                 'matematika.required' => 'field harus diisi',
                 'matematika.size' => 'field maksimal berisi 3 karakter',
                 'bhsind.required' => 'field harus diisi',
@@ -307,59 +325,80 @@ class SiswaController extends Controller
                 'bhsing.size' => 'field maksimal berisi 3 karakter',
             ]);
 
-        $biologi = $request->biologi;
-        $kimia = $request->kimia;
-        $fisika = $request->fisika;
+        $ipa = $request->ipa;
         $matematika = $request->matematika;
         $bhsind = $request->bhsind;
         $bhsing = $request->bhsing;
 
-        $rata = collect([$biologi, $kimia, $fisika, $matematika, $bhsind, $bhsing])->avg();
+        $rata = collect([$ipa, $matematika, $bhsind, $bhsing])->avg();
 
-        if($tes1 !== $id){
-            if ($cek1[0] !== $bulan1){
+        if($rata == null){
+            $kesimpulan = 0;
+        } elseif($rata <= 59){
+            $kesimpulan = 1;
+        } elseif ($rata > 59 && $rata <= 79){
+            $kesimpulan = 2;
+        } else if ($rata > 79){
+            $kesimpulan = 3;
+        }
 
-                DB::insert('insert into prestasi(student_id, biologi, kimia, fisika, matematika, bhsind, bhsing, rata, bulan, tahun, created_at, updated_at) values 
-("'.$id.'","'.$biologi.'","'.$kimia.'","'.$fisika.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+        if($kesimpulan == 0){
+            $ket = 'Tidak ada isi';
+        } elseif($kesimpulan == 1){
+            $ket = 'Rendah';
+        } elseif ($kesimpulan == 2){
+            $ket = 'Sedang';
+        } else if ($kesimpulan == 3){
+            $ket = 'Tinggi';
+        }
+
+        if ($tes1 == 0){
+            DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+
+        }elseif($tes1 != $id){
+            if ($cek1[0] != $bulan1){
+
+                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
             }elseif ($cek1[0] == $bulan1){
 
-                DB::insert('insert into prestasi(student_id, biologi, kimia, fisika, matematika, bhsind, bhsing, rata, bulan, tahun, created_at, updated_at) values 
-("'.$id.'","'.$biologi.'","'.$kimia.'","'.$fisika.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
             }
         }elseif ($tes1 == $id){
-            if ($cek1[0] !== $bulan1){
+            if ($cek1[0] != $bulan1){
 
-                DB::insert('insert into prestasi(student_id, biologi, kimia, fisika, matematika, bhsind, bhsing, rata, bulan, tahun, created_at, updated_at) values 
-("'.$id.'","'.$biologi.'","'.$kimia.'","'.$fisika.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
             }elseif ($cek1[0] == $bulan1){
 
-                DB::insert('insert into prestasi(student_id, biologi, kimia, fisika, matematika, bhsind, bhsing, rata, bulan, tahun, created_at, updated_at) values 
-("'.$id.'","'.$biologi.'","'.$kimia.'","'.$fisika.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
                 DB::table('prestasi')
                     ->where('bulan', $bulan1)
                     ->where('student_id', $id)
                     ->delete();
 
-                DB::insert('insert into prestasi(student_id, biologi, kimia, fisika, matematika, bhsind, bhsing, rata, bulan, tahun, created_at, updated_at) values 
-("'.$id.'","'.$biologi.'","'.$kimia.'","'.$fisika.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+
             }
         }
 
-        return redirect('/hasil-kuesioner');
+        return redirect('admin/form-prestasi')->with('status', 'Nilai '.($nama).' berhasil diisi');
     }
 
-    public function hasil()
+    public function daftarhasil()
     {
         $hasil = DB::table('students')->where('student_id', Auth::id())
             ->join('hasil', 'students.id', '=', 'hasil.student_id')
-            ->select('students.nama','students.kelas','students.email','hasil.skor', 'hasil.kesimpulan', 'hasil.bulan', 'hasil.created_at', 'hasil.keterangan')
-            ->latest()
-            ->limit('1')
-            ->get();
+            ->select('students.nama','students.kelas','hasil.*')
+            ->paginate(10);
 
         //validate
         if($hasil == null)
@@ -367,6 +406,54 @@ class SiswaController extends Controller
             $hasil = 'Tidak ada data';
         }
 
-        return view('siswa.hasil', compact('hasil'));
+        return view('siswa.daftar-survey', compact('hasil'));
+    }
+
+    public function showhasil(Hasil $hasil)
+    {
+        return view('siswa.detail-hasil', compact('hasil'));
+    }
+
+    public function hasil_prestasi()
+    {
+        $id = Auth::id();
+        $prestasi = DB::table('prestasi')
+            ->where('student_id', $id)
+            ->paginate(10);
+
+        return view('siswa.daftar-prestasi', compact('prestasi'));
+    }
+
+    public function psswrd()
+    {
+        return view('siswa.ganti-password');
+    }
+
+    public function ganti_psswrd(Request $request, Student $student)
+    {
+        $request->validate([
+            'current-password' => 'required',
+            'new-password' => 'required|min:6|confirmed',
+        ],
+            [
+                'current-password.required' => 'Password harus diisi',
+                'new-password.required' => 'Password harus diisi',
+                'new-password.min' => 'Password minimal harus berisi 6 karakter',
+            ]);
+
+        $request_data = $request->all();
+        $current_password = auth()->user()->password;
+
+        $now = bcrypt($request_data['current-password']);
+
+        if (Hash::check($request_data['current-password'], $current_password)) {
+            $user = Auth::user();
+            $user->password = $request->get('new-password');
+            $user->save();
+        } else {
+            return back()->with('failed', 'Password tidak cocok!');
+        };
+
+        return redirect()->back()->with('status', 'Password berhasil diganti!');
     }
 }

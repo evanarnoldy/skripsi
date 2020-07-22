@@ -63,6 +63,24 @@ return [
             'provider' => 'teachers',
             'hash' => false,
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admin',
+        ],
+        'api_admin' => [
+            'driver' => 'token',
+            'provider' => 'admin',
+            'hash' => false,
+        ],
+        'wali' => [
+            'driver' => 'session',
+            'provider' => 'wali',
+        ],
+        'api_wali' => [
+            'driver' => 'token',
+            'provider' => 'wali',
+            'hash' => false,
+        ],
     ],
 
 
@@ -104,6 +122,16 @@ return [
             'driver' => 'eloquent',
             'model' => App\Teacher::class,
         ],
+
+        'admin' => [
+            'driver' => 'eloquent',
+            'model' => App\Admin::class,
+        ],
+
+        'wali' => [
+            'driver' => 'eloquent',
+            'model' => App\WaliKelas::class,
+        ],
     ],
 
     /*
@@ -135,6 +163,16 @@ return [
         ],
         'teachers' => [
             'provider' => 'teachers',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        'admin' => [
+            'provider' => 'admin',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        'wali' => [
+            'provider' => 'wali',
             'table' => 'password_resets',
             'expire' => 60,
         ],

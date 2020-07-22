@@ -13,7 +13,7 @@
     <title>Sistem Monitoring Kesehatan Mental</title>
 </head>
 <body>
-<div class="page-wrapper bg-blue p-t-100 p-b-100 font-robo">
+<div class="page-wrapper p-t-100 p-b-100 font-robo" style="background-image:url({{"/asset/buku.jpg"}});background-repeat: no-repeat; background-size: cover; background-position: center center;">
     <div class="wrapper wrapper--w680">
         <div class="card tengah" style="width:40rem">
             <div class="card-heading">

@@ -15,7 +15,7 @@
             <div class="row no-gutters">
                 <div class="col-md-3">
                     <img src="{{url('uploads/avatar/'.auth()->user()->avatar)}}" class="card-img" alt="..." style="width: 250px; height: 250px">
-                    <form enctype="multipart/form-data" action="/profil-siswa" method="POST">
+                    <form enctype="multipart/form-data" action="{{url('siswa/profil-siswa')}}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="avatar">Ubah foto profil</label>
@@ -46,14 +46,14 @@
                             <div class="col">
                                 <p>: {{$user->nama}}</p>
                                 <p>: {{$user->NISN}}</p>
-                                <p>: {{$user->kelas}}</p>
+                                <p>: {{$user->kelas}}{{$user->unit}}</p>
                                 <p>: {{$user->email}}</p>
                                 <p>: {{$user->jenis_kelamin}}</p>
                                 <p>: {{date('d-m-Y', strtotime($user->tanggal_lahir))}}</p>
                                 <p>: {{$user->alamat}}</p>
                             </div>
                         </div>
-                        <a href="/profil-siswa/{{ $user->id }}/edit-profil" class="btn btn-primary">Edit profil</a>
+                        <a href="{{url('siswa/profil-siswa/'.$user->id .'/edit-profil')}}" class="btn btn-primary">Edit profil</a>
                     </div>
                 </div>
             </div>

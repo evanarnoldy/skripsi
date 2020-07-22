@@ -5,7 +5,7 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="title mt-4">Form Ubah Profil</h1>
         </div>
-        <form method="post" action="/profil/{{ $teacher->id }}">
+        <form method="post" action="/admin/profil/{{ $admin->id }}">
             @method('patch')
             @csrf
             <div class="form-group">

@@ -15,15 +15,15 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->char('NISN', 9)->unique();
+            $table->char('NISN', 6)->unique();
             $table->string('nama');
             $table->date('tanggal_lahir');
             $table->string('jenis_kelamin');
             $table->string('alamat');
-            $table->string('email')->unique();
             $table->string('avatar')->default('default.jpg');
             $table->string('kelas');
-            $table->string('password')->nullable(true);;
+            $table->string('unit');
+            $table->string('password')->default(bcrypt(123456));
             $table->timestamps();
         });
     }

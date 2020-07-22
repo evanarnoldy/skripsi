@@ -37,13 +37,23 @@
             </div>
             <div class="form-group">
                 <label for="kelas">Kelas</label>
-                <input type="text" class="form-control @error('kelas') is-invalid @enderror" id="kelas" name="kelas" placeholder="Masukkan Kelas" value="{{ old('kelas') }}">
-                @error('kelas') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                <select type="text" class="form-control @error('kelas') is-invalid @enderror" id="kelas" name="kelas" placeholder="Masukkan Kelas" value="{{ old('kelas') }}">
+                    @error('kelas') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                </select>
             </div>
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Masukkan Email" value="{{ old('email') }}">
-                @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                <label for="unit">Unit</label>
+                <select type="text" class="form-control @error('unit') is-invalid @enderror" id="unit" name="unit" placeholder="Masukkan Unit Kelas" value="{{ old('unit') }}">
+                    @error('unit') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                    <option>D</option>
+                    <option>E</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="avatar">Foto</label>

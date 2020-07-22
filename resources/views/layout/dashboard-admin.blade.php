@@ -10,16 +10,14 @@
     <link rel="stylesheet" type="text/css" href="{{url('css/bootstrap.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{url('fontawesome-free-5.12.1-web/css/all.min.css')}}">
 
-    <title>Sistem Monitoring Kesehatan Mental</title>
+    <title>Sistem Monitoring Kesehatan Mental dan Prestasi Belajar</title>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
-
     <!-- Sidebar -->
     <div class="bg-drk border-right" id="sidebar-wrapper">
-        <div class="sidebar-heading">Monitoring Kesehatan Mental</div>
+        <div class="sidebar-heading">Monitoring Kesehatan Mental dan Prestasi Belajar</div>
         <div class="list-group list-group-flush">
-            <a href="{{ route('admin') }}" class="{{set_active('admin')}}list-group-item bg-list list-group-item-action"><i class="fas fa-home mr-15"></i> Dashboard</a>
             <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-list dropdown-togglee"><i class="fas fa-users mr-15"></i>Data User</a>
             <ul class="collapse list-unstyled" id="pageSubmenu">
                 <li>
@@ -28,18 +26,11 @@
                 <li>
                     <a href="{{ route('data-guru') }}" class="{{set_active('data-guru')}}list-group-item bg-list list-group-item-action">Data guru</a>
                 </li>
-            </ul>
-            <a href="{{ route('daftar-pertanyaan') }}" class="{{set_active('daftar-pertanyaan')}}list-group-item bg-list list-group-item-action"><i class="fas fa-list mr-15"></i>Daftar Pertanyaan</a>
-            <a href="#pageSubmenuu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-list dropdown-togglee"><i class="fas fa-poll mr-15"></i>Hasil</a>
-            <ul class="collapse list-unstyled" id="pageSubmenuu">
                 <li>
-                    <a href="{{ route('survey') }}" class="{{set_active('survey')}}list-group-item bg-list list-group-item-action">Hasil Monitoring Kesehatan Mental</a>
-                </li>
-                <li>
-                    <a href="{{ route('korelasi') }}" class="{{set_active('korelasi')}}list-group-item bg-list list-group-item-action">Korelasi</a>
+                    <a href="{{ route('data-wali') }}" class="{{set_active('data-wali')}}list-group-item bg-list list-group-item-action">Data walikelas</a>
                 </li>
             </ul>
-            <a href="{{ route('daftar.keluhan') }}" class="{{set_active('daftar.keluhan')}}list-group-item bg-list list-group-item-action"><i class="fas fa-comments mr-15"></i>Daftar Keluhan</a>
+            <a href="{{ route('daftar.prestasi') }}" class="{{set_active('daftar.prestasi')}}list-group-item bg-list list-group-item-action"><i class="fas fa-book mr-15"></i>Prestasi Belajar</a>
         </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -51,30 +42,16 @@
                 <a id="menu-toggle"><i class="fas fa-bars"></i></a>
             </div>
             <ul class="nav navbar-nav ml-auto" style="margin: 13px">
-                <li class="dropdown">
-                    <a href="#" class="nama-ses mt-14 dropdown-togglee" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-globe"></i>Notifikasi<span class="badge badge-danger notif">{{count(auth()->user()->unreadNotifications)}}</span>
-                    </a>
-                    <ul class="dropdown-menu cus" aria-labelledby="navbarDropdown">
-                        <li>
-                            @forelse(auth()->user()->unreadNotifications as $notif)
-                                @include('layout.notification.'.Str::snake(class_basename($notif->type)))
-                                {{$notif->markAsRead()}}
-                            @empty
-                                <span>Tidak ada pesan</span>
-                            @endforelse
-                        </li>
-                    </ul>
-                </li>
                 <li class="dropdown" style="padding-left: 15px;">
                     <a href="#" class="user-profile dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="{{url('uploads/avatar/'.auth()->user()->avatar)}}" class="rounded-circle pt-7 pb-7" style="width: 60px; height: 74px">
                         <span>{{Auth::user()->nama}}</span>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -30px">
                         <li>
                             <a class="dropdown-item" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt mr-15"></i>Logout</a>
-                            <a class="dropdown-item" href="{{ route('profil') }}"><i class="fas fa-user mr-15"></i>Profil</a>
+                            <a class="dropdown-item" href="{{ route('profil.admin') }}"><i class="fas fa-user mr-15"></i>Profil</a>
+                            <a class="dropdown-item" href="{{ route('psswrd.admin') }}"><i class="fas fa-key mr-15"></i>Ganti Password</a>
                         </li>
                     </ul>
                 </li>

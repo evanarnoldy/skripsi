@@ -1,26 +1,16 @@
-@extends('layout.dashboard-siswa')
+@extends('layout.dashboard-admin')
 
 @section('container')
     <div class="container-fluid">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="title mt-4">Form Prestasi Belajar</h1>
         </div>
-        <form method="post" action="/store-prestasi">
+        <form method="post" action="{{url('admin/store-prestasi/'.$student->id)}}">
             @csrf
             <div class="form-group">
-                <label for="biologi">Biologi</label>
-                <input type="text" class="form-control @error('biologi') is-invalid @enderror" id="biologi" name="biologi" placeholder="Masukkan Nilai Biologi" value="{{ old('biologi') }}">
-                @error('biologi') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
-            <div class="form-group">
-                <label for="kimia">Kimia</label>
-                <input type="text" class="form-control @error('kimia') is-invalid @enderror" id="kimia" name="kimia" placeholder="Masukkan Nilai Kimia" value="{{ old('kimia') }}">
-                @error('kimia') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
-            <div class="form-group">
-                <label for="fisika">Fisika</label>
-                <input type="text" class="form-control @error('fisika') is-invalid @enderror" id="fisika" name="fisika" placeholder="Masukkan Nilai Fisika" value="{{ old('fisika') }}">
-                @error('fisika') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                <label for="ipa">Ipa</label>
+                <input type="text" class="form-control @error('ipa') is-invalid @enderror" id="ipa" name="ipa" placeholder="Masukkan Nilai Ipa" value="{{ old('ipa') }}">
+                @error('ipa') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             <div class="form-group">
                 <label for="matematika">Matematika</label>

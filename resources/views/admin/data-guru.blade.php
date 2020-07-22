@@ -6,13 +6,27 @@
             <h1 class="title mt-4">Data Guru</h1>
         </div>
 
-        <a href="{{url('tambah-guru')}}" class="btn btn-primary mb-18">Tambah Data Guru</a>
-
         @if (session('status'))
             <div class="alert alert-success">
                 {{ session('status') }}
             </div>
         @endif
+
+        <div class="row" style="margin-bottom: 15px">
+            <div class="col">
+                <a href="{{url('admin/tambah-guru')}}" class="btn btn-primary mb-18">Tambah Data Guru</a>
+            </div>
+            <div class="col-3">
+                <form class="form-inline" method="get" action="{{url('admin/cari-dataguru')}}">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Cari nama dan nisn" aria-label="Recipient's username" aria-describedby="button-addon2" name="cari">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <table class="table">
             <thead>
@@ -32,15 +46,15 @@
                 <td>{{ $g->nama }}</td>
                 <td>{{ $g->NIP }}</td>
                 <td>{{ $g->email }}</td>
-                 <td><img src="{{'uploads/avatar/'.$g->avatar }}" style="width:100px;height: 100px;"></td>
+                 <td><img src="{{url('uploads/avatar/'.$g->avatar )}}" style="width:100px;height: 100px;"></td>
                 <td>
-                    <a href="/detail-guru/{{ $g->id}}" class="badge badge-info">Rincian</a>
-                    <form method="post" action="/data-guru/{{ $g->id }}" class="d-inline">
+                    <a href="detail-guru/{{ $g->id}}" class="badge badge-info">Rincian</a>
+                    <form method="post" action="data-guru/{{ $g->id }}" class="d-inline">
                         @method('delete')
                         @csrf
                         <button type="submit" class="badge badge-danger no-border">Hapus</button>
                     </form>
-                    <a href="/data-guru/{{ $g->id }}/edit-guru" class="badge badge-success">Edit</a>
+                    <a href="data-guru/{{ $g->id }}/edit-guru" class="badge badge-success">Edit</a>
                 </td>
              </tr>
             @endforeach

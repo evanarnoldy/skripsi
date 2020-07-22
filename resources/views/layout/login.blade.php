@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <title>Sistem Monitoring Kesehatan Mental</title>
+    <title>Sistem Monitoring Kesehatan Mental dan Prestasi Belajar</title>
 </head>
 <body>
 <div class="fullpage">

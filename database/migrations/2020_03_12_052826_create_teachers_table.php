@@ -22,8 +22,8 @@ class CreateTeachersTable extends Migration
             $table->string('alamat');
             $table->string('email')->unique();
             $table->string('avatar')->default('default.jpg');
-            $table->boolean('admin')->default(0);
-            $table->string('password')->nullable(true);
+            $table->string('role')->default('guru');
+            $table->string('password')->default(bcrypt(12345678));
             $table->timestamps();
         });
     }

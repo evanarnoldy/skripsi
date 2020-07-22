@@ -10,14 +10,15 @@ class Student extends Authenticatable
 {
     use Notifiable;
     //
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
     }
 
-    protected $fillable = ['nama', 'NISN', 'kelas', 'email', 'tanggal_lahir', 'jenis_kelamin', 'alamat', 'password', 'avatar'];
+    protected $fillable = ['nama', 'NISN', 'kelas', 'email', 'tanggal_lahir', 'jenis_kelamin', 'alamat', 'avatar', 'kelas', 'unit', 'password'];
 
-    protected $guarded = ['password', 'id'];
+    protected $guarded = [];
 
     protected $hidden = [
         'password', 'remember_token',

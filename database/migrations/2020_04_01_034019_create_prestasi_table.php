@@ -16,15 +16,15 @@ class CreatePrestasiTable extends Migration
         Schema::create('prestasi', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('student_id');
-            $table->string('biologi');
-            $table->string('kimia');
-            $table->string('fisika');
+            $table->string('ipa');
             $table->string('matematika');
             $table->string('bhsind');
             $table->string('bhsing');
             $table->string('rata');
             $table->string('bulan');
             $table->string('tahun');
+            $table->string('kesimpulan');
+            $table->string('keterangan');
             $table->timestamps();
         });
     }
