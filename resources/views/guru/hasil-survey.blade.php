@@ -68,6 +68,7 @@
                 <th scope="col">Bulan</th>
                 <th scope="col">Tahun</th>
                 <th scope="col">Hasil</th>
+                <th scope="col">Keterangan</th>
             </tr>
             </thead>
             <tbody>
@@ -81,6 +82,7 @@
                     <td>
                         <a href="{{url('guru/detail-jawaban-guru/'.$s->student_id)}}">{{ $s->keterangan }}</a>
                     </td>
+                    <td>{{ $s->status }}</td>
                 </tr>
             @endforeach
             </tbody>

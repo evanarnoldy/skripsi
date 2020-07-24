@@ -54,6 +54,7 @@
                 <th scope="col">Bulan</th>
                 <th scope="col">Tahun</th>
                 <th scope="col">Hasil</th>
+                <th scope="col">Keterangan</th>
             </tr>
             </thead>
             <tbody>
@@ -70,6 +71,7 @@
                      <td>
                          <a href="{{url('wali/detail-jawaban-wali/'.$s->id)}}">{{ $s->keterangan }}</a>
                      </td>
+                     <td>{{ $s->status }}</td>
                  </tr>
                  @endif
             @endforeach

@@ -356,8 +356,6 @@ class GuruController extends Controller
             ->get();
 
         $jmldata = count($datapb);
-        $jmlsiswa = count($siswa);
-
 
         foreach ($dataks as $d){
             $skor[] = $d->nilai;
