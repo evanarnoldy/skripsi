@@ -107,6 +107,7 @@ class SiswaController extends Controller
         foreach ($data as $d)
         {
             $nilai[] = $d->nilai;
+            $bulanksh[] = $d->bulan;
         }
 
         foreach ($dataprestasi as $p)
@@ -115,7 +116,7 @@ class SiswaController extends Controller
             $bulan[] = $p->bulan;
         }
 
-        return view('siswa.index', compact('data', 'bulan','nilai', 'prestasi'));
+        return view('siswa.index', compact('data', 'bulan','nilai', 'prestasi', 'bulanksh'));
     }
 
     public function pertanyaan()
@@ -142,7 +143,7 @@ class SiswaController extends Controller
         ];
 
         $bulan1 = date('m');
-        $bulan1 = $bulan[$bulan1];
+        $bulan1 = 'Februari';
         $tahun = date('Y');
         $jawaban = $_POST['jawaban'];
         $jumlah = 0;
@@ -180,6 +181,14 @@ class SiswaController extends Controller
             $ket = 'Sedang';
         } else if ($hasil == 3){
             $ket = 'Tinggi';
+        }
+
+        if($ket == 'Tinggi'){
+            $status = 'Status kesehatan mental baik';
+        } elseif($ket == 'Sedang'){
+            $status = 'Status kesehatan mental cukup baik';
+        } elseif ($ket == 'Rendah'){
+            $status = 'Disarankan untuk berkonsultasi dengan guru BK';
         }
 
         $cek = DB::table('answers')
@@ -230,25 +239,25 @@ class SiswaController extends Controller
 
         //hasil
         if ($tes1 == 0){
-            DB::insert('insert into hasil(student_id, skor, nilai, kesimpulan, keterangan, kelas, unit, bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+            DB::insert('insert into hasil(student_id, skor, nilai, kesimpulan, keterangan, status, kelas, unit, bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$status.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
         }elseif($tes1 != $id){
             if ($cek1[0] != $bulan1){
-                DB::insert('insert into hasil(student_id, skor, nilai, kesimpulan, keterangan, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into hasil(student_id, skor, nilai, kesimpulan, keterangan, status, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$status.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
             }elseif ($cek1[0] == $bulan1){
-                DB::insert('insert into hasil(student_id, skor,  nilai, keterangan, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into hasil(student_id, skor,  nilai, keterangan, status, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$status.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
             }
         }elseif ($tes1 == $id){
             if ($cek1[0] != $bulan1){
-                DB::insert('insert into hasil(student_id, skor,  nilai, kesimpulan, keterangan, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into hasil(student_id, skor,  nilai, kesimpulan, keterangan, status, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$status.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
             }elseif ($cek1[0] == $bulan1){
-                DB::insert('insert into hasil(student_id, skor,  nilai, kesimpulan, keterangan, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into hasil(student_id, skor,  nilai, kesimpulan, keterangan, status, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$status.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
                 DB::table('hasil')
                     ->where('bulan', $bulan1)
                     ->where('student_id', $id)
                     ->delete();
 
-                DB::insert('insert into hasil(student_id, skor,  nilai, kesimpulan, keterangan, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into hasil(student_id, skor,  nilai, kesimpulan, keterangan, status, kelas, unit,  bulan, tahun, created_at, updated_at) values ("'.$id.'","'.$jumlah.'","'.$kesimpulan.'","'.$hasil.'","'.$ket.'","'.$status.'","'.$kelas.'","'.$unit.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
             }
         }
@@ -352,40 +361,48 @@ class SiswaController extends Controller
             $ket = 'Tinggi';
         }
 
+        if($ket == 'Tinggi'){
+            $status = 'Status prestasi belajar baik';
+        } elseif($ket == 'Sedang'){
+            $status = 'Status prestasi belajar cukup baik';
+        } elseif ($ket == 'Rendah') {
+            $status = 'Disarankan untuk berkonsultasi dengan walikelas';
+        }
+
         if ($tes1 == 0){
-            DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
-("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+            DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, status, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$status.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
         }elseif($tes1 != $id){
             if ($cek1[0] != $bulan1){
 
-                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
-("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, status, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$status.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
             }elseif ($cek1[0] == $bulan1){
 
-                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
-("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, status, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$status.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
             }
         }elseif ($tes1 == $id){
             if ($cek1[0] != $bulan1){
 
-                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
-("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, status, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$status.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
             }elseif ($cek1[0] == $bulan1){
 
-                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
-("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, status, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$status.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
                 DB::table('prestasi')
                     ->where('bulan', $bulan1)
                     ->where('student_id', $id)
                     ->delete();
 
-                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, bulan, tahun, created_at, updated_at) values 
-("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
+                DB::insert('insert into prestasi(student_id, ipa, matematika, bhsind, bhsing, rata, kesimpulan, keterangan, status, bulan, tahun, created_at, updated_at) values 
+("'.$id.'","'.$ipa.'","'.$matematika.'","'.$bhsind.'","'.$bhsing.'","'.$rata.'","'.$kesimpulan.'","'.$ket.'","'.$status.'","'.$bulan1.'","'.$tahun.'","'.$create.'","'.$update.'")');
 
             }
         }

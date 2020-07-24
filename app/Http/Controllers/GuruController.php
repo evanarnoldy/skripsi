@@ -49,7 +49,7 @@ class GuruController extends Controller
             $bulan1 = $b->bulan;
         }
 
-        $bln = DB::table('prestasi')
+        $bln = DB::table('hasil')
             ->groupBy('bulan')
             ->get();
 
@@ -87,7 +87,7 @@ class GuruController extends Controller
             ->where('kesimpulan', 2)
             ->get();
 
-        $rendahpb = DB::table('hasil')
+        $rendahpb = DB::table('prestasi')
             ->where('bulan', $bulan1)
             ->where('tahun', $tahun)
             ->where('kesimpulan', 1)
@@ -132,11 +132,11 @@ class GuruController extends Controller
             $bulan1 = $b->bulan;
         }
 
-        $bln = DB::table('prestasi')
+        $bln = DB::table('hasil')
             ->groupBy('bulan')
             ->get();
 
-        $thn = DB::table('prestasi')
+        $thn = DB::table('hasil')
             ->groupBy('tahun')
             ->get();
 
@@ -175,7 +175,7 @@ class GuruController extends Controller
                 ->where('kesimpulan', 2)
                 ->get();
 
-            $rendahpb = DB::table('hasil')
+            $rendahpb = DB::table('prestasi')
                 ->where('bulan', $bulan1)
                 ->where('tahun', $tahun)
                 ->where('kesimpulan', 1)
@@ -212,7 +212,7 @@ class GuruController extends Controller
                 ->where('kesimpulan', 2)
                 ->get();
 
-            $rendahpb = DB::table('hasil')
+            $rendahpb = DB::table('prestasi')
                 ->where('bulan', $getbulan)
                 ->where('tahun', $gettahun)
                 ->where('kesimpulan', 1)
@@ -248,7 +248,7 @@ class GuruController extends Controller
                 ->where('kesimpulan', 2)
                 ->get();
 
-            $rendahpb = DB::table('hasil')
+            $rendahpb = DB::table('prestasi')
                 ->where('bulan', $getbulan)
                 ->where('tahun', $tahun)
                 ->where('kesimpulan', 1)
@@ -284,7 +284,7 @@ class GuruController extends Controller
                 ->where('kesimpulan', 2)
                 ->get();
 
-            $rendahpb = DB::table('hasil')
+            $rendahpb = DB::table('prestasi')
                 ->where('bulan', $bulan1)
                 ->where('tahun', $gettahun)
                 ->where('kesimpulan', 1)

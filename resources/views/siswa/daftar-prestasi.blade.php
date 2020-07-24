@@ -63,6 +63,7 @@
                 <th scope="col">Bahasa Inggris</th>
                 <th scope="col">Rata-rata</th>
                 <th scope="col">Hasil</th>
+                <th scope="col">Keterangan</th>
             </tr>
             </thead>
             <tbody>
@@ -76,6 +77,7 @@
                     <td>{{$s->bhsing}}</td>
                     <td>{{$s->rata}}</td>
                     <td>{{$s->keterangan}}</td>
+                    <td>{{$s->status}}</td>
                 </tr>
             @endforeach
             </tbody>

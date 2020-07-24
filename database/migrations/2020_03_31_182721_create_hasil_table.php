@@ -20,6 +20,7 @@ class CreateHasilTable extends Migration
             $table->string('nilai');
             $table->string('kesimpulan');
             $table->string('keterangan');
+            $table->string('status');
             $table->string('kelas');
             $table->string('unit');
             $table->string('bulan');

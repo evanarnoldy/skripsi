@@ -3,7 +3,7 @@
 @section('container')
     <div class="container-fluid">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="title mt-4">Hasil Kuesioner</h1>
+            <h1 class="title mt-4">Hasil Tes Kesehatan Mental</h1>
         </div>
 
 {{--        <div class="row" style="margin-bottom: 15px">--}}
@@ -57,8 +57,9 @@
             <tr>
                 <th scope="col">Bulan</th>
                 <th scope="col">Tahun</th>
+                <th scope="col">Nilai</th>
                 <th scope="col">Hasil</th>
-                <th scope="col">Aksi</th>
+                <th scope="col">Keterangan</th>
             </tr>
             </thead>
             <tbody>
@@ -66,8 +67,9 @@
                 <tr>
                     <td>{{ $s->bulan }}</td>
                     <td>{{ $s->tahun }}</td>
+                    <td>{{ $s->nilai }}</td>
                     <td>{{$s->keterangan}}</td>
-                    <td><a href="{{url('siswa/detail-hasil/'. $s->id)}}" class="badge badge-info">Rincian</a></td>
+                    <td>{{$s->status}}</td>
                 </tr>
             @endforeach
             </tbody>

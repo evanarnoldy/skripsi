@@ -25,6 +25,7 @@ class CreatePrestasiTable extends Migration
             $table->string('tahun');
             $table->string('kesimpulan');
             $table->string('keterangan');
+            $table->string('status');
             $table->timestamps();
         });
     }
