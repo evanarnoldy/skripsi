@@ -14,10 +14,10 @@
                 @endforeach
             </select>
 
-            <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="semester">
-                <option selected>Pilih semester</option>
-                @foreach($semester as $b)
-                    <option>{{$b->semester}}</option>
+            <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="bulan">
+                <option selected>Pilih bulan</option>
+                @foreach($bulan as $b)
+                    <option>{{$b->bulan}}</option>
                 @endforeach
             </select>
 
@@ -29,7 +29,7 @@
             <div class="card-body">
                 @foreach($hasil as $h)
                 <h5 class="bold">Tahun : {{$h->tahun}}</h5>
-                <h5 class="bold">Semester : {{$h->semester}}</h5>
+                <h5 class="bold">Bulan : {{$h->bulan}}</h5>
                 <h5 class="bold">Hasil : </h5>
                 <p>Nilai koefisien korelasi sebesar {{$h->korelasi}}</p>
                 <p>{{$h->ket}}</p>

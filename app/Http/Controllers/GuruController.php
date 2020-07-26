@@ -307,8 +307,8 @@ class GuruController extends Controller
             ->groupBy('tahun')
             ->get();
 
-        $semester = DB::table('korelasi')
-            ->groupBy('semester')
+        $bulan = DB::table('korelasi')
+            ->groupBy('bulan')
             ->get();
 
         $hasil = DB::table('korelasi')
@@ -316,10 +316,25 @@ class GuruController extends Controller
             ->limit(1)
             ->get();
 
-        return view('guru.hasil-korelasi', compact('hasil', 'tahun', 'semester'));
+        return view('guru.hasil-korelasi', compact('hasil', 'tahun', 'bulan'));
     }
 
-    public function korelasi()
+    public function hitung_korelasi()
+    {
+        $bulan = DB::table('prestasi')
+            ->select('bulan')
+            ->groupBy('bulan')
+            ->get();
+
+        $tahun = DB::table('prestasi')
+            ->select('tahun')
+            ->groupBy('tahun')
+            ->get();
+
+        return view('guru.hitung-korelasi', compact('bulan', 'tahun'));
+    }
+
+    public function korelasi(Request $request)
     {
         $bulan = [
             '01' => 'Januari',
@@ -338,7 +353,6 @@ class GuruController extends Controller
 
         $bulan1 = date('m');
         $bulan1 = $bulan[$bulan1];
-        $siswa = Student::all();
         $tahun = date('Y');
         if(date('m') <= 06){
             $semester = "Genap";
@@ -346,89 +360,106 @@ class GuruController extends Controller
             $semester = "Ganjil";
         }
 
-        $dataks = DB::table('hasil')
-            ->where('tahun', $tahun)
-            ->orderBy('student_id')
-            ->get();
+        $gettahun = $request->tahun;
+        $getbulan = $request->bulan;
 
-        $datapb = DB::table('prestasi')
-            ->where('tahun', $tahun)
-            ->get();
+        if ($getbulan == 'Pilih bulan' && $gettahun == 'Pilih tahun')
+        {
+            $ket = 'Tidak ada data';
+        } elseif ($getbulan != 'Pilih bulan' && $gettahun == 'Pilih tahun')
+        {
+            $ket = 'Tidak ada data';
+        } elseif ($getbulan == 'Pilih bulan' && $gettahun != 'Pilih tahun')
+        {
+            $ket = 'Tidak ada data';
+        } elseif ($getbulan != 'Pilih bulan' && $gettahun != 'Pilih tahun') {
+            $dataks = DB::table('hasil')
+                ->where('bulan', $getbulan)
+                ->where('tahun', $gettahun)
+                ->orderBy('student_id')
+                ->get();
 
-        $jmldata = count($datapb);
+            $datapb = DB::table('prestasi')
+                ->where('bulan', $getbulan)
+                ->where('tahun', $gettahun)
+                ->get();
 
-        foreach ($dataks as $d){
-            $skor[] = $d->nilai;
+            $jmldata = count($datapb);
+
+            foreach ($dataks as $d) {
+                $skor[] = $d->nilai;
+            }
+
+            foreach ($datapb as $d) {
+                $rata[] = $d->rata;
+            }
+
+            for ($i = 0; $i < $jmldata; $i++) {
+                $xy[$i] = $skor[$i] * $rata[$i];
+            }
+
+            foreach ($dataks as $d) {
+                $x2[] = pow($d->nilai, 2);
+            }
+
+            foreach ($datapb as $d) {
+                $y2[] = pow($d->rata, 2);
+            }
+
+
+            $jumlahx = array_sum($skor);
+            $jumlahy = array_sum($rata);
+            $jumlahx2 = array_sum($x2);
+            $jumlahy2 = array_sum($y2);
+            $jumlahxy = array_sum($xy);
+            $njumlahxy = $jumlahxy * $jmldata;
+            $kalixy = $jumlahx * $jumlahy;
+            $njumlahx2 = $jmldata * $jumlahx2;
+            $totkiri = $njumlahx2 - pow($jumlahx, 2);
+            $njumlahy2 = $jmldata * $jumlahy2;
+            $totkanan = $njumlahy2 - pow($jumlahy, 2);
+            $kalitotbwh = $totkiri * $totkanan;
+            $hsltotbwh = sqrt($kalitotbwh);
+            $hslatas = $njumlahxy - $kalixy;
+            $korelasi = $hslatas / $hsltotbwh;
+
+            $tes = DB::table('tabelsig')
+                ->select('df', 'taraf_sig')
+                ->where('df', $jmldata)
+                ->get();
+
+            $df = [];
+            $ts = [];
+
+            foreach ($tes as $t) {
+                $df[] = $t->df;
+                $ts[] = $t->taraf_sig;
+            }
+
+            $data = implode(',', $ts);
+
+            if ($korelasi >= $data) {
+                $hasil = 'Korelasi antara Kesehatan Mental dan Prestasi Belajar bersifat positif dan signifikan artinya semakin tinggi Kesehatan Mental siswa maka semakin tinggi prestasi belajarnya';
+            } elseif ($korelasi < 0) {
+                $hasil = 'Korelasi antara Kesehatan Mental dan Prestasi Belajar bersifat negatif';
+            } elseif ($korelasi < $data) {
+                $hasil = 'Korelasi antara Kesehatan Mental dan Prestasi Belajar bersifat positif dan tidak signifikan artinya ada korelasi antara kesehatan mental dengan prestasi belajar tetapi tidak terlalu berpengaruh';
+            } elseif ($korelasi == 0) {
+                $hasil = 'Tidak ada korelasi';
+            }
+
+            DB::table('korelasi')
+                ->insert([
+                    'korelasi' => $korelasi,
+                    'tahun' => $tahun,
+                    'bulan' => $bulan1,
+                    'semester' => $semester,
+                    'ket' => $hasil
+                ]);
+
         }
 
-        foreach ($datapb as $d){
-            $rata[] = $d->rata;
-        }
-
-        for($i=0; $i<$jmldata; $i++){
-            $xy[$i] = $skor[$i] * $rata[$i];
-        }
-
-        foreach ($dataks as $d){
-            $x2[] = pow($d->nilai,2);
-        }
-
-        foreach ($datapb as $d){
-            $y2[] = pow($d->rata, 2);
-        }
-
-
-        $jumlahx = array_sum($skor);
-        $jumlahy = array_sum($rata);
-        $jumlahx2 = array_sum($x2);
-        $jumlahy2 = array_sum($y2);
-        $jumlahxy = array_sum($xy);
-        $njumlahxy = $jumlahxy*$jmldata;
-        $kalixy = $jumlahx*$jumlahy;
-        $njumlahx2 = $jmldata*$jumlahx2;
-        $totkiri = $njumlahx2-pow($jumlahx,2);
-        $njumlahy2 = $jmldata*$jumlahy2;
-        $totkanan= $njumlahy2-pow($jumlahy,2);
-        $kalitotbwh = $totkiri*$totkanan;
-        $hsltotbwh = sqrt($kalitotbwh);
-        $hslatas = $njumlahxy-$kalixy;
-        $korelasi = $hslatas/$hsltotbwh;
-
-        $tes = DB::table('tabelsig')
-            ->select('df', 'taraf_sig')
-            ->where('df', $jmldata)
-            ->get();
-
-        $df = [];
-        $ts = [];
-
-        foreach ($tes as $t){
-            $df[] = $t->df;
-            $ts[] = $t->taraf_sig;
-        }
-
-        $data = implode(',',$ts);
-
-        if($korelasi >= $data){
-            $hasil = 'Korelasi antara Kesehatan Mental dan Prestasi Belajar bersifat positif dan signifikan artinya semakin tinggi Kesehatan Mental siswa maka semakin tinggi prestasi belajarnya';
-        }elseif ($korelasi < 0) {
-            $hasil = 'Korelasi antara Kesehatan Mental dan Prestasi Belajar bersifat negatif';
-        }elseif ($korelasi < $data){
-            $hasil = 'Korelasi antara Kesehatan Mental dan Prestasi Belajar bersifat positif dan tidak signifikan artinya ada korelasi antara kesehatan mental dengan prestasi belajar tetapi tidak terlalu berpengaruh';
-        }elseif ($korelasi == 0){
-            $hasil = 'Tidak ada korelasi';
-        }
-
-        DB::table('korelasi')
-            ->insert([
-                'korelasi' => $korelasi,
-                'tahun' =>$tahun,
-                'bulan' =>$bulan1,
-                'semester' => $semester,
-                'ket' => $hasil
-            ]);
-
-        return view('guru.korelasi', compact('hasil', 'korelasi', 'semester'));
+        return view('guru.korelasi', compact('hasil', 'korelasi', 'bulan1', 'tahun'));
     }
 
     public function profil()
@@ -966,15 +997,21 @@ class GuruController extends Controller
             ->groupBy('unit')
             ->get();
 
+        $ket = DB::table('hasil')
+            ->select('keterangan')
+            ->groupBy('keterangan')
+            ->get();
+
         $cari = $request->cari;
 
         $siswa = DB::table('students')
             ->join('hasil', 'students.id', '=', 'hasil.student_id')
-            ->select('students.nama','students.NISN','students.email', 'hasil.*')
+            ->select('students.nama','students.NISN', 'hasil.*')
             ->where('students.nama','LIKE','%'.$cari.'%')
+            ->orWhere('students.NISN','LIKE','%'.$cari.'%')
             ->paginate(10);
 
-        return view('guru.hasil-survey', compact('siswa', 'bulan', 'tahun', 'kelas', 'unit'));
+        return view('guru.hasil-survey', compact('siswa', 'bulan', 'tahun', 'kelas', 'unit', 'ket'));
     }
 
     public function filterprestasiguru(Request $request)
@@ -1286,6 +1323,7 @@ class GuruController extends Controller
             ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
             ->select('students.*', 'prestasi.*')
             ->where('students.nama','LIKE','%'.$cari.'%')
+            ->orWhere('students.NISN','LIKE','%'.$cari.'%')
             ->paginate(10);
 
         return view('guru.hasil-prestasi', compact('hasil', 'bulan', 'tahun', 'kelas', 'unit', 'ket'));
@@ -1297,40 +1335,40 @@ class GuruController extends Controller
             ->groupBy('tahun')
             ->get();
 
-        $semester = DB::table('korelasi')
-            ->groupBy('semester')
+        $bulan = DB::table('korelasi')
+            ->groupBy('bulan')
             ->get();
 
         $gettahun = $request->tahun;
-        $getsemester = $request->semester;
+        $getbulan = $request->bulan;
 
-        if ($gettahun == 'Pilih tahun' && $getsemester == 'Pilih semester'){
+        if ($gettahun == 'Pilih tahun' && $getbulan == 'Pilih bulan'){
             $hasil = DB::table('korelasi')
                 ->orderByDesc('id')
                 ->limit(1)
                 ->get();
-        } elseif ($gettahun != 'Pilih tahun' && $getsemester != 'Pilih semester'){
+        } elseif ($gettahun != 'Pilih tahun' && $getbulan != 'Pilih bulan'){
             $hasil = DB::table('korelasi')
                 ->where('tahun', $gettahun)
-                ->where('semester', $getsemester)
+                ->where('bulan', $getbulan)
                 ->orderByDesc('id')
                 ->limit(1)
                 ->get();
-        } elseif ($gettahun != 'Pilih tahun' && $getsemester == 'Pilih semester'){
+        } elseif ($gettahun != 'Pilih tahun' && $getbulan == 'Pilih bulan'){
             $hasil = DB::table('korelasi')
                 ->where('tahun', $gettahun)
                 ->orderByDesc('id')
                 ->limit(1)
                 ->get();
-        } elseif ($gettahun == 'Pilih tahun' && $getsemester != 'Pilih semester'){
+        } elseif ($gettahun == 'Pilih tahun' && $getbulan != 'Pilih bulan'){
             $hasil = DB::table('korelasi')
-                ->where('semester', $getsemester)
+                ->where('bulan', $getbulan)
                 ->orderByDesc('id')
                 ->limit(1)
                 ->get();
         }
 
-        return view('guru.hasil-korelasi', compact('hasil', 'tahun', 'semester'));
+        return view('guru.hasil-korelasi', compact('hasil', 'tahun', 'bulan'));
     }
 
 }
