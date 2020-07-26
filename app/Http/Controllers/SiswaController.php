@@ -100,10 +100,6 @@ class SiswaController extends Controller
             ->groupBy('bulan')
             ->get();
 
-        $bulan = [];
-        $nilai = [];
-        $prestasi = [];
-
         foreach ($data as $d)
         {
             $nilai[] = $d->nilai;
