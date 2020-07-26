@@ -20,7 +20,7 @@
         <div class="sidebar-heading">Monitoring Kesehatan Mental dan Prestasi Belajar</div>
         <div class="list-group list-group-flush">
             <a href="{{ route('wali.index') }}" class="{{set_active('wali.index')}}list-group-item bg-list list-group-item-action"><i class="fas fa-home mr-15"></i> Dashboard</a>
-            <a href="{{ route('korelasi-kelas') }}" class="{{ set_active('korelasi-kelas') }}list-group-item bg-list list-group-item-action"><i class="far fa-chart-bar mr-15"></i> Hitung korelasi kelas</a>
+            <a href="{{ route('hitung-korelasi-kelas') }}" class="{{ set_active('hitung-korelasi-kelas') }}list-group-item bg-list list-group-item-action"><i class="far fa-chart-bar mr-15"></i> Hitung korelasi kelas</a>
             <a href="#pageSubmenuu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-list dropdown-togglee"><i class="fas fa-poll mr-15"></i>Hasil</a>
             <ul class="collapse list-unstyled" id="pageSubmenuu">
                 <li>

@@ -20,7 +20,7 @@
         <div class="list-group list-group-flush">
             <a href="{{ route('guru') }}" class="{{set_active('guru')}}list-group-item bg-list list-group-item-action"><i class="fas fa-home mr-15"></i> Dashboard</a>
             <a href="{{ route('daftar-pertanyaan-guru') }}" class="{{set_active('daftar-pertanyaan-guru')}}list-group-item bg-list list-group-item-action"><i class="fas fa-list mr-15"></i>Daftar Pertanyaan</a>
-            <a href="{{ route('korelasi') }}" class="{{set_active('korelasi')}}list-group-item bg-list list-group-item-action"><i class="far fa-chart-bar mr-15"></i>Hitung Korelasi</a>
+            <a href="{{ route('hitung-korelasi-guru') }}" class="{{set_active('hitung-korelasi-guru')}}list-group-item bg-list list-group-item-action"><i class="far fa-chart-bar mr-15"></i>Hitung Korelasi</a>
             <a href="#pageSubmenuu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action bg-list dropdown-togglee"><i class="fas fa-poll mr-15"></i>Hasil</a>
             <ul class="collapse list-unstyled" id="pageSubmenuu">
                 <li>

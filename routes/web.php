@@ -93,6 +93,7 @@ Route::prefix('guru')->middleware(['auth:teachers'])->group(function () {
     Route::get('/hasil-survey-guru', 'GuruController@hasil_survey')->name('survey-guru');
     Route::get('/korelasi', 'GuruController@korelasi')->name('korelasi');
     Route::get('/korelasi-guru', 'GuruController@hasilkorelasi')->name('korelasi-guru');
+    Route::get('/hitung-korelasi-guru', 'GuruController@hitung_korelasi')->name('hitung-korelasi-guru');
     Route::get('/list-keluhan-guru', 'KeluhanController@list_keluhan_guru')->name('daftar.keluhanguru');
     Route::get('/detail-keluhan-guru/{keluhan}', 'KeluhanController@show_keluhan_guru')->name('detail.keluhanguru');
     Route::get('/profil-guru', 'GuruController@profil')->name('profil-guru');
@@ -142,6 +143,12 @@ Route::prefix('siswa')->middleware(['auth:students'])->group(function () {
 //dashboard wali
 Route::prefix('wali')->middleware(['auth:wali'])->group(function () {
     Route::get('/index', 'WaliController@index')->name('wali.index');
+    Route::get('/indexksh', 'WaliController@indexksh')->name('wali.indexksh');
+    Route::get('/filter-indexksh', 'WaliController@filter_indexksh')->name('wali.filter-indexksh');
+    Route::get('/indexpb', 'WaliController@indexpb')->name('wali.indexpb');
+    Route::get('/filter-indexpb', 'WaliController@filter_indexpb')->name('wali.filter-indexpb');
+    Route::get('/indexkor', 'WaliController@indexkor')->name('wali.indexkor');
+    Route::get('/filter-indexkor', 'WaliController@filter_indexkor')->name('wali.filter-indexkor');
     Route::get('/profil-wali', 'WaliController@profil')->name('profil.wali');
     Route::get('/profil-wali/{waliKelas}/edit-profil', 'WaliController@edit_profil');
     Route::patch('/profil-wali/{waliKelas}', 'WaliController@update_profil')->name('profil.update');
@@ -159,7 +166,7 @@ Route::prefix('wali')->middleware(['auth:wali'])->group(function () {
     Route::get('/detail-keluhan/{keluhan}', 'KeluhanController@show_keluhan')->name('detail.keluhan');
     Route::get('/tanggapanwali/{keluhan}', 'TanggapanController@tanggapanwali')->name('tanggapan.wali');
     Route::post('/send-tanggapan/{keluhan}', 'TanggapanController@send_tanggapan');
-    Route::get('/filter-indexwali', 'WaliController@filterindexwali');
+    Route::get('/hitung-korelasi', 'WaliController@hitung_korelasi')->name('hitung-korelasi-kelas');
     Route::get('/korelasi-kelas', 'WaliController@korelasikelas')->name('korelasi-kelas');
     Route::get('/hasil-korelasi', 'WaliController@hasilkorelasi')->name('hasil-korelasi');
     Route::get('/filter-korelasiwali', 'WaliController@filterkorelasiwali');
