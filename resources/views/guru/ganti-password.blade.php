@@ -1,4 +1,4 @@
-@extends('layout.dashboard-admin')
+@extends('layout.dashboard-guru')
 
 @section('container')
     @if (session('status'))

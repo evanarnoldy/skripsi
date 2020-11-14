@@ -38,12 +38,11 @@ class SiswaController extends Controller
 
         $request->validate([
             'nama' => 'required|max:255',
-            'NISN' => 'required|size:9',
+            'NISN' => 'required|size:6',
             'jenis_kelamin' => 'required',
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
             'kelas' => 'required',
-            'email' => 'required|email',
             'unit' => 'required'
         ],
             [
@@ -55,8 +54,6 @@ class SiswaController extends Controller
                 'alamat.required' => 'Alamat harus diisi',
                 'kelas.required' => 'Kelas harus diisi',
                 'unit.required' => 'Unit harus diisi',
-                'email.required' => 'Email harus diisi',
-                'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
             ]);
 
         Student::where('id', Auth::user()->id)
@@ -68,8 +65,8 @@ class SiswaController extends Controller
                 'alamat'=> $request->alamat,
                 'jenis_kelamin'=> $request->jenis_kelamin,
                 'tanggal_lahir'=> $request->tanggal_lahir,
-                'email'=> $request->email
             ]);
+
         return redirect('siswa/profil-siswa')->with('status', 'Data berhasil diubah!');
     }
 
@@ -88,18 +85,33 @@ class SiswaController extends Controller
     }
     public function index()
     {
+        $tahun = date('Y');
+
+        $thn = DB::table('hasil')
+            ->groupBy('tahun')
+            ->get();
+
         $data = DB::table('hasil')
             ->where('student_id', Auth::id())
-            ->select('nilai', 'bulan')
+            ->where('tahun', $tahun)
             ->groupBy('bulan')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         $dataprestasi = DB::table('prestasi')
             ->where('student_id', Auth::id())
+            ->where('tahun', $tahun)
             ->select('rata', 'bulan')
             ->groupBy('bulan')
+            ->orderBy('created_at', 'asc')
             ->get();
 
+        if(!isset($data[0])){
+            $nilai[] = null;
+            $bulanksh[] = null;
+            $prestasi[] = null;
+            $bulan[] = null;
+        }
         foreach ($data as $d)
         {
             $nilai[] = $d->nilai;
@@ -112,7 +124,77 @@ class SiswaController extends Controller
             $bulan[] = $p->bulan;
         }
 
-        return view('siswa.index', compact('data', 'bulan','nilai', 'prestasi', 'bulanksh'));
+        return view('siswa.index', compact('data', 'bulan','nilai', 'prestasi', 'bulanksh', 'thn'));
+    }
+
+    public function filterindex(Request $request)
+    {
+        $tahun = date('Y');
+        $thn = DB::table('hasil')
+            ->groupBy('tahun')
+            ->get();
+
+        $gettahun = $request->tahun;
+
+        if ($gettahun == 'Pilih tahun') {
+            $data = DB::table('hasil')
+                ->where('student_id', Auth::id())
+                ->where('tahun', $tahun)
+                ->groupBy('bulan')
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+            $dataprestasi = DB::table('prestasi')
+                ->where('student_id', Auth::id())
+                ->where('tahun', $tahun)
+                ->select('rata', 'bulan')
+                ->groupBy('bulan')
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+            foreach ($data as $d) {
+                $nilai[] = $d->nilai;
+                $bulanksh[] = $d->bulan;
+            }
+
+            foreach ($dataprestasi as $p) {
+                $prestasi[] = $p->rata;
+                $bulan[] = $p->bulan;
+            }
+        }elseif ($gettahun != 'Pilih tahun'){
+            $data = DB::table('hasil')
+                ->where('student_id', Auth::id())
+                ->where('tahun', $gettahun)
+                ->groupBy('bulan')
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            $dataprestasi = DB::table('prestasi')
+                ->where('student_id', Auth::id())
+                ->where('tahun', $gettahun)
+                ->select('rata', 'bulan')
+                ->groupBy('bulan')
+                ->get();
+
+            if(!isset($data[0])){
+                $nilai[] = null;
+                $bulanksh[] = null;
+                $prestasi[] = null;
+                $bulan[] = null;
+            }
+
+            foreach ($data as $d) {
+                $nilai[] = $d->nilai;
+                $bulanksh[] = $d->bulan;
+            }
+
+            foreach ($dataprestasi as $p) {
+                $prestasi[] = $p->rata;
+                $bulan[] = $p->bulan;
+            }
+        }
+
+        return view('siswa.filter-index', compact('data', 'bulan','nilai', 'prestasi', 'bulanksh', 'thn', 'gettahun'));
     }
 
     public function pertanyaan()
@@ -139,7 +221,7 @@ class SiswaController extends Controller
         ];
 
         $bulan1 = date('m');
-        $bulan1 = 'Februari';
+        $bulan1 = $bulan[$bulan1];
         $tahun = date('Y');
         $jawaban = $_POST['jawaban'];
         $jumlah = 0;
@@ -306,7 +388,6 @@ class SiswaController extends Controller
             $tes1 = $tes->student_id;
         }
 
-
         $cek1 = [];
 
         foreach ($cek as $c){
@@ -339,11 +420,11 @@ class SiswaController extends Controller
 
         if($rata == null){
             $kesimpulan = 0;
-        } elseif($rata <= 59){
+        } elseif($rata < 60){
             $kesimpulan = 1;
-        } elseif ($rata > 59 && $rata <= 79){
+        } elseif ($rata >= 60 && $rata < 80){
             $kesimpulan = 2;
-        } else if ($rata > 79){
+        } else if ($rata >= 80){
             $kesimpulan = 3;
         }
 
@@ -408,6 +489,21 @@ class SiswaController extends Controller
 
     public function daftarhasil()
     {
+        $bulan = DB::table('hasil')
+            ->select('bulan')
+            ->groupBy('bulan')
+            ->get();
+
+        $tahun = DB::table('hasil')
+            ->select('tahun')
+            ->groupBy('tahun')
+            ->get();
+
+        $ket = DB::table('hasil')
+            ->select('keterangan')
+            ->groupBy('keterangan')
+            ->get();
+
         $hasil = DB::table('students')->where('student_id', Auth::id())
             ->join('hasil', 'students.id', '=', 'hasil.student_id')
             ->select('students.nama','students.kelas','hasil.*')
@@ -419,7 +515,93 @@ class SiswaController extends Controller
             $hasil = 'Tidak ada data';
         }
 
-        return view('siswa.daftar-survey', compact('hasil'));
+        return view('siswa.daftar-survey', compact('hasil', 'bulan', 'tahun', 'ket'));
+    }
+
+    public function filterdaftarhasil(Request $request)
+    {
+        $getbulan = $request->bulan;
+        $gettahun = $request->tahun;
+        $getket = $request->keterangan;
+
+        $bulan = DB::table('hasil')
+            ->groupBy('bulan')
+            ->get();
+
+        $tahun = DB::table('hasil')
+            ->groupBy('tahun')
+            ->get();
+
+        $ket = DB::table('hasil')
+            ->select('keterangan')
+            ->groupBy('keterangan')
+            ->get();
+
+        if ($getbulan != 'Pilih bulan' && $gettahun != 'Pilih tahun' && $getket != 'Pilih hasil') {
+            $hasil = DB::table('students')
+                ->where('student_id', Auth::id())
+                ->join('hasil', 'students.id', '=', 'hasil.student_id')
+                ->select('students.nama','students.kelas','hasil.*')
+                ->where('hasil.bulan', $getbulan)
+                ->where('hasil.tahun', $gettahun)
+                ->where('hasil.keterangan', $getket)
+                ->paginate(10);
+
+        } elseif ($getbulan == 'Pilih bulan' && $gettahun == 'Pilih tahun' && $getket == 'Pilih hasil'){
+            $hasil = DB::table('students')->where('student_id', Auth::id())
+                ->join('hasil', 'students.id', '=', 'hasil.student_id')
+                ->select('students.nama','students.kelas','hasil.*')
+                ->paginate(10);
+
+        } elseif ($getbulan != 'Pilih bulan' && $gettahun == 'Pilih tahun' && $getket == 'Pilih hasil') {
+            $hasil = DB::table('students')
+                ->where('student_id', Auth::id())
+                ->join('hasil', 'students.id', '=', 'hasil.student_id')
+                ->select('students.nama','students.kelas','hasil.*')
+                ->where('bulan', $getbulan)
+                ->paginate(10);
+
+        } elseif ($getbulan == 'Pilih bulan' && $gettahun != 'Pilih tahun' && $getket == 'Pilih hasil') {
+            $hasil = DB::table('students')
+                ->where('student_id', Auth::id())
+                ->join('hasil', 'students.id', '=', 'hasil.student_id')
+                ->select('students.nama','students.kelas','hasil.*')
+                ->where('tahun', $gettahun)
+                ->paginate(10);
+        } elseif ($getbulan == 'Pilih bulan' && $gettahun == 'Pilih tahun' && $getket != 'Pilih hasil') {
+            $hasil = DB::table('students')
+                ->where('student_id', Auth::id())
+                ->join('hasil', 'students.id', '=', 'hasil.student_id')
+                ->select('students.nama','students.kelas','hasil.*')
+                ->where('hasil.keterangan', $getket)
+                ->paginate(10);
+        } elseif ($getbulan != 'Pilih bulan' && $gettahun == 'Pilih tahun' && $getket != 'Pilih hasil') {
+            $hasil = DB::table('students')
+                ->where('student_id', Auth::id())
+                ->join('hasil', 'students.id', '=', 'hasil.student_id')
+                ->select('students.nama','students.kelas','hasil.*')
+                ->where('hasil.bulan', $getbulan)
+                ->where('hasil.keterangan', $getket)
+                ->paginate(10);
+        } elseif ($getbulan == 'Pilih bulan' && $gettahun != 'Pilih tahun' && $getket != 'Pilih hasil') {
+            $hasil = DB::table('students')
+                ->where('student_id', Auth::id())
+                ->join('hasil', 'students.id', '=', 'hasil.student_id')
+                ->select('students.nama','students.kelas','hasil.*')
+                ->where('hasil.tahun', $gettahun)
+                ->where('hasil.keterangan', $getket)
+                ->paginate(10);
+        } elseif ($getbulan != 'Pilih bulan' && $gettahun != 'Pilih tahun' && $getket == 'Pilih hasil') {
+            $hasil = DB::table('students')
+                ->where('student_id', Auth::id())
+                ->join('hasil', 'students.id', '=', 'hasil.student_id')
+                ->select('students.nama','students.kelas','hasil.*')
+                ->where('hasil.bulan', $getbulan)
+                ->where('hasil.tahun', $gettahun)
+                ->paginate(10);
+        }
+
+        return view('siswa.daftar-survey', compact('hasil', 'bulan', 'tahun', 'ket'));
     }
 
     public function showhasil(Hasil $hasil)

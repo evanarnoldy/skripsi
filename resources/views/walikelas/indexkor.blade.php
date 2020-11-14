@@ -3,7 +3,7 @@
 @section('container')
     <div class="container-fluid">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="title mt-4">Grafik Monitoring Kesehatan Mental dan Prestasi Belajar Kelas {{auth()->user()->kelas_diampu}}{{auth()->user()->unit}}</h1>
+            <h1 class="title mt-4">Grafik Monitoring Korelasi Antara Kesehatan Mental dan Prestasi Belajar Kelas {{auth()->user()->kelas_diampu}}{{auth()->user()->unit}}</h1>
         </div>
 
         <div class="row" style="margin-bottom: 15px">
@@ -29,6 +29,9 @@
 
         <div class="container">
             <div class="row">
+                <div class="col" id="chart">
+
+                </div>
                 <div class="col" id="chartkor">
 
                 </div>
@@ -38,15 +41,15 @@
 @endsection
 
 @section('footer')
-    <script src="{{'/js/highcharts.js'}}"></script>
+    <script src="{{asset('js/highcharts.js')}}"></script>
     <script>
         //chart korelasi
-        $('#chartkor').highcharts({
+        $('#chart').highcharts({
             chart: {
                 type: 'column'
             },
             title: {
-                text: 'Grafik Kesehatan Mental dan Prestasi Belajar Kelas {{auth()->user()->kelas_diampu}}{{auth()->user()->unit}} Bulan {{$bulan1}} Tahun {{$tahun1}}'
+                text: 'Grafik Perkembangan Kesehatan Mental dan Prestasi Belajar Kelas {{auth()->user()->kelas_diampu}}{{auth()->user()->unit}} Bulan {{$bulan1}} Tahun {{$tahun1}}'
             },
             xAxis: {
                 categories: [
@@ -85,5 +88,42 @@
             }]
         });
 
+        $('#chartkor').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Grafik Korelasi Kelas {{auth()->user()->kelas_diampu}}{{auth()->user()->unit}} Tahun {{$tahun1}}'
+            },
+            xAxis: {
+                categories: {!! json_encode($blnkor) !!},
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Nilai'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Korelasi',
+                data: [{{implode(',',$nilai)}}]
+
+            }]
+        });
     </script>
 @endsection

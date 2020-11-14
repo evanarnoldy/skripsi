@@ -23,25 +23,14 @@ class GuruController extends Controller
 
     public function index()
     {
-        $bulan = [
-            '01' => 'Januari',
-            '02' => 'Februari',
-            '03' => 'Maret',
-            '04' => 'April',
-            '05' => 'Mei',
-            '06' => 'Juni',
-            '07' => 'Juli',
-            '08' => 'Agustus',
-            '09' => 'September',
-            '10' => 'Oktober',
-            '11' => 'November',
-            '12' => 'Desember'
-        ];
+        return view('guru.index');
+    }
 
-        $tahun = date('Y');
-        $bulann = DB::table('prestasi')
+    public function indexksh()
+    {
+        $bulann = DB::table('hasil')
             ->select('bulan')
-            ->orderByDesc('bulan')
+            ->orderByDesc('created_at')
             ->limit(1)
             ->get();
 
@@ -49,82 +38,54 @@ class GuruController extends Controller
             $bulan1 = $b->bulan;
         }
 
+        $tahun = DB::table('hasil')
+            ->select('tahun')
+            ->orderByDesc('tahun')
+            ->limit(1)
+            ->get();
+
+        foreach ($tahun as $t){
+            $tahun1 = $t->tahun;
+        }
+
+        $thn = DB::table('hasil')
+            ->groupBy('tahun')
+            ->get();
+
         $bln = DB::table('hasil')
             ->groupBy('bulan')
             ->get();
 
-        $thn = DB::table('prestasi')
-            ->groupBy('tahun')
-            ->get();
-
         $tinggi = DB::table('hasil')
+            ->where('tahun', $tahun1)
             ->where('bulan', $bulan1)
-            ->where('tahun', $tahun)
             ->where('kesimpulan', 3)
             ->get();
 
         $sedang = DB::table('hasil')
+            ->where('tahun', $tahun1)
             ->where('bulan', $bulan1)
-            ->where('tahun', $tahun)
             ->where('kesimpulan', 2)
             ->get();
 
         $rendah = DB::table('hasil')
+            ->where('tahun', $tahun1)
             ->where('bulan', $bulan1)
-            ->where('tahun', $tahun)
-            ->where('kesimpulan', 1)
-            ->get();
-
-        $tinggipb = DB::table('prestasi')
-            ->where('bulan', $bulan1)
-            ->where('tahun', $tahun)
-            ->where('kesimpulan', 3)
-            ->get();
-
-        $sedangpb = DB::table('prestasi')
-            ->where('bulan', $bulan1)
-            ->where('tahun', $tahun)
-            ->where('kesimpulan', 2)
-            ->get();
-
-        $rendahpb = DB::table('prestasi')
-            ->where('bulan', $bulan1)
-            ->where('tahun', $tahun)
             ->where('kesimpulan', 1)
             ->get();
 
         $t = count($tinggi);
         $s = count($sedang);
         $r = count($rendah);
-        $tpb = count($tinggipb);
-        $spb = count($sedangpb);
-        $rpb = count($rendahpb);
 
-        return view('guru.index', compact('bulan1','tahun', 't','s','r', "tpb", 'spb', 'rpb', 'bln', 'thn'));
+        return view('guru.indexksh', compact('t', 's', 'r','thn', 'bln','tahun1', 'bulan1'));
     }
 
-    public function filterindexguru(Request $request)
+    public function filter_indexksh(Request $request)
     {
-        $bulan = [
-            '01' => 'Januari',
-            '02' => 'Februari',
-            '03' => 'Maret',
-            '04' => 'April',
-            '05' => 'Mei',
-            '06' => 'Juni',
-            '07' => 'Juli',
-            '08' => 'Agustus',
-            '09' => 'September',
-            '10' => 'Oktober',
-            '11' => 'November',
-            '12' => 'Desember'
-        ];
-
-        $tahun = date('Y');
-
-        $bulann = DB::table('prestasi')
+        $bulann = DB::table('hasil')
             ->select('bulan')
-            ->orderByDesc('bulan')
+            ->orderByDesc('created_at')
             ->limit(1)
             ->get();
 
@@ -132,12 +93,22 @@ class GuruController extends Controller
             $bulan1 = $b->bulan;
         }
 
-        $bln = DB::table('hasil')
-            ->groupBy('bulan')
+        $tahun = DB::table('hasil')
+            ->select('tahun')
+            ->orderByDesc('tahun')
+            ->limit(1)
             ->get();
+
+        foreach ($tahun as $t){
+            $tahun1 = $t->tahun;
+        }
 
         $thn = DB::table('hasil')
             ->groupBy('tahun')
+            ->get();
+
+        $bln = DB::table('hasil')
+            ->groupBy('bulan')
             ->get();
 
         $getbulan = $request->bulan;
@@ -146,149 +117,849 @@ class GuruController extends Controller
         if ($getbulan == 'Pilih bulan' && $gettahun == 'Pilih tahun')
         {
             $tinggi = DB::table('hasil')
+                ->where('tahun', $tahun1)
                 ->where('bulan', $bulan1)
-                ->where('tahun', $tahun)
                 ->where('kesimpulan', 3)
                 ->get();
 
             $sedang = DB::table('hasil')
+                ->where('tahun', $tahun1)
                 ->where('bulan', $bulan1)
-                ->where('tahun', $tahun)
                 ->where('kesimpulan', 2)
                 ->get();
 
             $rendah = DB::table('hasil')
+                ->where('tahun', $tahun1)
                 ->where('bulan', $bulan1)
-                ->where('tahun', $tahun)
                 ->where('kesimpulan', 1)
                 ->get();
-
-            $tinggipb = DB::table('prestasi')
-                ->where('bulan', $bulan1)
-                ->where('tahun', $tahun)
+        } elseif ($getbulan != 'Pilih bulan' && $gettahun != 'Pilih tahun')
+        {
+            $tinggi = DB::table('hasil')
+                ->where('tahun', $gettahun)
+                ->where('bulan', $getbulan)
                 ->where('kesimpulan', 3)
                 ->get();
 
-            $sedangpb = DB::table('prestasi')
-                ->where('bulan', $bulan1)
-                ->where('tahun', $tahun)
+            $sedang = DB::table('hasil')
+                ->where('tahun', $gettahun)
+                ->where('bulan', $getbulan)
                 ->where('kesimpulan', 2)
                 ->get();
 
-            $rendahpb = DB::table('prestasi')
+            $rendah = DB::table('hasil')
+                ->where('tahun', $gettahun)
+                ->where('bulan', $getbulan)
+                ->where('kesimpulan', 1)
+                ->get();
+        } elseif ($getbulan == 'Pilih bulan' && $gettahun != 'Pilih tahun')
+        {
+            $tinggi = DB::table('hasil')
+                ->where('tahun', $gettahun)
                 ->where('bulan', $bulan1)
-                ->where('tahun', $tahun)
+                ->where('kesimpulan', 3)
+                ->get();
+
+            $sedang = DB::table('hasil')
+                ->where('tahun', $gettahun)
+                ->where('bulan', $bulan1)
+                ->where('kesimpulan', 2)
+                ->get();
+
+            $rendah = DB::table('hasil')
+                ->where('tahun', $gettahun)
+                ->where('bulan', $bulan1)
+                ->where('kesimpulan', 1)
+                ->get();
+        } elseif ($getbulan != 'Pilih bulan' && $gettahun == 'Pilih tahun')
+        {
+            $tinggi = DB::table('hasil')
+                ->where('tahun', $tahun1)
+                ->where('bulan', $getbulan)
+                ->where('kesimpulan', 3)
+                ->get();
+
+            $sedang = DB::table('hasil')
+                ->where('tahun', $tahun1)
+                ->where('bulan', $getbulan)
+                ->where('kesimpulan', 2)
+                ->get();
+
+            $rendah = DB::table('hasil')
+                ->where('tahun', $tahun1)
+                ->where('bulan', $getbulan)
+                ->where('kesimpulan', 1)
+                ->get();
+        }
+
+        $t = count($tinggi);
+        $s = count($sedang);
+        $r = count($rendah);
+
+        return view('guru.filter-indexksh', compact('t', 's', 'r','thn', 'bln','tahun1', 'bulan1','getbulan', 'gettahun'));
+    }
+
+    public function indexpb()
+    {
+        $bulann = DB::table('prestasi')
+            ->select('bulan')
+            ->orderByDesc('created_at')
+            ->limit(1)
+            ->get();
+
+        foreach ($bulann as $b){
+            $bulan1 = $b->bulan;
+        }
+
+        $tahun = DB::table('prestasi')
+            ->select('tahun')
+            ->orderByDesc('tahun')
+            ->limit(1)
+            ->get();
+
+        foreach ($tahun as $t){
+            $tahun1 = $t->tahun;
+        }
+
+        $thn = DB::table('prestasi')
+            ->groupBy('tahun')
+            ->get();
+
+        $bln = DB::table('prestasi')
+            ->groupBy('bulan')
+            ->get();
+
+        if(!isset($data[0])){
+            $nilaiipa[] = null;
+            $nilaimm[] = null;
+            $nilaibind[] = null;
+            $nilaibing[] = null;
+        }
+
+        $tinggipb = DB::table('students')
+            ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+            ->select('students.*','prestasi.*')
+            ->where('prestasi.bulan', $bulan1)
+            ->where('prestasi.tahun', $tahun1)
+            ->where('kesimpulan', 3)
+            ->get();
+
+        $sedangpb = DB::table('students')
+            ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+            ->select('students.*','prestasi.*')
+            ->where('prestasi.bulan', $bulan1)
+            ->where('prestasi.tahun', $tahun1)
+            ->where('kesimpulan', 2)
+            ->get();
+
+        $rendahpb = DB::table('students')
+            ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+            ->select('students.*','prestasi.*')
+            ->where('prestasi.bulan', $bulan1)
+            ->where('prestasi.tahun', $tahun1)
+            ->where('kesimpulan', 1)
+            ->get();
+
+        $ipa = DB::table('students')
+            ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+            ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.ipa')
+            ->where('prestasi.bulan', $bulan1)
+            ->where('prestasi.tahun', $tahun1)
+            ->get();
+        foreach ($ipa as $i)
+        {
+            $nilaiipa[] = $i->ipa;
+        }
+
+        $mm = DB::table('students')
+            ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+            ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.matematika')
+            ->where('prestasi.bulan', $bulan1)
+            ->where('prestasi.tahun', $tahun1)
+            ->get();
+
+        foreach ($mm as $i)
+        {
+            $nilaimm[] = $i->matematika;
+        }
+
+        $bind = DB::table('students')
+            ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+            ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.bhsind')
+            ->where('prestasi.bulan', $bulan1)
+            ->where('prestasi.tahun', $tahun1)
+            ->get();
+        foreach ($bind as $i)
+        {
+            $nilaibind[] = $i->bhsind;
+        }
+
+        $bing = DB::table('students')
+            ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+            ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.bhsing')
+            ->where('prestasi.bulan', $bulan1)
+            ->where('prestasi.tahun', $tahun1)
+            ->get();
+        foreach ($bing as $i)
+        {
+            $nilaibing[] = $i->bhsing;
+        }
+
+        $tpb = count($tinggipb);
+        $spb = count($sedangpb);
+        $rpb = count($rendahpb);
+        $rataipa = collect($nilaiipa)->avg();
+        $ratamm = collect($nilaimm)->avg();
+        $ratabind = collect($nilaibind)->avg();
+        $ratabing = collect($nilaibing)->avg();
+
+        return view('guru.indexpb', compact('tpb', 'spb', 'rpb','thn', 'bln','tahun1', 'bulan1','rataipa', 'ratamm', 'ratabind', 'ratabing'));
+
+    }
+
+    public function filter_indexpb(Request $request)
+    {
+        $bulann = DB::table('prestasi')
+            ->select('bulan')
+            ->orderByDesc('created_at')
+            ->limit(1)
+            ->get();
+
+        foreach ($bulann as $b){
+            $bulan1 = $b->bulan;
+        }
+
+        $tahun = DB::table('prestasi')
+            ->select('tahun')
+            ->orderByDesc('tahun')
+            ->limit(1)
+            ->get();
+
+        foreach ($tahun as $t){
+            $tahun1 = $t->tahun;
+        }
+
+        $bln = DB::table('prestasi')
+            ->groupBy('bulan')
+            ->get();
+
+        $thn = DB::table('prestasi')
+            ->groupBy('tahun')
+            ->get();
+
+        $getbulan = $request->bulan;
+        $gettahun = $request->tahun;
+
+        if ($getbulan == 'Pilih bulan' && $gettahun == 'Pilih tahun')
+        {
+            $tinggipb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $tahun1)
+                ->where('kesimpulan', 3)
+                ->get();
+
+            $sedangpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $tahun1)
+                ->where('kesimpulan', 2)
+                ->get();
+
+            $rendahpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $tahun1)
+                ->where('kesimpulan', 1)
+                ->get();
+
+            $ipa = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.ipa')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $tahun1)
+                ->get();
+            foreach ($ipa as $i)
+            {
+                $nilaiipa[] = $i->ipa;
+            }
+
+            $mm = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.matematika')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $tahun1)
+                ->get();
+
+            foreach ($mm as $i)
+            {
+                $nilaimm[] = $i->matematika;
+            }
+
+            $bind = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.bhsind')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $tahun1)
+                ->get();
+            foreach ($bind as $i)
+            {
+                $nilaibind[] = $i->bhsind;
+            }
+
+            $bing = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.bhsing')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $tahun1)
+                ->get();
+            foreach ($bing as $i)
+            {
+                $nilaibing[] = $i->bhsing;
+            }
+
+        }elseif ($getbulan != 'Pilih bulan' && $gettahun != 'Pilih tahun'){
+            $tinggipb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $gettahun)
+                ->where('kesimpulan', 3)
+                ->get();
+
+            $sedangpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $gettahun)
+                ->where('kesimpulan', 2)
+                ->get();
+
+            $rendahpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $gettahun)
+                ->where('kesimpulan', 1)
+                ->get();
+
+            $ipa = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.ipa')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $gettahun)
+                ->get();
+            foreach ($ipa as $i)
+            {
+                $nilaiipa[] = $i->ipa;
+            }
+
+            $mm = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.matematika')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $gettahun)
+                ->get();
+
+            foreach ($mm as $i)
+            {
+                $nilaimm[] = $i->matematika;
+            }
+
+            $bind = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.bhsind')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $gettahun)
+                ->get();
+            foreach ($bind as $i)
+            {
+                $nilaibind[] = $i->bhsind;
+            }
+
+            $bing = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.bhsing')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $gettahun)
+                ->get();
+            foreach ($bing as $i)
+            {
+                $nilaibing[] = $i->bhsing;
+            }
+
+        }elseif ($getbulan != 'Pilih bulan' && $gettahun == 'Pilih tahun'){
+            $tinggipb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $tahun1)
+                ->where('kesimpulan', 3)
+                ->get();
+
+            $sedangpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $tahun1)
+                ->where('kesimpulan', 2)
+                ->get();
+
+            $rendahpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $tahun1)
+                ->where('kesimpulan', 1)
+                ->get();
+
+            $ipa = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.ipa')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $tahun1)
+                ->get();
+            foreach ($ipa as $i)
+            {
+                $nilaiipa[] = $i->ipa;
+            }
+
+            $mm = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.matematika')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $tahun1)
+                ->get();
+
+            foreach ($mm as $i)
+            {
+                $nilaimm[] = $i->matematika;
+            }
+
+            $bind = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.bhsind')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $tahun1)
+                ->get();
+            foreach ($bind as $i)
+            {
+                $nilaibind[] = $i->bhsind;
+            }
+
+            $bing = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.bhsing')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $tahun1)
+                ->get();
+            foreach ($bing as $i)
+            {
+                $nilaibing[] = $i->bhsing;
+            }
+
+        }elseif ($getbulan == 'Pilih bulan' && $gettahun != 'Pilih tahun'){
+            $tinggipb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $gettahun)
+                ->where('kesimpulan', 3)
+                ->get();
+
+            $sedangpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $gettahun)
+                ->where('kesimpulan', 2)
+                ->get();
+
+            $rendahpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $gettahun)
+                ->where('kesimpulan', 1)
+                ->get();
+
+            $ipa = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.ipa')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $gettahun)
+                ->get();
+            foreach ($ipa as $i)
+            {
+                $nilaiipa[] = $i->ipa;
+            }
+
+            $mm = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.matematika')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $gettahun)
+                ->get();
+
+            foreach ($mm as $i)
+            {
+                $nilaimm[] = $i->matematika;
+            }
+
+            $bind = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.bhsind')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $gettahun)
+                ->get();
+            foreach ($bind as $i)
+            {
+                $nilaibind[] = $i->bhsind;
+            }
+
+            $bing = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.bulan','prestasi.tahun', 'prestasi.bhsing')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $gettahun)
+                ->get();
+            foreach ($bing as $i)
+            {
+                $nilaibing[] = $i->bhsing;
+            }
+        }
+
+        $tpb = count($tinggipb);
+        $spb = count($sedangpb);
+        $rpb = count($rendahpb);
+        $rataipa = collect($nilaiipa)->avg();
+        $ratamm = collect($nilaimm)->avg();
+        $ratabind = collect($nilaibind)->avg();
+        $ratabing = collect($nilaibing)->avg();
+
+
+        return view('guru.filter-indexpb',
+            compact('tahun1','bulan1', "tpb", 'spb', 'rpb', 'bln', 'thn', 'rataipa', 'ratabind', 'ratabing','ratamm', 'getbulan', 'gettahun'));
+    }
+
+    public function indexkor()
+    {
+        $bulann = DB::table('prestasi')
+            ->select('bulan')
+            ->orderByDesc('created_at')
+            ->limit(1)
+            ->get();
+
+        foreach ($bulann as $b){
+            $bulan1 = $b->bulan;
+        }
+
+        $tahun = DB::table('prestasi')
+            ->select('tahun')
+            ->orderByDesc('tahun')
+            ->limit(1)
+            ->get();
+
+        foreach ($tahun as $t){
+            $tahun1 = $t->tahun;
+        }
+
+        $thn = DB::table('prestasi')
+            ->groupBy('tahun')
+            ->get();
+
+        $bln = DB::table('prestasi')
+            ->groupBy('bulan')
+            ->get();
+
+        $tinggi = DB::table('hasil')
+            ->where('tahun', $tahun1)
+            ->where('bulan', $bulan1)
+            ->where('kesimpulan', 3)
+            ->get();
+
+        $sedang = DB::table('hasil')
+            ->where('tahun', $tahun1)
+            ->where('bulan', $bulan1)
+            ->where('kesimpulan', 2)
+            ->get();
+
+        $rendah = DB::table('hasil')
+            ->where('tahun', $tahun1)
+            ->where('bulan', $bulan1)
+            ->where('kesimpulan', 1)
+            ->get();
+
+        $tinggipb = DB::table('students')
+            ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+            ->select('students.*','prestasi.*')
+            ->where('prestasi.bulan', $bulan1)
+            ->where('prestasi.tahun', $tahun1)
+            ->where('kesimpulan', 3)
+            ->get();
+
+        $sedangpb = DB::table('students')
+            ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+            ->select('students.*','prestasi.*')
+            ->where('prestasi.bulan', $bulan1)
+            ->where('prestasi.tahun', $tahun1)
+            ->where('kesimpulan', 2)
+            ->get();
+
+        $rendahpb = DB::table('students')
+            ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+            ->select('students.*','prestasi.*')
+            ->where('prestasi.bulan', $bulan1)
+            ->where('prestasi.tahun', $tahun1)
+            ->where('kesimpulan', 1)
+            ->get();
+
+        $korelasi = DB::table('korelasi')
+            ->where('tahun', $tahun1)
+            ->get();
+
+        foreach ($korelasi as $k){
+            $nilai[] = $k->korelasi;
+            $blnkor[] = $k->bulan;
+        }
+
+        $tpb = count($tinggipb);
+        $spb = count($sedangpb);
+        $rpb = count($rendahpb);
+        $t = count($tinggi);
+        $s = count($sedang);
+        $r = count($rendah);
+
+        return view('guru.indexkor', compact('tpb', 'spb', 'rpb', 't', 's', 'r', 'thn', 'bln','tahun1', 'bulan1', 'nilai', 'blnkor'));
+    }
+
+    public function filter_indexkor(Request $request)
+    {
+        $bulann = DB::table('prestasi')
+            ->select('bulan')
+            ->orderByDesc('created_at')
+            ->limit(1)
+            ->get();
+
+        foreach ($bulann as $b){
+            $bulan1 = $b->bulan;
+        }
+
+        $tahun = DB::table('prestasi')
+            ->select('tahun')
+            ->orderByDesc('tahun')
+            ->limit(1)
+            ->get();
+
+        foreach ($tahun as $t){
+            $tahun1 = $t->tahun;
+        }
+
+        $bln = DB::table('prestasi')
+            ->groupBy('bulan')
+            ->get();
+
+        $thn = DB::table('prestasi')
+            ->groupBy('tahun')
+            ->get();
+
+        $getbulan = $request->bulan;
+        $gettahun = $request->tahun;
+
+        if ($getbulan == 'Pilih bulan' && $gettahun == 'Pilih tahun'){
+            $tinggi = DB::table('hasil')
+                ->where('tahun', $tahun1)
+                ->where('bulan', $bulan1)
+                ->where('kesimpulan', 3)
+                ->get();
+
+            $sedang = DB::table('hasil')
+                ->where('tahun', $tahun1)
+                ->where('bulan', $bulan1)
+                ->where('kesimpulan', 2)
+                ->get();
+
+            $rendah = DB::table('hasil')
+                ->where('tahun', $tahun1)
+                ->where('bulan', $bulan1)
+                ->where('kesimpulan', 1)
+                ->get();
+
+            $tinggipb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $tahun1)
+                ->where('kesimpulan', 3)
+                ->get();
+
+            $sedangpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $tahun1)
+                ->where('kesimpulan', 2)
+                ->get();
+
+            $rendahpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $tahun1)
                 ->where('kesimpulan', 1)
                 ->get();
 
         }elseif ($getbulan != 'Pilih bulan' && $gettahun != 'Pilih tahun'){
             $tinggi = DB::table('hasil')
-                ->where('bulan', $getbulan)
                 ->where('tahun', $gettahun)
+                ->where('bulan', $getbulan)
                 ->where('kesimpulan', 3)
                 ->get();
 
             $sedang = DB::table('hasil')
-                ->where('bulan', $getbulan)
                 ->where('tahun', $gettahun)
+                ->where('bulan', $getbulan)
                 ->where('kesimpulan', 2)
                 ->get();
 
             $rendah = DB::table('hasil')
-                ->where('bulan', $getbulan)
                 ->where('tahun', $gettahun)
+                ->where('bulan', $getbulan)
                 ->where('kesimpulan', 1)
                 ->get();
 
-            $tinggipb = DB::table('prestasi')
-                ->where('bulan', $getbulan)
-                ->where('tahun', $gettahun)
+            $tinggipb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $gettahun)
                 ->where('kesimpulan', 3)
                 ->get();
 
-            $sedangpb = DB::table('prestasi')
-                ->where('bulan', $getbulan)
-                ->where('tahun', $gettahun)
+            $sedangpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $gettahun)
                 ->where('kesimpulan', 2)
                 ->get();
 
-            $rendahpb = DB::table('prestasi')
-                ->where('bulan', $getbulan)
-                ->where('tahun', $gettahun)
+            $rendahpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $gettahun)
                 ->where('kesimpulan', 1)
                 ->get();
+
         }elseif ($getbulan != 'Pilih bulan' && $gettahun == 'Pilih tahun'){
             $tinggi = DB::table('hasil')
+                ->where('tahun', $tahun1)
                 ->where('bulan', $getbulan)
-                ->where('tahun', $tahun)
                 ->where('kesimpulan', 3)
                 ->get();
 
             $sedang = DB::table('hasil')
+                ->where('tahun', $tahun1)
                 ->where('bulan', $getbulan)
-                ->where('tahun', $tahun)
                 ->where('kesimpulan', 2)
                 ->get();
 
             $rendah = DB::table('hasil')
+                ->where('tahun', $tahun1)
                 ->where('bulan', $getbulan)
-                ->where('tahun', $tahun)
                 ->where('kesimpulan', 1)
                 ->get();
 
-            $tinggipb = DB::table('prestasi')
-                ->where('bulan', $getbulan)
-                ->where('tahun', $tahun)
+            $tinggipb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $tahun1)
                 ->where('kesimpulan', 3)
                 ->get();
 
-            $sedangpb = DB::table('prestasi')
-                ->where('bulan', $getbulan)
-                ->where('tahun', $tahun)
+            $sedangpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $tahun1)
                 ->where('kesimpulan', 2)
                 ->get();
 
-            $rendahpb = DB::table('prestasi')
-                ->where('bulan', $getbulan)
-                ->where('tahun', $tahun)
+            $rendahpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*','prestasi.*')
+                ->where('prestasi.bulan', $getbulan)
+                ->where('prestasi.tahun', $tahun1)
                 ->where('kesimpulan', 1)
                 ->get();
-        }elseif ($getbulan == 'Pilih bulan' && $gettahun != 'Pilih tahun'){
+
+        }elseif ($getbulan == 'Pilih bulan' && $gettahun != 'Pilih tahun') {
             $tinggi = DB::table('hasil')
-                ->where('bulan', $bulan1)
                 ->where('tahun', $gettahun)
+                ->where('bulan', $bulan1)
                 ->where('kesimpulan', 3)
                 ->get();
 
             $sedang = DB::table('hasil')
-                ->where('bulan', $bulan1)
                 ->where('tahun', $gettahun)
+                ->where('bulan', $bulan1)
                 ->where('kesimpulan', 2)
                 ->get();
 
             $rendah = DB::table('hasil')
-                ->where('bulan', $bulan1)
                 ->where('tahun', $gettahun)
+                ->where('bulan', $bulan1)
                 ->where('kesimpulan', 1)
                 ->get();
 
-            $tinggipb = DB::table('prestasi')
-                ->where('bulan', $bulan1)
-                ->where('tahun', $gettahun)
+            $tinggipb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*', 'prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $gettahun)
                 ->where('kesimpulan', 3)
                 ->get();
 
-            $sedangpb = DB::table('prestasi')
-                ->where('bulan', $bulan1)
-                ->where('tahun', $gettahun)
+            $sedangpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*', 'prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $gettahun)
                 ->where('kesimpulan', 2)
                 ->get();
 
-            $rendahpb = DB::table('prestasi')
-                ->where('bulan', $bulan1)
-                ->where('tahun', $gettahun)
+            $rendahpb = DB::table('students')
+                ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
+                ->select('students.*', 'prestasi.*')
+                ->where('prestasi.bulan', $bulan1)
+                ->where('prestasi.tahun', $gettahun)
                 ->where('kesimpulan', 1)
                 ->get();
+        }
+
+        if ($gettahun == 'Pilih tahun') {
+            $korelasi = DB::table('korelasi')
+                ->where('tahun', $tahun1)
+                ->get();
+
+            foreach ($korelasi as $k) {
+                $nilai[] = $k->korelasi;
+                $blnkor[] = $k->bulan;
+            }
+        }elseif ($gettahun != 'Pilih tahun'){
+            $korelasi = DB::table('korelasi')
+                ->where('tahun', $gettahun)
+                ->get();
+
+            foreach ($korelasi as $k) {
+                $nilai[] = $k->korelasi;
+                $blnkor[] = $k->bulan;
+            }
         }
 
         $t = count($tinggi);
@@ -298,7 +969,7 @@ class GuruController extends Controller
         $spb = count($sedangpb);
         $rpb = count($rendahpb);
 
-        return view('guru.filterindex', compact('bulan1','tahun', 't','s','r', "tpb", 'spb', 'rpb', 'bln', 'thn', 'getbulan', 'gettahun'));
+        return view('guru.filter-indexkor', compact('tpb', 'spb', 'rpb', 't', 's', 'r', 'thn', 'bln','tahun1', 'bulan1', 'getbulan', 'gettahun', 'nilai', 'blnkor'));
     }
 
     public function hasilkorelasi()
@@ -359,6 +1030,8 @@ class GuruController extends Controller
         }elseif(date('m') > 06){
             $semester = "Ganjil";
         }
+        $create = now();
+        $update = now();
 
         $gettahun = $request->tahun;
         $getbulan = $request->bulan;
@@ -386,6 +1059,10 @@ class GuruController extends Controller
 
             $jmldata = count($datapb);
 
+            if($jmldata <= 1){
+                return abort(403, 'Data harus lebih dari 1');
+            }
+
             foreach ($dataks as $d) {
                 $skor[] = $d->nilai;
             }
@@ -406,7 +1083,6 @@ class GuruController extends Controller
                 $y2[] = pow($d->rata, 2);
             }
 
-
             $jumlahx = array_sum($skor);
             $jumlahy = array_sum($rata);
             $jumlahx2 = array_sum($x2);
@@ -422,6 +1098,7 @@ class GuruController extends Controller
             $hsltotbwh = sqrt($kalitotbwh);
             $hslatas = $njumlahxy - $kalixy;
             $korelasi = $hslatas / $hsltotbwh;
+
 
             $tes = DB::table('tabelsig')
                 ->select('df', 'taraf_sig')
@@ -448,18 +1125,74 @@ class GuruController extends Controller
                 $hasil = 'Tidak ada korelasi';
             }
 
-            DB::table('korelasi')
-                ->insert([
-                    'korelasi' => $korelasi,
-                    'tahun' => $tahun,
-                    'bulan' => $bulan1,
-                    'semester' => $semester,
-                    'ket' => $hasil
-                ]);
+            $d = DB::table('korelasi')
+                ->where('bulan', $getbulan)
+                ->where('tahun', $gettahun)
+                ->limit(1)
+                ->get();
+
+            $bln = 0;
+            $thn = 0;
+
+            foreach ($d as $b){
+                $bln = $b->bulan;
+                $thn = $b->tahun;
+            }
+
+            if ($getbulan == $bln && $gettahun == $thn){
+                DB::table('korelasi')
+                    ->where('bulan', $getbulan)
+                    ->where('tahun', $gettahun)
+                    ->delete();
+
+                DB::table('korelasi')
+                    ->insert([
+                        'korelasi' => $korelasi,
+                        'tahun' => $tahun,
+                        'bulan' => $getbulan,
+                        'semester' => $semester,
+                        'ket' => $hasil,
+                        'created_at' => $create,
+                        'updated_at' => $update
+                    ]);
+            } elseif ($getbulan != $bln && $gettahun == $thn) {
+                DB::table('korelasi')
+                    ->insert([
+                        'korelasi' => $korelasi,
+                        'tahun' => $tahun,
+                        'bulan' => $getbulan,
+                        'semester' => $semester,
+                        'ket' => $hasil,
+                        'created_at' => $create,
+                        'updated_at' => $update
+                    ]);
+            } elseif ($getbulan == $bln && $gettahun != $thn) {
+                DB::table('korelasi')
+                    ->insert([
+                        'korelasi' => $korelasi,
+                        'tahun' => $tahun,
+                        'bulan' => $getbulan,
+                        'semester' => $semester,
+                        'ket' => $hasil,
+                        'created_at' => $create,
+                        'updated_at' => $update
+                    ]);
+            } elseif ($getbulan != $bln && $gettahun != $thn){
+                DB::table('korelasi')
+                    ->insert([
+                        'korelasi' => $korelasi,
+                        'tahun' => $tahun,
+                        'bulan' => $getbulan,
+                        'semester' => $semester,
+                        'ket' => $hasil,
+                        'created_at' => $create,
+                        'updated_at' => $update
+                    ]);
+            }
 
         }
 
-        return view('guru.korelasi', compact('hasil', 'korelasi', 'bulan1', 'tahun'));
+        return view('guru.korelasi', compact('hasil', 'korelasi', 'bulan1', 'tahun','getbulan', 'gettahun', 'jmldata'));
     }
 
     public function profil()

@@ -9,8 +9,8 @@
             <div class="card-header">
             </div>
             <div class="card-body">
-                <h5 class="bold">Tahun : {{$tahun}}</h5>
-                <h5 class="bold">Bulan : {{$bulan1}}</h5>
+                <h5 class="bold">Tahun : {{$gettahun}}</h5>
+                <h5 class="bold">Bulan : {{$getbulan}}</h5>
                 <h5 class="bold">Hasil : </h5>
                 <p>Nilai koefisien korelasi sebesar {{$korelasi}}</p>
                 <p>{{$hasil}}</p>

@@ -3,7 +3,7 @@
 @section('container')
     <div class="container-fluid">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="title mt-4">Grafik Monitoring Kesehatan Mental dan Prestasi Belajar Kelas {{auth()->user()->kelas_diampu}}{{auth()->user()->unit}}</h1>
+            <h1 class="title mt-4">Grafik Monitoring Kesehatan Mental Kelas {{auth()->user()->kelas_diampu}}{{auth()->user()->unit}}</h1>
         </div>
 
         <div class="row" style="margin-bottom: 15px">
@@ -38,7 +38,7 @@
 @endsection
 
 @section('footer')
-    <script src="{{'/js/highcharts.js'}}"></script>
+    <script src="{{asset('js/highcharts.js')}}"></script>
     <script>
         $('#chartksh').highcharts({
             chart: {
@@ -54,7 +54,7 @@
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Nilai'
+                    text: 'Jumlah'
                 }
             },
             tooltip: {

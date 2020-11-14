@@ -6,22 +6,35 @@
             <h1 class="title mt-4">Grafik Kesehatan Mental dan Prestasi Belajar Siswa</h1>
         </div>
 
+        <form class="form-inline" method="get" action="{{url('siswa/filter-index')}}">
+            <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="tahun">
+                <option selected>Pilih tahun</option>
+                @foreach($thn as $b)
+                    <option>{{$b->tahun}}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="btn btn-primary my-1">Cari</button>
+        </form>
+
         <div class="container">
-            <div id="chartksh">
+            <div class="row">
+                <div class="col">
+                    <div id="chartksh">
 
-            </div>
-        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div id="chart">
 
-        <div class="container">
-            <div id="chart">
-
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 @endsection
 
 @section('footer')
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="{{asset('js/highcharts.js')}}"></script>
     <script>
         $('#chartksh').highcharts({
             chart: {

@@ -1,4 +1,4 @@
-@extends('layout.dashboard-admin')
+@extends('layout.dashboard-siswa')
 
 @section('container')
     <div class="container-fluid">
@@ -19,6 +19,26 @@
                 @error('NISN') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             <div class="form-group">
+                <label for="kelas">Kelas</label>
+                <select type="text" class="form-control @error('kelas') is-invalid @enderror" id="kelas" name="kelas" placeholder="Masukkan Kelas" value="{{ auth()->user()->kelas }}">
+                    @error('kelas') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="unit">Unit</label>
+                <select type="text" class="form-control @error('unit') is-invalid @enderror" id="unit" name="unit" placeholder="Masukkan Unit Kelas" value="{{ auth()->user()->unit }}">
+                    @error('unit') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                    <option>D</option>
+                    <option>E</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="tanggal_lahir">Tanggal lahir</label>
                 <input type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror" id="tanggal_lahir" name="tanggal_lahir" placeholder="Masukkan Tanggal lahir" value="{{ auth()->user()->tanggal_lahir }}">
                 @error('tanggal_lahir') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -36,11 +56,7 @@
                 <input type="text" class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" placeholder="Masukkan Alamat" value="{{ auth()->user()->alamat }}">
                 @error('alamat') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Masukkan Email" value="{{ auth()->user()->email }}">
-                @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
+
             <button type="submit" class="btn btn-primary">Ubah Data</button>
         </form>
     </div>

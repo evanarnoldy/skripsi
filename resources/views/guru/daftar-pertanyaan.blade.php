@@ -25,9 +25,9 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($pertanyaan as $p)
+            @foreach($pertanyaan as $index => $p)
              <tr>
-                <th scope="row">{{ $loop->iteration }}</th>
+                <th scope="row">{{ ++$index + ($pertanyaan->currentPage()-1) * $pertanyaan->perPage() }}</th>
                 <td>{{ $p->pertanyaan }}</td>
                 <td>{{ $p->jenis }}</td>
                 <td>{{ $p->kategori }}</td>

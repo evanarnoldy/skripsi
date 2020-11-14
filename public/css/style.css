@@ -4,7 +4,7 @@
     background-color: inherit;
 }
 
-.branding {
+#branding {
     height: 100%;
     margin-right: 400px;
     margin-left: 0px;
@@ -17,13 +17,13 @@
     float: left;
 }
 
-.contentWrap {
+#contentWrap {
     position: relative;
     width: 350px;
     height: 100%;
     overflow: auto;
     background-color: #ffffff;
-    margin-left: -400px;
+    margin-left: -380px;
     margin-right: 0px;
     float: left;
 }
@@ -31,7 +31,7 @@
 .content {
     min-height: 100%;
     height: auto !important;
-    margin: 0 auto 0px auto;
+    margin: 100px auto 0px auto;
     padding: 0 50px 10px 0px;
 }
 

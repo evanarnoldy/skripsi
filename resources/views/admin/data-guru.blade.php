@@ -19,7 +19,7 @@
             <div class="col-3">
                 <form class="form-inline" method="get" action="{{url('admin/cari-dataguru')}}">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Cari nama dan nisn" aria-label="Recipient's username" aria-describedby="button-addon2" name="cari">
+                        <input type="text" class="form-control" placeholder="Cari nama dan NIP" aria-label="Recipient's username" aria-describedby="button-addon2" name="cari">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                         </div>
@@ -35,20 +35,23 @@
                 <th scope="col">Nama</th>
                 <th scope="col">NIP</th>
                 <th scope="col">Email</th>
+                <th scope="col">Status</th>
+                <th scope="col">Alamat</th>
                 <th scope="col">Foto</th>
                 <th scope="col">Aksi</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($guru as $g)
+            @foreach($guru as $index => $g)
              <tr>
-                <th scope="row">{{ $loop->iteration }}</th>
+                <th scope="row">{{ ++$index + ($guru->currentPage()-1) * $guru->perPage() }}</th>
                 <td>{{ $g->nama }}</td>
                 <td>{{ $g->NIP }}</td>
                 <td>{{ $g->email }}</td>
+                <td>{{ $g->role }}</td>
+                <td>{{ $g->alamat }}</td>
                  <td><img src="{{url('uploads/avatar/'.$g->avatar )}}" style="width:100px;height: 100px;"></td>
                 <td>
-                    <a href="detail-guru/{{ $g->id}}" class="badge badge-info">Rincian</a>
                     <form method="post" action="data-guru/{{ $g->id }}" class="d-inline">
                         @method('delete')
                         @csrf

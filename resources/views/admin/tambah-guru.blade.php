@@ -26,6 +26,7 @@
                 <label for="jenis_kelamin">Jenis Kelamin</label>
                 <select type="date" class="form-control @error('jenis_kelamin') is-invalid @enderror" id="jenis_kelamin" name="jenis_kelamin" placeholder="Masukkan Jenis Kelamin" value="{{ old('jenis_kelamin') }}">
                 @error('jenis_kelamin') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <option selected disabled>Pilih Jenis Kelamin</option>
                     <option>Laki-laki</option>
                     <option>Perempuan</option>
                 </select>
@@ -34,6 +35,11 @@
                 <label for="alamat">Alamat</label>
                 <input type="text" class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" placeholder="Masukkan Alamat" value="{{ old('alamat') }}">
                 @error('alamat') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <input type="text" class="form-control @error('status') is-invalid @enderror" id="status" name="status" placeholder="Masukkan Status" value="{{ old('status') }}">
+                @error('status') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             <div class="form-group">
                 <label for="email">Email</label>

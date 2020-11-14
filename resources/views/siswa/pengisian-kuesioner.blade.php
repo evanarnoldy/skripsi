@@ -12,10 +12,6 @@
             </div>
         @endif
 
-        <div class="alert alert-success">
-            <p>Pengisian kuesioner hanya dilakukan setelah UAS dan UTS</p>
-        </div>
-
         <table class="table table-bordered col-3">
             <thead>
             <tr>

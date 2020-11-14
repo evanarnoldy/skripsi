@@ -578,6 +578,7 @@ class AdminController extends Controller
 
         $wali = DB::table('wali_kelas')
             ->where('nama','LIKE','%'.$cari.'%')
+            ->orWhere('NIP','LIKE','%'.$cari.'%')
             ->paginate(10);
 
         return view('admin.data-wali', compact('wali','kelas', 'unit'));
@@ -611,6 +612,7 @@ class AdminController extends Controller
             [
                 'nama.required' => 'Nama harus diisi',
                 'nama.unique' => 'Nama telah dipakai',
+                'nama.alpha' => 'Nama harus berisi huruf',
                 'NISN.required' => 'NISN harus diisi',
                 'NISN.size' => 'NISN harus berisi 6 karakter',
                 'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
@@ -695,6 +697,7 @@ class AdminController extends Controller
         ],
             [
                 'nama.required' => 'Nama harus diisi',
+                'nama.alpha' => 'Nama harus berisi huruf',
                 'NISN.size' => 'NISN harus berisi 6 karakter',
                 'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
                 'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
@@ -773,6 +776,7 @@ class AdminController extends Controller
             'jenis_kelamin' => 'required',
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
+            'status' => 'required',
             'email' => 'required|email|unique:teachers',
             'passsword' => 'nullable',
             'avatar' => 'required'
@@ -780,12 +784,14 @@ class AdminController extends Controller
             [
                 'nama.required' => 'Nama harus diisi',
                 'nama.unique' => 'Nama telah dipakai',
+                'nama.alpha' => 'Nama harus berisi huruf',
                 'NIP.required' => 'NIP harus diisi',
                 'NIP.size' => 'NIP harus berisi 9 karakter',
                 'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
                 'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
                 'alamat.required' => 'Alamat harus diisi',
-                'emai;.required' => 'Email harus diisi',
+                'status.required' => 'Status harus diisi',
+                'email.required' => 'Email harus diisi',
                 'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
                 'email.unique' => 'Email telah digunakan',
                 'avatar.required' => 'Foto harus diisi'
@@ -802,6 +808,7 @@ class AdminController extends Controller
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'tanggal_lahir' => $request->tanggal_lahir,
                 'alamat' => $request->alamat,
+                'role' => $request->status,
                 'email' => $request->email,
                 'avatar' => $filename
             ]);
@@ -850,17 +857,19 @@ class AdminController extends Controller
             'jenis_kelamin' => 'required',
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
+            'status' => 'required',
             'email' => 'required|email',
             'passsword' => 'nullable',
         ],
             [
                 'nama.required' => 'Nama harus diisi',
-                'nama.unique' => 'Nama telah dipakai',
+                'nama.alpha' => 'Nama harus berisi huruf',
                 'NIP.required' => 'NIP harus diisi',
                 'NIP.size' => 'NIP harus berisi 9 karakter',
                 'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
                 'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
                 'alamat.required' => 'Alamat harus diisi',
+                'status.required' => 'Status harus diisi',
                 'emai;.required' => 'Email harus diisi',
                 'email.email' => 'Pastikan format email benar contoh: abcdfg@mail.com',
             ]);
@@ -870,6 +879,7 @@ class AdminController extends Controller
                 'nama'=> $request->nama,
                 'NIP'=> $request->NIP,
                 'alamat'=> $request->alamat,
+                'role'=> $request->status,
                 'jenis_kelamin'=> $request->jenis_kelamin,
                 'tanggal_lahir'=> $request->tanggal_lahir,
                 'email'=> $request->email
@@ -898,7 +908,7 @@ class AdminController extends Controller
     {
         //
         Teacher::destroy($teacher->id);
-        return redirect('data-guru')->with('status', 'Data berhasil dihapus!');
+        return redirect('admin/data-guru')->with('status', 'Data berhasil dihapus!');
     }
 
     //walikelas
@@ -953,6 +963,7 @@ class AdminController extends Controller
             [
                 'nama.required' => 'Nama harus diisi',
                 'nama.unique' => 'Nama telah dipakai',
+                'nama.alpha' => 'Nama harus berisi huruf',
                 'NIP.required' => 'NIP harus diisi',
                 'NIP.size' => 'NIP harus berisi 9 karakter',
                 'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
@@ -1034,7 +1045,7 @@ class AdminController extends Controller
         ],
             [
                 'nama.required' => 'Nama harus diisi',
-                'nama.unique' => 'Nama telah dipakai',
+                'nama.alpha' => 'Nama harus berisi huruf',
                 'NIP.required' => 'NIP harus diisi',
                 'NIP.size' => 'NIP harus berisi 9 karakter',
                 'jenis_kelamin.required' => 'Jenis Kelamin harus diisi',
@@ -1081,7 +1092,7 @@ class AdminController extends Controller
     {
         //
         WaliKelas::destroy($waliKelas->id);
-        return redirect('data-wali')->with('status', 'Data berhasil dihapus!');
+        return redirect('admin/data-wali')->with('status', 'Data berhasil dihapus!');
     }
 
     //pertanyaan

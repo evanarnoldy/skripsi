@@ -32,7 +32,7 @@ class WaliController extends Controller
     {
         $bulann = DB::table('hasil')
             ->select('bulan')
-            ->orderByDesc('bulan')
+            ->orderByDesc('created_at')
             ->limit(1)
             ->get();
 
@@ -96,7 +96,7 @@ class WaliController extends Controller
     {
         $bulann = DB::table('hasil')
             ->select('bulan')
-            ->orderByDesc('bulan')
+            ->orderByDesc('created_at')
             ->limit(1)
             ->get();
 
@@ -241,7 +241,7 @@ class WaliController extends Controller
     {
         $bulann = DB::table('prestasi')
             ->select('bulan')
-            ->orderByDesc('bulan')
+            ->orderByDesc('created_at')
             ->limit(1)
             ->get();
 
@@ -269,6 +269,13 @@ class WaliController extends Controller
         $bln = DB::table('prestasi')
             ->groupBy('bulan')
             ->get();
+
+        if(!isset($data[0])){
+            $nilaiipa[] = null;
+            $nilaimm[] = null;
+            $nilaibind[] = null;
+            $nilaibing[] = null;
+        }
 
         $tinggipb = DB::table('students')
             ->join('prestasi', 'students.id', '=', 'prestasi.student_id')
@@ -369,7 +376,7 @@ class WaliController extends Controller
     {
         $bulann = DB::table('prestasi')
             ->select('bulan')
-            ->orderByDesc('bulan')
+            ->orderByDesc('created_at')
             ->limit(1)
             ->get();
 
@@ -400,6 +407,13 @@ class WaliController extends Controller
 
         $getbulan = $request->bulan;
         $gettahun = $request->tahun;
+
+        if(!isset($data[0])){
+            $nilaiipa[] = null;
+            $nilaimm[] = null;
+            $nilaibind[] = null;
+            $nilaibing[] = null;
+        }
 
         if ($getbulan == 'Pilih bulan' && $gettahun == 'Pilih tahun')
         {
@@ -756,7 +770,7 @@ class WaliController extends Controller
     {
         $bulann = DB::table('prestasi')
             ->select('bulan')
-            ->orderByDesc('bulan')
+            ->orderByDesc('created_at')
             ->limit(1)
             ->get();
 
@@ -839,6 +853,15 @@ class WaliController extends Controller
             ->where('kesimpulan', 1)
             ->get();
 
+        $korelasi = DB::table('korelasikelas')
+            ->where('tahun', $tahun1)
+            ->get();
+
+        foreach ($korelasi as $k){
+            $nilai[] = $k->korelasi;
+            $blnkor[] = $k->bulan;
+        }
+
         $tpb = count($tinggipb);
         $spb = count($sedangpb);
         $rpb = count($rendahpb);
@@ -846,14 +869,14 @@ class WaliController extends Controller
         $s = count($sedang);
         $r = count($rendah);
 
-        return view('walikelas.indexkor', compact('tpb', 'spb', 'rpb', 't', 's', 'r', 'thn', 'bln','tahun1', 'bulan1'));
+        return view('walikelas.indexkor', compact('tpb', 'spb', 'rpb', 't', 's', 'r', 'thn', 'bln','tahun1', 'bulan1', 'nilai', 'blnkor'));
     }
 
     public function filter_indexkor(Request $request)
     {
         $bulann = DB::table('prestasi')
             ->select('bulan')
-            ->orderByDesc('bulan')
+            ->orderByDesc('created_at')
             ->limit(1)
             ->get();
 
@@ -1106,6 +1129,28 @@ class WaliController extends Controller
                 ->get();
         }
 
+            if ($gettahun == 'Pilih tahun') {
+                $korelasi = DB::table('korelasikelas')
+                    ->where('tahun', $tahun1)
+                    ->get();
+
+                foreach ($korelasi as $k) {
+                    $nilai[] = $k->korelasi;
+                    $blnkor[] = $k->bulan;
+                }
+            }elseif ($gettahun != 'Pilih tahun'){
+                $korelasi = DB::table('korelasikelas')
+                    ->where('tahun', $gettahun)
+                    ->get();
+
+                foreach ($korelasi as $k) {
+                    $nilai[] = $k->korelasi;
+                    $blnkor[] = $k->bulan;
+                }
+            }
+
+
+
             $t = count($tinggi);
             $s = count($sedang);
             $r = count($rendah);
@@ -1113,7 +1158,7 @@ class WaliController extends Controller
             $spb = count($sedangpb);
             $rpb = count($rendahpb);
 
-            return view('walikelas.filter-indexkor', compact('tpb', 'spb', 'rpb', 't', 's', 'r', 'thn', 'bln','tahun1', 'bulan1', 'getbulan', 'gettahun'));
+            return view('walikelas.filter-indexkor', compact('tpb', 'spb', 'rpb', 't', 's', 'r', 'thn', 'bln','tahun1', 'bulan1', 'getbulan', 'gettahun', 'nilai', 'blnkor'));
     }
 
     public function hitung_korelasi()
@@ -1133,23 +1178,6 @@ class WaliController extends Controller
 
     public function korelasikelas(Request $request)
     {
-        $bulan = [
-            '01' => 'Januari',
-            '02' => 'Februari',
-            '03' => 'Maret',
-            '04' => 'April',
-            '05' => 'Mei',
-            '06' => 'Juni',
-            '07' => 'Juli',
-            '08' => 'Agustus',
-            '09' => 'September',
-            '10' => 'Oktober',
-            '11' => 'November',
-            '12' => 'Desember'
-        ];
-
-        $bulan1 = date('m');
-        $bulan1 = $bulan[$bulan1];
         $kelas = Auth::user()->kelas_diampu;
         $unit = Auth::user()->unit;
         $tahun = date('Y');
@@ -1159,6 +1187,8 @@ class WaliController extends Controller
             $semester = "Ganjil";
         }
 
+        $create = now();
+        $update = now();
         $gettahun = $request->tahun;
         $getbulan = $request->bulan;
 
@@ -1193,6 +1223,10 @@ class WaliController extends Controller
                 ->get();
 
             $jmldata = count($datapb);
+
+            if($jmldata <= 1){
+                return abort(403, 'Data harus lebih dari 1');
+            }
 
             foreach ($dataks as $d) {
                 $skor[] = $d->nilai;
@@ -1256,18 +1290,81 @@ class WaliController extends Controller
                 $hasil = 'Tidak ada korelasi';
             }
 
-            DB::table('korelasikelas')
-                ->insert([
-                    'korelasi' => $korelasi,
-                    'tahun' => $tahun,
-                    'bulan' => $bulan1,
-                    'kelas' => $kelas,
-                    'unit' => $unit,
-                    'semester' => $semester,
-                    'ket' => $hasil
-                ]);
+            $d = DB::table('korelasikelas')
+                ->where('bulan', $getbulan)
+                ->where('tahun', $gettahun)
+                ->limit(1)
+                ->get();
+
+            $bln = 0;
+            $thn = 0;
+
+            foreach ($d as $b) {
+                $bln = $b->bulan;
+                $thn = $b->tahun;
+            }
+
+
+            if ($getbulan == $bln && $gettahun == $thn){
+                DB::table('korelasikelas')
+                    ->where('bulan', $getbulan)
+                    ->where('tahun', $gettahun)
+                    ->delete();
+
+                DB::table('korelasikelas')
+                    ->insert([
+                        'korelasi' => $korelasi,
+                        'tahun' => $tahun,
+                        'bulan' => $getbulan,
+                        'semester' => $semester,
+                        'kelas' => $kelas,
+                        'unit' => $unit,
+                        'ket' => $hasil,
+                        'created_at' => $create,
+                        'updated_at' => $update
+                    ]);
+            } elseif ($getbulan != $bln && $gettahun == $thn) {
+                DB::table('korelasikelas')
+                    ->insert([
+                        'korelasi' => $korelasi,
+                        'tahun' => $tahun,
+                        'bulan' => $getbulan,
+                        'semester' => $semester,
+                        'kelas' => $kelas,
+                        'unit' => $unit,
+                        'ket' => $hasil,
+                        'created_at' => $create,
+                        'updated_at' => $update
+                    ]);
+            } elseif ($getbulan == $bln && $gettahun != $thn) {
+                DB::table('korelasikelas')
+                    ->insert([
+                        'korelasi' => $korelasi,
+                        'tahun' => $tahun,
+                        'bulan' => $getbulan,
+                        'semester' => $semester,
+                        'kelas' => $kelas,
+                        'unit' => $unit,
+                        'ket' => $hasil,
+                        'created_at' => $create,
+                        'updated_at' => $update
+                    ]);
+            } elseif ($getbulan != $bln && $gettahun != $thn){
+                DB::table('korelasikelas')
+                    ->insert([
+                        'korelasi' => $korelasi,
+                        'tahun' => $tahun,
+                        'bulan' => $getbulan,
+                        'semester' => $semester,
+                        'kelas' => $kelas,
+                        'unit' => $unit,
+                        'ket' => $hasil,
+                        'created_at' => $create,
+                        'updated_at' => $update
+                    ]);
+            }
         }
-        return view('walikelas.korelasi', compact('hasil', 'korelasi', 'bulan1', 'tahun'));
+        return view('walikelas.korelasi', compact('hasil', 'korelasi', 'getbulan', 'gettahun'));
     }
 
     public function hasilkorelasi()

@@ -89,6 +89,12 @@ Route::get('/markAsRead', function (){
 //dashboard guru
 Route::prefix('guru')->middleware(['auth:teachers'])->group(function () {
     Route::get('/index', 'GuruController@index')->name('guru');
+    Route::get('/indexksh', 'GuruController@indexksh')->name('guru.indexksh');
+    Route::get('/filter-indexksh', 'GuruController@filter_indexksh')->name('guru.filter-indexksh');
+    Route::get('/indexpb', 'GuruController@indexpb')->name('guru.indexpb');
+    Route::get('/filter-indexpb', 'GuruController@filter_indexpb')->name('guru.filter-indexpb');
+    Route::get('/indexkor', 'GuruController@indexkor')->name('guru.indexkor');
+    Route::get('/filter-indexkor', 'GuruController@filter_indexkor')->name('guru.filter-indexkor');
     Route::get('/detail-jawaban-guru/{student}', 'GuruController@show_answer');
     Route::get('/hasil-survey-guru', 'GuruController@hasil_survey')->name('survey-guru');
     Route::get('/korelasi', 'GuruController@korelasi')->name('korelasi');
@@ -123,6 +129,7 @@ Route::prefix('guru')->middleware(['auth:teachers'])->group(function () {
 //dashboard siswa
 Route::prefix('siswa')->middleware(['auth:students'])->group(function () {
     Route::get('/index', 'SiswaController@index')->name('siswa.index');
+    Route::get('/filter-index', 'SiswaController@filterindex')->name('siswa.filter-index');
     Route::get('/konsultasi', 'KeluhanController@konsultasi')->name('konsultasi');
     Route::post('/konsultasi', 'KeluhanController@send_konsultasi');
     Route::get('/profil-siswa', 'SiswaController@profil')->name('profil-siswa');
@@ -135,6 +142,7 @@ Route::prefix('siswa')->middleware(['auth:students'])->group(function () {
     Route::post('/store-kuesioner', 'SiswaController@store_jawaban');
     Route::get('/hasil-kuesioner', 'SiswaController@daftarhasil')->name('hasil');
     Route::get('/detail-hasil/{hasil}', 'SiswaController@showhasil');
+    Route::get('/filter-hasil-kuesioner', 'SiswaController@filterdaftarhasil');
     Route::get('/detail-tanggapan/{tanggapan}', 'TanggapanController@show_tanggapan')->name('detail.tanggapan');
     Route::get('/daftar-tanggapan', 'TanggapanController@daftartanggapan')->name('daftar.tanggapan');
     Route::get('/hasil-prestasi', 'SiswaController@hasil_prestasi')->name('prestasi');

@@ -18,6 +18,7 @@
             <div class="card-body">
                 @foreach($data as $d)
                     <h5 class="bold">Nama : {{$d->nama}}</h5>
+                    <h5 class="bold">Kelas : {{$d->kelas}}{{$d->unit}}</h5>
                     <h5 class="bold">Isi : {{$d->isi}}</h5>
                 @endforeach
             </div>

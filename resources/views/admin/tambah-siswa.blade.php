@@ -26,6 +26,7 @@
                 <label for="jenis_kelamin">Jenis Kelamin</label>
                 <select type="date" class="form-control @error('jenis_kelamin') is-invalid @enderror" id="jenis_kelamin" name="jenis_kelamin" placeholder="Masukkan Jenis Kelamin" value="{{ old('jenis_kelamin') }}">
                 @error('jenis_kelamin') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <option selected disabled>Pilih Jenis Kelamin</option>
                     <option>Laki-laki</option>
                     <option>Perempuan</option>
                 </select>
@@ -39,6 +40,7 @@
                 <label for="kelas">Kelas</label>
                 <select type="text" class="form-control @error('kelas') is-invalid @enderror" id="kelas" name="kelas" placeholder="Masukkan Kelas" value="{{ old('kelas') }}">
                     @error('kelas') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <option selected disabled>Pilih Kelas</option>
                     <option>7</option>
                     <option>8</option>
                     <option>9</option>
@@ -48,6 +50,7 @@
                 <label for="unit">Unit</label>
                 <select type="text" class="form-control @error('unit') is-invalid @enderror" id="unit" name="unit" placeholder="Masukkan Unit Kelas" value="{{ old('unit') }}">
                     @error('unit') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <option selected disabled>Pilih Unit Kelas</option>
                     <option>A</option>
                     <option>B</option>
                     <option>C</option>

@@ -55,9 +55,9 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($siswa as $s)
+            @foreach($siswa as $index => $s)
                  <tr>
-                    <th scope="row">{{ $loop->iteration }}</th>
+                    <th scope="row">{{ ++$index + ($siswa->currentPage()-1) * $siswa->perPage() }}</th>
                     <td>{{ $s->nama }}</td>
                     <td>{{ $s->NISN }}</td>
                     <td>{{ $s->kelas }}{{ $s->unit }}</td>

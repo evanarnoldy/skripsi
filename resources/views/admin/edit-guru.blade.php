@@ -37,6 +37,11 @@
                 @error('alamat') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             <div class="form-group">
+                <label for="status">Status</label>
+                <input type="text" class="form-control @error('status') is-invalid @enderror" id="status" name="status" placeholder="Masukkan Status" value="{{ $teacher->role }}">
+                @error('status') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            </div>
+            <div class="form-group">
                 <label for="email">Email</label>
                 <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Masukkan Email" value="{{ $teacher->email }}">
                 @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror

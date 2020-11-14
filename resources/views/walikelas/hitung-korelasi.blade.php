@@ -1,4 +1,4 @@
-@extends('layout.dashboard-guru')
+@extends('layout.dashboard-walikelas')
 
 @section('container')
     <div class="container-fluid">
@@ -8,14 +8,12 @@
 
         <form class="form-inline" method="get" action="{{url('wali/korelasi-kelas')}}" style="margin-bottom: 15px">
             <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="bulan">
-                <option selected>Pilih bulan</option>
                 @foreach($bulan as $b)
                     <option>{{$b->bulan}}</option>
                 @endforeach
             </select>
 
             <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="tahun">
-                <option selected>Pilih tahun</option>
                 @foreach($tahun as $b)
                     <option>{{$b->tahun}}</option>
                 @endforeach

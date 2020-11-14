@@ -38,7 +38,6 @@
                                 <p>Nama</p>
                                 <p>NISN</p>
                                 <p>Kelas</p>
-                                <p>Email</p>
                                 <p>Jenis Kelamin</p>
                                 <p>Tanggal lahir</p>
                                 <p>Alamat</p>
@@ -47,7 +46,6 @@
                                 <p>: {{$user->nama}}</p>
                                 <p>: {{$user->NISN}}</p>
                                 <p>: {{$user->kelas}}{{$user->unit}}</p>
-                                <p>: {{$user->email}}</p>
                                 <p>: {{$user->jenis_kelamin}}</p>
                                 <p>: {{date('d-m-Y', strtotime($user->tanggal_lahir))}}</p>
                                 <p>: {{$user->alamat}}</p>

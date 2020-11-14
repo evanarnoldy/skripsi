@@ -38,7 +38,7 @@
             <div class="col-3">
                 <form class="form-inline" method="get" action="{{url('admin/cari-wali')}}">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Cari nama" aria-label="Recipient's username" aria-describedby="button-addon2" name="cari">
+                        <input type="text" class="form-control" placeholder="Cari nama dan NIP" aria-label="Recipient's username" aria-describedby="button-addon2" name="cari">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                         </div>
@@ -54,22 +54,23 @@
                 <th scope="col">Nama</th>
                 <th scope="col">NIP</th>
                 <th scope="col">Email</th>
+                <th scope="col">Alamat</th>
                 <th scope="col">Kelas yang diampu</th>
                 <th scope="col">Foto</th>
                 <th scope="col">Aksi</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($wali as $g)
+            @foreach($wali as $index => $g)
              <tr>
-                <th scope="row">{{ $loop->iteration }}</th>
+                <th scope="row">{{ ++$index + ($wali->currentPage()-1) * $wali->perPage() }}</th>
                 <td>{{ $g->nama }}</td>
                 <td>{{ $g->NIP }}</td>
                 <td>{{ $g->email }}</td>
+                <td>{{ $g->alamat }}</td>
                 <td>{{ $g->kelas_diampu }}{{$g->unit}}</td>
                  <td><img src="{{url('uploads/avatar/'.$g->avatar )}}" style="width:100px;height: 100px;"></td>
                 <td>
-                    <a href="{{url('admin/detail-wali/'.$g->id)}}" class="badge badge-info">Rincian</a>
                     <form method="post" action="{{url('admin/data-wali/'.$g->id)}}" class="d-inline">
                         @method('delete')
                         @csrf

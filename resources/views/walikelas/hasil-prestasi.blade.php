@@ -36,7 +36,7 @@
             <div class="col-3">
                 <form class="form-inline" method="get" action="{{url('wali/cari-prestasiwali')}}">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Cari nama" aria-label="Recipient's username" aria-describedby="button-addon2" name="cari">
+                        <input type="text" class="form-control" placeholder="Cari nama atau NISN" aria-label="Recipient's username" aria-describedby="button-addon2" name="cari">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                         </div>
